@@ -20,7 +20,10 @@ public class User {
 	private UserEnum userType;
 	private boolean userBlocked;
 	
-	public User() {}
+	public User() {
+		this.userType = UserEnum.Kupac;
+		this.userBlocked = false;
+	}
 	
 	public User(String userName, String userPassword, String eMail, String name, String surname, LocalDate dateOfBirth,
 						String address, String phoneNumber, LocalDateTime registrationDateAndTime) {

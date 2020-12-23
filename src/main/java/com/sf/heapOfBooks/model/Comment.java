@@ -8,6 +8,7 @@ public class Comment {
 
 	private long id;
 	private float rating;
+	private String comment;
 	private LocalDate commentDate;
 	private User user;
 	private Book book;
@@ -15,8 +16,9 @@ public class Comment {
 	
 	public Comment() {}
 	
-	public Comment(float rating, LocalDate commentDate, User user, Book book) {
+	public Comment(float rating, String comment, LocalDate commentDate, User user, Book book) {
 		this.rating = rating;
+		this.comment = comment;
 		this.commentDate = commentDate;
 		this.user = user;
 		this.book = book;
@@ -37,6 +39,14 @@ public class Comment {
 
 	public void setRating(float rating) {
 		this.rating = rating;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public LocalDate getCommentDate() {

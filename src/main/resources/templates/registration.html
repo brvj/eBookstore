@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Registracija</title>
+</head>
+<body>
+		<form method="post" action="/HeapOfBooks/Users/Registration">
+			<table class="tabela">
+				<caption>Forma za registraciju</caption>
+				<tr><th>Korisnicko ime:</th><td><input type="text" value="" name="userName" required></td></tr>
+				<tr><th>Korisnicka sifra:</th><td><input type="password" value="" name="userPassword" required></td></tr>
+				<tr><th>E-Mail adresa:</th><td><input type="text" value="" name="eMail" required></td></tr>
+				<tr><th>Ime:</th><td><input type="text" value="" name="name" required></td></tr>
+				<tr><th>Prezime:</th><td><input type="text" value="" name="surname" required></td></tr>
+				<tr><th>Datum rodjenja:</th><td><input type="date" value="" name="dateOfBirth" required></td></tr>
+				<tr><th>Adresa stanovanja:</th><td><input type="text" value="" name="address" required></td></tr>
+				<tr><th>Broj telefona:</th><td><input type="text" value="" name="phoneNumber" required></td></tr>
+				<tr><th></th><td><input type="submit" value="Kreirajte nalog"/></td></tr>
+			</table>
+		</form>
+</body>
+</html>

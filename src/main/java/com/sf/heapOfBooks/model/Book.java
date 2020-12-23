@@ -21,6 +21,7 @@ public class Book {
 	private String bookLanguage;
 	private float averageRating;
 	private List<Genre> genre;
+	// dodati broj primeraka
 	
 	public Book() {}
 	

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Korisnici</title>
+</head>
+<body>
+		<form method="get" action="/Users">
+			<table class="tabela" border ="1">
+				<caption>Users</caption>
+				<tr>
+					<th>name</th>
+					<th>user name</th>
+					<th>email</th>					
+					<th>Tip korisnika</th>
+				</tr>
+				<tr th:each="itUser, status: ${users}">
+					<td th:text="${itUser.name}"></td>
+					<td th:text="${itUser.userName}"></td>
+					<td th:text="${itUser.eMail}"></td>					
+					<td th:text="${itUser.userType}"></td>
+				</tr>
+			</table>
+		</form>
+		<p/>
+		<a href="Users/Registration">Forma za registraciju</a>
+</body>
+</html>
