@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Zanr</title>
+</head>
+<body>
+		<table class="tabela" border ="1">
+			<caption>Zanr</caption>
+			<tr>
+				<th>ID</th>
+				<th>Naziv zanra</th>
+				<th>Opis</th>
+			</tr>
+			<tr >
+				<td th:text="${genre.id}"></td>
+				<td th:text="${genre.name}"></td>
+				<td th:text="${genre.description}"></td>
+			</tr>
+		</table>
+		<p/>
+		<a th:href="|/HeapOfBooks/Genres/Update?id=${genre.id}|" >Izmeni</a>
+		<p/>
+		<a th:href="|/HeapOfBooks/Genres/Delete?id=${genre.id}|">Obrisi zanr</a>
+		<p/>
+		<a href="/HeapOfBooks/Genres">Nazad</a>	
+</body>
+</html>

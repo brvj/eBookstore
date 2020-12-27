@@ -57,7 +57,7 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "/Registration")
-	public void register(@RequestParam String userName, @RequestParam String userPassword,@RequestParam String
+	public ModelAndView register(@RequestParam String userName, @RequestParam String userPassword,@RequestParam String
 			eMail,@RequestParam String name,@RequestParam String surname,@RequestParam String dateOfBirth,
 			@RequestParam String address,@RequestParam String phoneNumber, HttpServletResponse response) throws ParseException, IOException {
 		User user = new User();
@@ -70,8 +70,18 @@ public class UserController {
 		user.setAddress(address);
 		user.setPhoneNumber(phoneNumber);
 		
+		String message = "";
+		ModelAndView maw = new ModelAndView("message");
+		for(User u : userService.findAll()) {
+			if(u.getUserName().equals(userName)) {
+				message = "Korisnik sa tim korisnickim imenom vec postoji!";
+				return maw.addObject("message",message);
+			}
+		}
+		
 		userService.createNewUser(user);
 		
 		response.sendRedirect(baseURL+"Users");
+		return null;
 	}
 }

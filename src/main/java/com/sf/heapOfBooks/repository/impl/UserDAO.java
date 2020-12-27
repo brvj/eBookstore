@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.enums.UserEnum;
@@ -105,6 +106,7 @@ public class UserDAO implements IUserDAO{
 		return rcbh.getUsers().get(0);
 	}
 
+	@Transactional
 	@Override
 	public int createNewUser(User user) {
 		PreparedStatementCreator preparedStatementCreator = new PreparedStatementCreator() {

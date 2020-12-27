@@ -21,12 +21,12 @@ public class Book {
 	private String bookLanguage;
 	private float averageRating;
 	private List<Genre> genre;
-	// dodati broj primeraka
+	private int numberOfCopies;
 	
 	public Book() {}
 	
 	public Book(String name, String publisher, List<String> authors, String releaseDate, String shortDescription, String coverPicture,
-					float price, int numberOfPages, BookTypeEnum bookType, LetterEnum letter, String bookLanguage, List<Genre> genre) {
+					float price, int numberOfPages, BookTypeEnum bookType, LetterEnum letter, String bookLanguage, List<Genre> genre, int numberOfCopies) {
 		this.name = name;
 		this.publisher = publisher;
 		this.authors = authors;
@@ -39,6 +39,7 @@ public class Book {
 		this.letter = letter;
 		this.bookLanguage = bookLanguage;
 		this.genre = genre;
+		this.numberOfCopies = numberOfCopies;
 	}
 
 	public Long getISBN() {
@@ -151,5 +152,13 @@ public class Book {
 
 	public void setGenre(List<Genre> genre) {
 		this.genre = genre;
+	}
+
+	public int getNumberOfCopies() {
+		return numberOfCopies;
+	}
+
+	public void setNumberOfCopies(int numberOfCopies) {
+		this.numberOfCopies = numberOfCopies;
 	}
 }

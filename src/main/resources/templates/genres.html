@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Zanrovi</title>
+</head>
+<body>
+		<form method="get" action="/Genres">
+			<table class="tabela" border ="1">
+				<caption>Zanrovi</caption>
+				<tr>
+					
+					<td>Sortiraj <a href="/HeapOfBooks/Genres/SortAsc">Rastuce</a> 
+					 <a href="/HeapOfBooks/Genres/SortDesc">Opadajuce</a> 
+					 <a href="/HeapOfBooks/Genres">Ponisti</a>
+					 </td>
+				</tr>
+				<tr>
+					<th>Naziv zanra</th>
+					<th>Opis</th>
+				</tr>
+				<tr th:each="itGenre, status: ${genres}">
+					<td><a th:href="|/HeapOfBooks/Genres/Details?id=${itGenre.id}|" th:text="${itGenre.name}"></a></td>
+					<td th:text="${itGenre.description}"></td>
+				</tr>
+			</table>
+		</form>
+		<p/>
+		<form method="get" action="/HeapOfBooks/Genres/Search">						
+			<input type="text" value="" name="search"/><input type="submit" value="Pretrazi"/>					
+						
+		</form>
+		<p/>
+		<a href="/HeapOfBooks/Genres/Create">Dodaj zanr</a>	
+</body>
+</html>

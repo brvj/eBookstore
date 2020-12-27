@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Zanr-forma za kreiranje</title>
+</head>
+<body>
+		<form method="post" action="/HeapOfBooks/Genres/Create">
+			<table class="tabela">
+				<caption>Forma za kreiranje novog zanra</caption>
+				<tr><th>Naziv:</th><td><input type="text" value="" name="name" required></td></tr>
+				<tr><th>Opis:</th><td><input type="text" value="" name="description" required></td></tr>
+				<tr><th></th><td><input type="submit" value="Kreirajte zanr"/></td></tr>
+			</table>
+		</form>
+</body>
+</html>
