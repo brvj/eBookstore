@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Knjige</title>
+</head>
+<body>
+		<form method="get" action="/Books">
+			<table class="tabela" border ="1">
+				<caption>Knjige</caption>
+				<tr>
+					<th>Naziv knjige</th>
+					<th>Izdavac</th>
+					<th>Autor/i</th>
+					<th>Zanr/ovi</th>
+					<th>Datum izdavanja</th>
+					<th>Cena</th>
+					<th>Ocena</th>
+				</tr>
+				<tr th:each="itBook, status: ${books}">
+					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>
+					<td th:text="${itBook.publisher}"></td>
+					<td>
+						<ul>
+							<li th:each="itAuthor: ${itBook.authors}"><a th:text="${itAuthor}"></a></li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li th:each="itGenre: ${itBook.genre}"><a th:text="${itGenre.name}"></a></li>
+						</ul>
+					</td>
+					<td th:text="${itBook.releaseDate}"></td>
+					<td th:text="${itBook.price}"></td>
+					<td th:text="${itBook.averageRating}">
+				</tr>
+			</table>
+		</form>	
+</body>
+</html>

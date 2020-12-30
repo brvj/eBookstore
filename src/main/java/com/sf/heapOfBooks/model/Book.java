@@ -1,5 +1,6 @@
 package com.sf.heapOfBooks.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
@@ -11,7 +12,7 @@ public class Book {
 	private String name;
 	private String publisher;
 	private List<String> authors;
-	private String releaseDate;
+	private LocalDate releaseDate;
 	private String shortDescription;
 	private String coverPicture;
 	private float price;
@@ -25,8 +26,8 @@ public class Book {
 	
 	public Book() {}
 	
-	public Book(String name, String publisher, List<String> authors, String releaseDate, String shortDescription, String coverPicture,
-					float price, int numberOfPages, BookTypeEnum bookType, LetterEnum letter, String bookLanguage, List<Genre> genre, int numberOfCopies) {
+	public Book(String name, String publisher, List<String> authors, LocalDate releaseDate, String shortDescription, String coverPicture,
+					float price, int numberOfPages, BookTypeEnum bookType, LetterEnum letter, String bookLanguage, int numberOfCopies) {
 		this.name = name;
 		this.publisher = publisher;
 		this.authors = authors;
@@ -38,7 +39,6 @@ public class Book {
 		this.bookType = bookType;
 		this.letter = letter;
 		this.bookLanguage = bookLanguage;
-		this.genre = genre;
 		this.numberOfCopies = numberOfCopies;
 	}
 
@@ -74,11 +74,11 @@ public class Book {
 		this.authors = authors;
 	}
 
-	public String getReleaseDate() {
+	public LocalDate getReleaseDate() {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(String releaseDate) {
+	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 
