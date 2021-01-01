@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Knjiga</title>
+</head>
+<body>
+		<table class="tabela" border ="1">
+			<caption>Knjiga</caption>
+				<tr><th>ID: </th><td th:text="${book.ISBN}"></td></tr>
+				<tr><th>Naziv: </th><td th:text="${book.name}"></td></tr>
+				<tr><th>Izdavac: </th><td th:text="${book.publisher}"></td></tr>
+				<tr><th>Autori/i: </th><td>
+				<ul>
+							<li th:each="itAuthor: ${book.authors}"><a th:text="${itAuthor}"></a></li>
+				</ul>
+				</td></tr>
+				<tr><th>Datum izdavanja: </th><td th:text="${book.releaseDate}"></td></tr>
+				<tr><th>Opis: </th><td th:text="${book.shortDescription}"></td></tr>
+				<tr><th>Cena: </th><td th:text="${book.price}"></td></tr>
+				<tr><th>Broj stranica: </th><td th:text="${book.numberOfPages}"></td></tr>
+				<tr><th>Tip poveza: </th><td th:text="${book.bookType}"></td></tr>
+				<tr><th>Pismo: </th><td th:text="${book.letter}"></td></tr>
+				<tr><th>Jezik: </th><td th:text="${book.bookLanguage}"></td></tr>
+				<tr><th>Prosecna ocena: </th><td th:text="${book.averageRating}"></td></tr>
+				<tr><th>Broj kopija: </th><td th:text="${book.numberOfCopies}"></td></tr>
+				<tr><th>Autori/i: </th><td>
+				<ul>
+							<li th:each="itGenre: ${book.genre}"><a th:text="${itGenre.name}"></a></li>
+				</ul>
+				</td></tr>
+		
+
+		</table>
+		<img th:src="@{${'/images/' + book.coverPicture}}" alt="BookCover"></img>
+</body>
+</html>

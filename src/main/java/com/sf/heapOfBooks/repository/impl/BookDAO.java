@@ -1,7 +1,10 @@
 package com.sf.heapOfBooks.repository.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,8 +14,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
@@ -26,8 +32,8 @@ public class BookDAO implements IBookDAO{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	@Autowired
-	private GenreDAO genreRepository;
+	//@Autowired
+	//private GenreDAO genreRepository;
 	
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
@@ -70,8 +76,6 @@ public class BookDAO implements IBookDAO{
 				books.put(book.getISBN(), book);
 			}
 			
-			
-			
 			Long genreId = rs.getLong(i++);
 			String genreName = rs.getString(i++);
 			String genreDescription = rs.getString(i++);
@@ -92,8 +96,7 @@ public class BookDAO implements IBookDAO{
 	public List<Book> findAll() {
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.id";
+				+ " LEFT JOIN genres g ON bg.genreId = g.id";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		
@@ -102,21 +105,62 @@ public class BookDAO implements IBookDAO{
 
 	@Override
 	public Book findOne(Long id) {
-		String sql = "SELECT b.* FROM books as b"
-				+ "LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ "LEFT JOIN genres g On bg.genreId = g.id"
-				+ "WHERE b.id = ?"
-				+ "ORDER BY b.id";
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.id = ?";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh, id);
 		
 		return bcbh.getBooks().get(0);
 	}
 
+	@Transactional
 	@Override
 	public int create(Book book) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatementCreator preparedStatementCreator = new PreparedStatementCreator() {
+			
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				String sql = "INSERT INTO books (id, name, publicher,authors,releaseDate,description,imagePath,price,numberOfPages,bookType,letter,"
+						+ "bookLanguage,avgRating,numberOfCopies) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				int i = 1;
+				ps.setLong(i++, book.getISBN());
+				ps.setString(i++, book.getName());
+				ps.setString(i++, book.getPublisher());
+				String authors="";
+				for(String s : book.getAuthors()) {
+					authors += s + ",";
+				}
+				StringBuffer sb= new StringBuffer(authors);  
+				sb.deleteCharAt(sb.length()-1);
+				ps.setString(i++, sb.toString());
+				ps.setString(i++, book.getReleaseDate().toString());
+				ps.setString(i++, book.getShortDescription());
+				ps.setString(i++, book.getCoverPicture());
+				ps.setFloat(i++, book.getPrice());
+				ps.setInt(i++, book.getNumberOfPages());
+				ps.setString(i++, book.getBookType().toString());
+				ps.setString(i++, book.getLetter().toString());
+				ps.setString(i++, book.getBookLanguage());
+				ps.setFloat(i++, book.getAverageRating());
+				ps.setInt(i++, book.getNumberOfCopies());
+				
+				return ps;
+			}
+
+		};
+		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		boolean uspeh = jdbcTemplate.update(preparedStatementCreator, keyHolder) == 1;
+		if (uspeh) {
+			String sql = "INSERT INTO bookGenre (bookId, genreId) VALUES (?, ?)";
+			for (Genre g: book.getGenre()) {	
+				uspeh = uspeh && jdbcTemplate.update(sql, keyHolder.getKey(), g.getId()) == 1;
+			}
+		}
+		return uspeh?1:0;
 	}
 
 	@Override

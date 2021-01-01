@@ -18,8 +18,13 @@ public class GenreService implements IGenreService{
 	private GenreDAO genreRepository;
 	
 	private Long newId(List<Long> ids) {
-		Long maxId = Collections.max(ids);		
-		return maxId + 1L;
+		Long id = null;
+		if(ids.isEmpty()) {
+			id = 1L;
+		}else {
+			id = Collections.max(ids) + 1L;
+		}
+		return id;
 	}
 
 	@Override

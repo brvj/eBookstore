@@ -1,6 +1,7 @@
 package com.sf.heapOfBooks.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,9 +20,14 @@ public class BookService implements IBookService{
 	@Autowired
 	private BookDAO bookRepository;
 	
-	private Long newId(List<Long> ids) {
-		Long maxId = Collections.max(ids);		
-		return maxId + 1L;
+	private Long newId(List<Long> ids) {	
+		Long id = null;
+		if(ids.isEmpty()) {
+			id = 1000000000001L;
+		}else {
+			id = Collections.max(ids) + 1L;
+		}
+		return id;
 	}
 	
 	@Override
@@ -36,8 +42,14 @@ public class BookService implements IBookService{
 
 	@Override
 	public void create(Book book) {
-		// TODO Auto-generated method stub
 		
+		List<Long> ids = new ArrayList<Long>();
+		for(Book id : bookRepository.findAll()) {
+			ids.add(id.getISBN());
+		}
+		
+		book.setISBN(newId(ids));
+		bookRepository.create(book);
 	}
 
 	@Override
@@ -165,5 +177,4 @@ public class BookService implements IBookService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

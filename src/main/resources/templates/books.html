@@ -16,6 +16,7 @@
 					<th>Datum izdavanja</th>
 					<th>Cena</th>
 					<th>Ocena</th>
+					<th>Slika</th>
 				</tr>
 				<tr th:each="itBook, status: ${books}">
 					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>
@@ -33,6 +34,7 @@
 					<td th:text="${itBook.releaseDate}"></td>
 					<td th:text="${itBook.price}"></td>
 					<td th:text="${itBook.averageRating}">
+					<td><img th:src="@{${'/images/' + itBook.coverPicture}}" height="50px" width="30px"></td>
 				</tr>
 			</table>
 		</form>	

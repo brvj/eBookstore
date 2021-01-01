@@ -37,7 +37,7 @@ public interface IBookService {
 	
 	 List<Book> searchByPriceTo(int price);
 	
-	 List<Book> searchByPriceFromTo(int priceFrom, int priceTo);
+	 List<Book> searchByPriceFromTo(int priceFrom, int price);
 	
 	 List<Book> searchByNumberOfPagesFrom(int pageNumber);
 	
