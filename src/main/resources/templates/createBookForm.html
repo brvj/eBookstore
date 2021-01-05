@@ -4,32 +4,32 @@
 	<meta charset="UTF-8">
 	<title>Knjiga-forma za kreiranje</title>
 </head>
-<body>
+<body>		
 		<form method="post" enctype="multipart/form-data" action="/HeapOfBooks/Books/Create">
-			<table class="tabela">
-				<caption>Forma za kreiranje nove knjige</caption>
-				<tr><th>Naziv:</th><td><input type="text" value="" name="name" required></td></tr>
-				<tr><th>Izdavac:</th><td><input type="text" value="" name="publisher" required></td></tr>
-				<tr><th>Autor/i:</th><td><input type="text" value="" name="authors" required></td></tr>
-				<tr><th>Datum izdavanja:</th><td><input type="date" value="" name="releaseDate" required></td></tr>
-				<tr><th>Opis:</th><td><input type="text" value="" name="shortDescription" required></td></tr>
-				<tr><th>Cena:</th><td><input type="number" value="" name="price" required></td></tr>
-				<tr><th>Broj stranica:</th><td><input type="number" value="" name="numberOfPages" required></td></tr>
-	 			<tr><th>Zanr:</th><td><select name="genre">
-					<option th:each="itGenre : ${genres}"
-						th:value="${itGenre.id}" th:text="${itGenre.name}"></option>
-				</select></td></tr> 			
-				<tr><th>Tip poveza:</th><td><select name="bookType">
+			<table class="tabela">		
+			<caption>Forma za kreiranje nove knjige</caption>		
+				<tr><th align="left">Naziv:</th><td><input type="text" value="" name="name" required></td></tr>
+				<tr><th align="left">Izdavac:</th><td><input type="text" value="" name="publisher" required></td></tr>
+				<tr><th align="left">Autor/i:</th><td><input type="text" value="" name="authors" required></td></tr>
+				<tr><th align="left">Datum izdavanja:</th><td><input type="date" value="" name="releaseDate" required></td></tr>
+				<tr><th align="left">Opis:</th><td><input type="text" value="" name="shortDescription" required></td></tr>
+				<tr><th align="left">Cena:</th><td><input type="number" value="" name="price" required></td></tr>
+				<tr><th align="left">Broj stranica:</th><td><input type="number" value="" name="numberOfPages" required></td></tr>			
+				<tr><th align="left">Tip poveza:</th><td><select name="bookType">
 					<option th:each="itBookType : ${T(com.sf.heapOfBooks.model.enums.BookTypeEnum).values()}"
 						th:value="${itBookType}" th:text="${itBookType}"></option> 
 				</select></td></tr>
-				<tr><th>Pismo:</th><td><select name="letter">
+				<tr><th align="left">Pismo:</th><td><select name="letter">
 					<option th:each="itLetterType : ${T(com.sf.heapOfBooks.model.enums.LetterEnum).values()}"
 						th:value="${itLetterType}" th:text="${itLetterType}"></option> 
 				</select></td></tr>
-				<tr><th>Jezik:</th><td><input type="text" value="" name="language" required></td></tr>
-				<tr><th>Broj kopija:</th><td><input type="number" value="" name="numberOfCopies" required></td></tr>
-				<tr><th>Slika:</th><td><input type="file" name="image" required></td></tr>
+				<tr><th align="left">Zanr:</th><td><select name="genre" multiple="multiple">
+					<option th:each="itGenre : ${genres}"
+						th:value="${itGenre.id}" th:text="${itGenre.name}"></option>
+				</select></td></tr> 
+				<tr><th align="left">Jezik:</th><td><input type="text" value="" name="language" required></td></tr>
+				<tr><th align="left">Broj kopija:</th><td><input type="number" value="" name="numberOfCopies" required></td></tr>
+				<tr><th align="left">Slika:</th><td><input type="file" name="image" required></td></tr>
 				
 				<tr><th></th><td><input type="submit" value="Kreirajte knjigu"/></td></tr>
 			</table>

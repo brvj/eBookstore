@@ -1,6 +1,7 @@
 package com.sf.heapOfBooks.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
@@ -21,7 +22,7 @@ public class Book {
 	private LetterEnum letter;
 	private String bookLanguage;
 	private float averageRating;
-	private List<Genre> genre;
+	private List<Genre> genre = new ArrayList<Genre>();
 	private int numberOfCopies;
 	
 	public Book() {}

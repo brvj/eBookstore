@@ -33,6 +33,7 @@ public class BookController {
 	
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static final String folder = "C:\\Users\\Boris\\Desktop\\Fakultet\\Semestar I\\Osnove WEB programiranja\\Projekat\\heapOfBooks\\src\\main\\resources\\static\\images\\";
+	private static List<Genre> gList = new ArrayList<Genre>();
 	
 	@Autowired
 	private BookService bookService;
@@ -68,9 +69,9 @@ public class BookController {
 			@RequestParam String releaseDate,
 			@RequestParam String shortDescription, 
 			@RequestParam float price, 
-			@RequestParam int numberOfPages,
-			@RequestParam String genre, 
+			@RequestParam int numberOfPages, 
 			@RequestParam BookTypeEnum bookType,
+			@RequestParam String[] genre,
 			@RequestParam LetterEnum letter, 
 			@RequestParam String language, 
 			@RequestParam int numberOfCopies, 
@@ -83,22 +84,24 @@ public class BookController {
 				
 		String[] auth = authors.split(",");
 		List<String> authorsList = new ArrayList<String>();
-		List<Genre> genres = new ArrayList<Genre>();
 		
 		for(String s : auth) {
 			authorsList.add(s);
 		}
-		String imageName = image.getOriginalFilename();
+		
+		for(String s : genre) {
+			gList.add(genreService.findOne(Long.valueOf(s)));
+		}
 		
 		Book book = new Book(name, publisher, authorsList, LocalDate.parse(releaseDate, formatterDate), shortDescription, 
-				imageName, price, numberOfPages, bookType, letter, language, numberOfCopies);
+				image.getOriginalFilename(), price, numberOfPages, bookType, letter, language, numberOfCopies);
 		
-		Genre g = genreService.findOne(Long.valueOf(genre));
-		genres.add(g);
-		book.setGenre(genres);
+		book.setGenre(gList);
 		book.setAverageRating(0);
 			
-		bookService.create(book);		
+		bookService.create(book);	
+		gList.clear();
+		response.sendRedirect("/HeapOfBooks/Books");
 	}
 	
 	@GetMapping(value = "/Details")
@@ -109,5 +112,86 @@ public class BookController {
 		maw.addObject("book", book);
 		
 		return maw;
+	}
+	
+	@GetMapping(value = "/Update")
+	public ModelAndView update(@RequestParam Long id) {
+		ModelAndView maw = new ModelAndView("updateBookForm");
+		
+		Book book = bookService.findOne(id);
+		List<Genre> genres = genreService.findAll();
+
+		String authors="";
+		for(String s : book.getAuthors()) {
+			authors += s + ",";
+		}
+		StringBuffer sb= new StringBuffer(authors);
+		
+		maw.addObject("genres", genres);
+		maw.addObject("book", book);
+		maw.addObject("authors", sb.deleteCharAt(sb.length()-1));
+		
+		return maw;
+	}
+	
+	@PostMapping(value = "/Update")
+	public void update(@RequestParam String name, 
+			@RequestParam String publisher, 
+			@RequestParam String authors,
+			@RequestParam String releaseDate,
+			@RequestParam String shortDescription, 
+			@RequestParam float price, 
+			@RequestParam int numberOfPages, 
+			@RequestParam BookTypeEnum bookType,
+			@RequestParam String[] genre,
+			@RequestParam LetterEnum letter, 
+			@RequestParam String language, 
+			@RequestParam Long id, 
+			HttpServletResponse response) throws IOException {
+		
+		Book book = bookService.findOne(id);
+		book.setName(name);
+		book.setPublisher(publisher);
+		List<String> authorsList = new ArrayList<String>();
+		String[] auth = authors.split(",");
+		for(String s : auth) {
+			authorsList.add(s);
+		}
+		book.setAuthors(authorsList);
+		book.setReleaseDate(LocalDate.parse(releaseDate, formatterDate));
+		book.setShortDescription(shortDescription);
+		book.setPrice(price);
+		book.setNumberOfPages(numberOfPages);
+		book.setBookType(bookType);
+		for(String s : genre) {
+			gList.add(genreService.findOne(Long.valueOf(s)));
+		}
+		book.setGenre(gList);
+		book.setLetter(letter);
+		book.setBookLanguage(language);
+		
+		bookService.update(book);
+		gList.clear();
+		
+		response.sendRedirect("/HeapOfBooks/Books");
+	}
+	
+	@GetMapping(value = "/Order")
+	public ModelAndView order(@RequestParam Long id) {
+		ModelAndView maw = new ModelAndView("order");
+		
+		maw.addObject("book", bookService.findOne(id));
+		
+		return maw;
+	}
+	
+	@PostMapping(value = "/Order")
+	public void order(@RequestParam Long id, @RequestParam int numberOfCopies, HttpServletResponse response) throws IOException {
+		Book book = bookService.findOne(id);
+		
+		book.setNumberOfCopies(book.getNumberOfCopies() + numberOfCopies);
+		bookService.orderCopiesOfBook(book);
+		
+		response.sendRedirect("/HeapOfBooks/Books");
 	}
 }

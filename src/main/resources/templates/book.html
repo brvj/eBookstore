@@ -24,14 +24,15 @@
 				<tr><th>Jezik: </th><td th:text="${book.bookLanguage}"></td></tr>
 				<tr><th>Prosecna ocena: </th><td th:text="${book.averageRating}"></td></tr>
 				<tr><th>Broj kopija: </th><td th:text="${book.numberOfCopies}"></td></tr>
-				<tr><th>Autori/i: </th><td>
+				<tr><th>Zanr/ovi: </th><td>
 				<ul>
 							<li th:each="itGenre: ${book.genre}"><a th:text="${itGenre.name}"></a></li>
 				</ul>
 				</td></tr>
-		
-
-		</table>
-		<img th:src="@{${'/images/' + book.coverPicture}}" alt="BookCover"></img>
+				<tr><th>Slika: </th><td><img th:src="@{${'/images/' + book.coverPicture}}" alt="BookCover" height="75px" width="75px"></img></td></tr>
+		</table>		
+		<a th:href="|/HeapOfBooks/Books/Update?id=${book.ISBN}|">Izmeni knjigu</a>
+		<p/>
+		<a th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|">Poruci knjige</a>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Knjiga-azuriranje</title>
+</head>
+<body>		
+		<form method="post" th:action="@{Update}">
+			<table class="tabela">		
+			<caption>Forma za kreiranje nove knjige</caption>		
+				<tr><th align="left">Naziv:</th><td><input type="text" th:value="${book.name}" name="name" required></td></tr>
+				<tr><th align="left">Izdavac:</th><td><input type="text" th:value="${book.publisher}" name="publisher" required></td></tr>
+				<tr><th align="left">Autor/i:</th><td><input type="text" th:value="${authors}" name="authors" required></td></tr>
+				<tr><th align="left">Datum izdavanja:</th><td><input type="date" th:value="${book.releaseDate}" name="releaseDate" required></td></tr>
+				<tr><th align="left">Opis:</th><td><input type="text" th:value="${book.shortDescription}" name="shortDescription" required></td></tr>
+				<tr><th align="left">Cena:</th><td><input type="number" th:value="${book.price}" name="price" required></td></tr>
+				<tr><th align="left">Broj stranica:</th><td><input type="number" th:value="${book.numberOfPages}" name="numberOfPages" required></td></tr>			
+				<tr><th align="left">Tip poveza:</th><td><select name="bookType">
+					<option th:each="itBookType : ${T(com.sf.heapOfBooks.model.enums.BookTypeEnum).values()}"
+						th:value="${itBookType}" th:text="${itBookType}" th:selected="${book.bookType}"></option> 
+				</select></td></tr>
+				<tr><th align="left">Pismo:</th><td><select name="letter">
+					<option th:each="itLetterType : ${T(com.sf.heapOfBooks.model.enums.LetterEnum).values()}"
+						th:value="${itLetterType}" th:text="${itLetterType}" th:selected="${book.letter}"></option> 
+				</select></td></tr>
+				<tr><th align="left">Zanr:</th><td><select name="genre" multiple="multiple">
+					<option th:each="itGenre : ${genres}"
+						th:value="${itGenre.id}" th:text="${itGenre.name}" th:selected="book.genre.name"></option>
+				</select></td></tr> 
+				<tr><th align="left">Jezik:</th><td><input type="text" th:value="${book.bookLanguage}" name="language" required></td></tr>
+				
+				<tr><th></th><td><input type="submit" value="Azurirajte knjigu"/></td></tr>
+			</table>
+			<input type="hidden" name="id" th:value="${book.ISBN}"/>
+		</form>
+</body>
+</html>

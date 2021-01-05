@@ -40,7 +40,6 @@ public class BookDAO implements IBookDAO{
 	private class BookRowCallBackHandler implements RowCallbackHandler{
 
 		private Map<Long, Book> books = new LinkedHashMap<Long, Book>();
-		private List<Genre> genres = new ArrayList<Genre>();
 		
 		@Override
 		public void processRow(ResultSet rs) throws SQLException {
@@ -84,8 +83,7 @@ public class BookDAO implements IBookDAO{
 			genre.setId(genreId);
 			genre.setDeleted(genreDeleted);
 
-			genres.add(genre);
-			book.setGenre(genres);
+			book.getGenre().add(genre);
 		}
 		public List<Book> getBooks(){
 			return new ArrayList<Book>(books.values());
@@ -163,10 +161,32 @@ public class BookDAO implements IBookDAO{
 		return uspeh?1:0;
 	}
 
+	@Transactional
 	@Override
 	public int update(Book book) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM bookGenre WHERE bookId = ?";
+		jdbcTemplate.update(sql, book.getISBN());
+		
+		boolean uspeh = true;
+		sql = "INSERT INTO bookGenre (bookId, genreId) VALUES (?, ?)";
+		for(Genre g : book.getGenre()) {
+			uspeh = uspeh && jdbcTemplate.update(sql, book.getISBN(), g.getId()) == 1;
+		}
+		
+		sql = "UPDATE books SET name = ?, publicher = ?, authors = ?, releaseDate = ?, description = ?, price = ?, bookType = ?, letter = ?"
+				+ " WHERE id = ?";
+		
+		String authors="";
+		for(String s : book.getAuthors()) {
+			authors += s + ",";
+		}
+		StringBuffer sb= new StringBuffer(authors);  
+		sb.deleteCharAt(sb.length()-1);
+		
+		uspeh = uspeh && jdbcTemplate.update(sql,book.getName(),book.getPublisher(),sb,book.getReleaseDate().toString(),book.getShortDescription(),
+				book.getPrice(),book.getBookType().toString(),book.getLetter().toString(),book.getISBN()) == 1;
+		
+		return uspeh?1:0;
 	}
 
 	@Override
@@ -175,10 +195,15 @@ public class BookDAO implements IBookDAO{
 		return 0;
 	}
 
+	@Transactional
 	@Override
 	public int orderCopiesOfBook(Book book) {
-		// TODO Auto-generated method stub
-		return 0;
+		boolean uspeh = true;
+		String sql = "UPDATE books SET numberOfCopies = ? WHERE id = ?";
+		
+		uspeh = uspeh && jdbcTemplate.update(sql,book.getNumberOfCopies(),book.getISBN()) == 1;
+		
+		return uspeh?1:0;
 	}
 
 	@Override

@@ -54,8 +54,7 @@ public class BookService implements IBookService{
 
 	@Override
 	public void update(Book book) {
-		// TODO Auto-generated method stub
-		
+		bookRepository.update(book);		
 	}
 
 	@Override
@@ -66,8 +65,7 @@ public class BookService implements IBookService{
 
 	@Override
 	public void orderCopiesOfBook(Book book) {
-		// TODO Auto-generated method stub
-		
+		bookRepository.orderCopiesOfBook(book);
 	}
 
 	@Override
