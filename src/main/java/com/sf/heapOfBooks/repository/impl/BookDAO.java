@@ -208,110 +208,230 @@ public class BookDAO implements IBookDAO{
 
 	@Override
 	public List<Book> searchByCopiesFrom(int numberOfCopies) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies >= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh, numberOfCopies);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByCopiesTo(int numberOfCopies) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies <= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh, numberOfCopies);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByCopiesFromTo(int numberOfCopiesFrom, int numberOfCopiesTo) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE (b.numberOfCopies >= ? AND b.numberOfCopies <= ?)";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh, numberOfCopiesFrom, numberOfCopiesTo);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByNameOrPublisher(String search) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE (b.name LIKE ? OR b.publicher LIKE ?)";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,search,search);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByAuthors(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.authors LIKE ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,author);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> serachByReleaseDate(LocalDate releaseDate) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.releaseDate LIKE ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,releaseDate.toString());
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> serachByPriceFrom(int price) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.price >= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,price);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByPriceTo(int price) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.price <= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,price);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByPriceFromTo(int priceFrom, int priceTo) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE (b.price >= ? AND b.price <= ?)";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,priceFrom,priceTo);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesFrom(int pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfPages >= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,pageNumber);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesTo(int pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfPages <= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,pageNumber);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesFromTo(int pageNumberFrom, int pageNumberTo) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE (b.numberOfPages >= ? AND b.numberOfPages <= ?)";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,pageNumberFrom,pageNumberTo);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByBookType(BookTypeEnum bookType) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.bookType = ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,bookType.toString());
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> seacrhByLetter(LetterEnum letter) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.letter = ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,letter.toString());
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByLanguage(String language) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.bookLanguage = ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,language);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByRatingFrom(float rating) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.avgRating >= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,rating);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByRatingTo(float rating) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.avgRating <= ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,rating);
+		
+		return bcbh.getBooks();
 	}
 
 	@Override
 	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE (b.avgRating >= ? AND b.avgRating <= ?)";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,ratingFrom,ratingTo);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> searchByGenre(Long id) {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE g.id = ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh,id);
+		
+		return bcbh.getBooks();
 	}
 
 }

@@ -5,10 +5,59 @@
 	<title>Knjige</title>
 </head>
 <body>
-		<form method="get" action="/Books">
+		<form method="get" th:action="@{Books}">
 			<table class="tabela" border ="1">
 				<caption>Knjige</caption>
 				<tr>
+					<th colspan="2"> 
+						Broj kopija od:<input type="number" min="0" th:value="${param.numberOfCopiesFrom}?: ''" name = "numberOfCopiesFrom"/><br/>
+						Broj kopija do:<input type="number" min="0" th:value="${param.numberOfCopiesTo}?: ''" name="numberOfCopiesTo"/>
+					</th>
+					
+					<th colspan="2"> 
+						Stranice od:<input type="number" min="0" th:value="${param.pageNumFrom}?: ''" name = "pageNumFrom"/><br/>
+						Stranice do:<input type="number" min="0" th:value="${param.pageNumTo}?: ''" name="pageNumTo"/>
+					</th>
+					
+					<th>Pretraga po povezu:
+						<select name="bookType">
+							<option value="">Povez</option>
+							<option th:each="itBookType : ${T(com.sf.heapOfBooks.model.enums.BookTypeEnum).values()}"
+								th:value="${itBookType}" th:text="${itBookType}" >
+						</select>
+					</th>
+					<th>Pretraga po pismu:
+						<select name="letter">
+							<option value="">Pismo</option>
+							<option th:each="itLetterType : ${T(com.sf.heapOfBooks.model.enums.LetterEnum).values()}"
+								th:value="${itLetterType}" th:text="${itLetterType}" >
+						</select>
+					</th>
+					<th>Jezik:<input type="text" th:value="${param.language}?: ''" name = "language"/></th>		
+					<th><a th:href="@{Books}">Ponisti rezultate pretrage</a>						
+				</tr>
+				<tr>
+					<th colspan="2">Pretraga (naziv,izdavac):<input type="text" min="" th:value="${param.search}?: ''" name="search"/></th>
+					<th>Pretraga autor:<input type="text" min="" th:value="${param.author}?: ''" name="author"/></th>
+					<th>Pretraga zanr:
+						<select name="id">
+								<option value="">Zanr</option>
+								<option th:each="itGenre : ${genres}"
+									th:value="${itGenre.id}" th:text="${itGenre.name}" >
+						</select>
+					</th>
+					<th>Datum:<input type="date" th:value="${param.releaseDate}?: ''" name="releaseDate"/></th>
+					<th> 
+						Cena od:<input type="number" min="0" th:value="${param.priceFrom}?: ''" name = "priceFrom"/><br/>
+						Cena do:<input type="number" min="0" th:value="${param.priceTo}?: ''" name="priceTo"/>
+					</th>
+					<th> 
+						Ocena od:<input type="number" min="0" th:value="${param.ratingFrom}?: ''" name = "ratingFrom"/><br/>
+						Ocena do:<input type="number" min="0" th:value="${param.ratingTo}?: ''" name="ratingTo"/>
+					</th>
+					<th><input type="submit" value="Pretraži"/></th>
+				</tr>				
+				<tr>					
 					<th>Naziv knjige</th>
 					<th>Izdavac</th>
 					<th>Autor/i</th>
@@ -18,6 +67,7 @@
 					<th>Ocena</th>
 					<th>Slika</th>
 				</tr>
+				
 				<tr th:each="itBook, status: ${books}">
 					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>
 					<td th:text="${itBook.publisher}"></td>

@@ -56,4 +56,6 @@ public interface IBookService {
 	 List<Book> searchByRatingTo(float rating);
 	
 	 List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo);
+	 
+	 List<Book> searchByGenre(Long genreId);
 }

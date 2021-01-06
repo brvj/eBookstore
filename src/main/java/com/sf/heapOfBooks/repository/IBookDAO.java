@@ -56,4 +56,6 @@ public interface IBookDAO {
 	public List<Book> searchByRatingTo(float rating);
 	
 	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo);	
+	
+	public List<Book> searchByGenre(Long genreId);
 }

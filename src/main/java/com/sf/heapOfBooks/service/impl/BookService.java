@@ -70,109 +70,97 @@ public class BookService implements IBookService{
 
 	@Override
 	public List<Book> searchByCopiesFrom(int numberOfCopies) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByCopiesFrom(numberOfCopies);
 	}
 
 	@Override
 	public List<Book> searchByCopiesTo(int numberOfCopies) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByCopiesTo(numberOfCopies);
 	}
 
 	@Override
 	public List<Book> searchByCopiesFromTo(int numberOfCopiesFrom, int numberOfCopiesTo) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByCopiesFromTo(numberOfCopiesFrom, numberOfCopiesTo);
 	}
 
 	@Override
 	public List<Book> searchByNameOrPublisher(String search) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByNameOrPublisher(search);
 	}
 
 	@Override
 	public List<Book> searchByAuthors(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByAuthors(author);
 	}
 
 	@Override
 	public List<Book> serachByReleaseDate(LocalDate releaseDate) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.serachByReleaseDate(releaseDate);
 	}
 
 	@Override
 	public List<Book> serachByPriceFrom(int price) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.serachByPriceFrom(price);
 	}
 
 	@Override
 	public List<Book> searchByPriceTo(int price) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByPriceTo(price);
 	}
 
 	@Override
 	public List<Book> searchByPriceFromTo(int priceFrom, int priceTo) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByPriceFromTo(priceFrom, priceTo);
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesFrom(int pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByNumberOfPagesFrom(pageNumber);
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesTo(int pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByNumberOfPagesTo(pageNumber);
 	}
 
 	@Override
 	public List<Book> searchByNumberOfPagesFromTo(int pageNumberFrom, int pageNumberTo) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByNumberOfPagesFromTo(pageNumberFrom, pageNumberTo);
 	}
 
 	@Override
 	public List<Book> searchByBookType(BookTypeEnum bookType) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByBookType(bookType);
 	}
 
 	@Override
 	public List<Book> seacrhByLetter(LetterEnum letter) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.seacrhByLetter(letter);
 	}
 
 	@Override
 	public List<Book> searchByLanguage(String language) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByLanguage(language);
 	}
 
 	@Override
 	public List<Book> searchByRatingFrom(float rating) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByRatingFrom(rating);
 	}
 
 	@Override
 	public List<Book> searchByRatingTo(float rating) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByRatingTo(rating);
 	}
 
 	@Override
 	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookRepository.searchByRatingFromTo(ratingFrom, ratingTo);
 	}
+
+	@Override
+	public List<Book> searchByGenre(Long id) {
+		return bookRepository.searchByGenre(id);
+	}
+	
 }

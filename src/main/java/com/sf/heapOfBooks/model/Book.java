@@ -43,6 +43,31 @@ public class Book {
 		this.numberOfCopies = numberOfCopies;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime*result + ((ISBN == null) ? 0 : ISBN.hashCode());
+		return 31 + ISBN.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		if (ISBN == null) {
+			if (other.ISBN != null)
+				return false;
+		} else if (!ISBN.equals(other.ISBN))
+			return false;
+		return true;
+	}
+	
 	public Long getISBN() {
 		return ISBN;
 	}

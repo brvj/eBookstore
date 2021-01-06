@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,11 +43,97 @@ public class BookController {
 	private GenreService genreService;
 	
 	@GetMapping
-	public ModelAndView init() {
-		List<Book> books = bookService.findAll();
+	public ModelAndView init(
+			@RequestParam(required = false) Integer numberOfCopiesFrom,
+			@RequestParam(required = false) Integer numberOfCopiesTo,
+			@RequestParam(required = false) String search,
+			@RequestParam(required = false) String author,
+			@RequestParam(required = false) String releaseDate,
+			@RequestParam(required = false) Integer priceFrom,
+			@RequestParam(required = false) Integer priceTo,
+			@RequestParam(required = false) Integer pageNumFrom,
+			@RequestParam(required = false) Integer pageNumTo,
+			@RequestParam(required = false) BookTypeEnum bookType,
+			@RequestParam(required = false) LetterEnum letter,
+			@RequestParam(required = false) String language,
+			@RequestParam(required = false) Integer ratingFrom,
+			@RequestParam(required = false) Integer ratingTo,
+			@RequestParam(required = false) Long id) {
+		List<Book> books = bookService.findAll();	
+		List<Genre> genres = genreService.findAll();
 		
 		ModelAndView returnBooks = new ModelAndView("books");
-		returnBooks.addObject("books", books);
+		returnBooks.addObject("genres", genres);
+		List<Book> bookFilter = new ArrayList<Book>();
+		
+		if(numberOfCopiesFrom != null) {
+			bookFilter.addAll(bookService.searchByCopiesFrom(numberOfCopiesFrom));
+		}
+		if(numberOfCopiesTo != null) {
+			bookFilter.addAll(bookService.searchByCopiesTo(numberOfCopiesTo));
+		}
+		if(numberOfCopiesFrom != null && numberOfCopiesTo != null) {
+			bookFilter.addAll(bookService.searchByCopiesFromTo(numberOfCopiesFrom,numberOfCopiesTo));
+		}
+		if(search != null) {
+			bookFilter.addAll(bookService.searchByNameOrPublisher(search));
+		}
+		if(author != null) {
+			bookFilter.addAll(bookService.searchByAuthors(author));
+		}
+		if(releaseDate != null && releaseDate != "") {
+			bookFilter.addAll(bookService.serachByReleaseDate(LocalDate.parse(releaseDate, formatterDate)));
+		}
+		if(priceFrom != null) {
+			bookFilter.addAll(bookService.serachByPriceFrom(priceFrom));
+		}
+		if(priceTo != null) {
+			bookFilter.addAll(bookService.searchByPriceTo(priceTo));
+		}
+		if(priceTo != null && priceFrom != null) {
+			bookFilter.addAll(bookService.searchByPriceFromTo(priceFrom, priceTo));
+		}
+		if(pageNumTo != null) {
+			bookFilter.addAll(bookService.searchByNumberOfPagesTo(pageNumTo));
+		}
+		if(pageNumFrom != null) {
+			bookFilter.addAll(bookService.searchByNumberOfPagesFrom(pageNumFrom));
+		}
+		if(pageNumTo != null && pageNumFrom != null) {
+			bookFilter.addAll(bookService.searchByNumberOfPagesFromTo(pageNumFrom, pageNumTo));
+		}
+		if(bookType != null) {
+			bookFilter.addAll(bookService.searchByBookType(bookType));
+		}
+		if(letter != null) {
+			bookFilter.addAll(bookService.seacrhByLetter(letter));
+		}
+		if(language != null) {
+			bookFilter.addAll(bookService.searchByLanguage(language));
+		}
+		if(ratingFrom != null) {
+			bookFilter.addAll(bookService.searchByRatingFrom(ratingFrom));
+		}
+		if(ratingTo != null) {
+			bookFilter.addAll(bookService.searchByRatingTo(ratingTo));
+		}
+		if(ratingFrom != null && ratingTo != null) {
+			bookFilter.addAll(bookService.searchByRatingFromTo(ratingFrom,ratingTo));
+		}
+		if(id != null) {
+			bookFilter.addAll(bookService.searchByGenre(id));
+		}
+		
+				
+		if(numberOfCopiesTo == null && numberOfCopiesFrom == null && search == null &&
+				author == null && releaseDate == null && priceTo == null && priceFrom == null &&
+				pageNumFrom == null && pageNumTo == null && bookType == null && letter == null &&
+				language == null && ratingFrom == null && ratingTo == null && id == null)
+			return returnBooks.addObject("books", books);
+		
+		List<Book> removeDuplicates = bookFilter.stream().distinct().collect(Collectors.toList());
+
+		returnBooks.addObject("books", removeDuplicates);
 		
 		return returnBooks;		
 	}
