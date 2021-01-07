@@ -32,9 +32,6 @@ public class BookDAO implements IBookDAO{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	//@Autowired
-	//private GenreDAO genreRepository;
-	
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	private class BookRowCallBackHandler implements RowCallbackHandler{
@@ -434,4 +431,220 @@ public class BookDAO implements IBookDAO{
 		return bcbh.getBooks();
 	}
 
+	@Override
+	public List<Book> orderByNameASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.name ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByNameDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.name DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByPublisherASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.publicher ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByPublisherDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.publicher DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByAuthorsASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.authors ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByAuthorsDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.authors DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByReleaseDateASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.releaseDate ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByReleaseDateDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.releaseDate DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByPriceASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.price ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByPriceDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.price DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfPagesASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.numberOfPages ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfPagesDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.numberOfPages DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByLanguageASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.bookLanguage ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByLanguageDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.bookLanguage DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByRatingASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.avgRating ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByRatingDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.avgRating DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfCopiesASC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.numberOfCopies ASC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfCopiesDESC() {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	ORDER BY b.numberOfCopies DESC";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		return bcbh.getBooks();
+	}
+	
 }

@@ -1,5 +1,6 @@
 package com.sf.heapOfBooks.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ import com.sf.heapOfBooks.service.impl.GenreService;
 public class BookController {
 	
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	private static final String folder = "C:\\Users\\Boris\\Desktop\\Fakultet\\Semestar I\\Osnove WEB programiranja\\Projekat\\heapOfBooks\\src\\main\\resources\\static\\images\\";
+	private static String folder = "";
 	private static List<Genre> gList = new ArrayList<Genre>();
 	
 	@Autowired
@@ -41,6 +43,14 @@ public class BookController {
 	
 	@Autowired
 	private GenreService genreService;
+	
+	@PostConstruct
+	private void imagesPath() {
+		String path = "src/main/resources/static/images/";
+		
+		File file = new File(path);
+		folder = file.getAbsolutePath();		
+	}
 	
 	@GetMapping
 	public ModelAndView init(
@@ -166,7 +176,7 @@ public class BookController {
 			HttpServletResponse response) throws IOException {
 				
 		byte[] bytes = image.getBytes();
-		Path path = Paths.get(folder + image.getOriginalFilename());
+		Path path = Paths.get(folder + "\\" + image.getOriginalFilename());
 		Files.write(path, bytes);
 				
 		String[] auth = authors.split(",");
@@ -280,5 +290,167 @@ public class BookController {
 		bookService.orderCopiesOfBook(book);
 		
 		response.sendRedirect("/HeapOfBooks/Books");
+	}
+	
+	@GetMapping(value = "/OrderByNameASC")
+	public ModelAndView orderByNameAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNameASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByNameDESC")
+	public ModelAndView orderByNameDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNameDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByPublisherASC")
+	public ModelAndView orderByPublisherAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByPublisherASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByPublisherDESC")
+	public ModelAndView orderByPublisherDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByPublisherDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByAuthorsASC")
+	public ModelAndView orderByAuthorsAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByAuthorsASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByAuthorsDESC")
+	public ModelAndView orderByAuthorsDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByAuthorsDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByDateASC")
+	public ModelAndView orderByDateAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByReleaseDateASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByDateDESC")
+	public ModelAndView orderByDateDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByReleaseDateDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByPriceASC")
+	public ModelAndView orderByPriceAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByPriceASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByPriceDESC")
+	public ModelAndView orderByPriceDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByPriceDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByNumPagesASC")
+	public ModelAndView orderByNumPagesAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNumberOfPagesASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByNumPagesDESC")
+	public ModelAndView orderByNumPagesDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNumberOfPagesDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByLanguageASC")
+	public ModelAndView orderByLanguageAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByLanguageASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByLanguageDESC")
+	public ModelAndView orderByLanguageDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByLanguageDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByRatingASC")
+	public ModelAndView orderByRatingAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByRatingASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByRatingDESC")
+	public ModelAndView orderByRatingDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByRatingDESC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByNumCopiesASC")
+	public ModelAndView orderByNumCopiesAsc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNumberOfCopiesASC());
+		
+		return maw;
+	}
+	
+	@GetMapping(value = "/OrderByNumCopiesDESC")
+	public ModelAndView orderByNumCopiesDesc() {
+		ModelAndView maw = new ModelAndView("books");
+		
+		maw.addObject("books", bookService.orderByNumberOfCopiesDESC());
+		
+		return maw;
 	}
 }

@@ -58,4 +58,40 @@ public interface IBookService {
 	 List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo);
 	 
 	 List<Book> searchByGenre(Long genreId);
+	 
+	 List<Book> orderByNameASC();
+		
+	 List<Book> orderByNameDESC();
+		
+	 List<Book> orderByPublisherASC();
+		
+	 List<Book> orderByPublisherDESC();
+
+	 List<Book> orderByAuthorsASC();
+		
+	 List<Book> orderByAuthorsDESC();
+		
+	 List<Book> orderByReleaseDateASC();
+		
+	 List<Book> orderByReleaseDateDESC();
+
+	 List<Book> orderByPriceASC();
+		
+	 List<Book> orderByPriceDESC();
+		
+	 List<Book> orderByNumberOfPagesASC();
+		
+	 List<Book> orderByNumberOfPagesDESC();
+
+	 List<Book> orderByLanguageASC();
+		
+	 List<Book> orderByLanguageDESC();
+		
+	 List<Book> orderByRatingASC();
+		
+	 List<Book> orderByRatingDESC();
+		
+	 List<Book> orderByNumberOfCopiesASC();
+		
+	 List<Book> orderByNumberOfCopiesDESC();
 }

@@ -10,13 +10,13 @@
 				<caption>Knjige</caption>
 				<tr>
 					<th colspan="2"> 
-						Broj kopija od:<input type="number" min="0" th:value="${param.numberOfCopiesFrom}?: ''" name = "numberOfCopiesFrom"/><br/>
-						Broj kopija do:<input type="number" min="0" th:value="${param.numberOfCopiesTo}?: ''" name="numberOfCopiesTo"/>
+						Broj kopija od:<input type="number" min="0" th:value="${param.numberOfCopiesFrom}?: ''" name = "numberOfCopiesFrom"/>   <a th:href="@{/Books/OrderByNumCopiesASC}">▲</a><br/>
+						Broj kopija do:<input type="number" min="0" th:value="${param.numberOfCopiesTo}?: ''" name="numberOfCopiesTo"/>   <a th:href="@{/Books/OrderByNumCopiesDESC}">▼</a>
 					</th>
 					
 					<th colspan="2"> 
-						Stranice od:<input type="number" min="0" th:value="${param.pageNumFrom}?: ''" name = "pageNumFrom"/><br/>
-						Stranice do:<input type="number" min="0" th:value="${param.pageNumTo}?: ''" name="pageNumTo"/>
+						Stranice od:<input type="number" min="0" th:value="${param.pageNumFrom}?: ''" name = "pageNumFrom"/>  <a th:href="@{/Books/OrderByNumPagesASC}">▲</a><br/>
+						Stranice do:<input type="number" min="0" th:value="${param.pageNumTo}?: ''" name="pageNumTo"/>   <a th:href="@{/Books/OrderByNumPagesDESC}">▼</a>
 					</th>
 					
 					<th>Pretraga po povezu:
@@ -33,8 +33,8 @@
 								th:value="${itLetterType}" th:text="${itLetterType}" >
 						</select>
 					</th>
-					<th>Jezik:<input type="text" th:value="${param.language}?: ''" name = "language"/></th>		
-					<th><a th:href="@{Books}">Ponisti rezultate pretrage</a>						
+					<th>Jezik:<input type="text" th:value="${param.language}?: ''" name = "language"/>   <a th:href="@{/Books/OrderByLanguageASC}">▲</a>     <a th:href="@{/Books/OrderByLanguageDESC}">▼</a></th>		
+					<th><a th:href="@{/Books}">Ponisti rezultate</a>						
 				</tr>
 				<tr>
 					<th colspan="2">Pretraga (naziv,izdavac):<input type="text" min="" th:value="${param.search}?: ''" name="search"/></th>
@@ -58,13 +58,13 @@
 					<th><input type="submit" value="Pretraži"/></th>
 				</tr>				
 				<tr>					
-					<th>Naziv knjige</th>
-					<th>Izdavac</th>
-					<th>Autor/i</th>
+					<th>Naziv knjige  <a th:href="@{/Books/OrderByNameASC}">▲</a>     <a th:href="@{/Books/OrderByNameDESC}">▼</a></th>
+					<th>Izdavac   <a th:href="@{/Books/OrderByPublisherASC}">▲</a>     <a th:href="@{/Books/OrderByPublisherDESC}">▼</a></th>
+					<th>Autor/i   <a th:href="@{/Books/OrderByAuthorsASC}">▲</a>     <a th:href="@{/Books/OrderByAuthorsDESC}">▼</a></th>
 					<th>Zanr/ovi</th>
-					<th>Datum izdavanja</th>
-					<th>Cena</th>
-					<th>Ocena</th>
+					<th>Datum izdavanja   <a th:href="@{/Books/OrderByDateASC}">▲</a>     <a th:href="@{/Books/OrderByDateDESC}">▼</a></th>
+					<th>Cena   <a th:href="@{/Books/OrderByPriceASC}">▲</a>     <a th:href="@{/Books/OrderByPriceDESC}">▼</a></th>
+					<th>Ocena   <a th:href="@{/Books/OrderByRatingASC}">▲</a>     <a th:href="@{/Books/OrderByRatingDESC}">▼</a></th>
 					<th>Slika</th>
 				</tr>
 				

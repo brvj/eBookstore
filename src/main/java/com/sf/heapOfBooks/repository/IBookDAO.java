@@ -58,4 +58,40 @@ public interface IBookDAO {
 	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo);	
 	
 	public List<Book> searchByGenre(Long genreId);
+	
+	public List<Book> orderByNameASC();
+	
+	public List<Book> orderByNameDESC();
+	
+	public List<Book> orderByPublisherASC();
+	
+	public List<Book> orderByPublisherDESC();
+
+	public List<Book> orderByAuthorsASC();
+	
+	public List<Book> orderByAuthorsDESC();
+	
+	public List<Book> orderByReleaseDateASC();
+	
+	public List<Book> orderByReleaseDateDESC();
+
+	public List<Book> orderByPriceASC();
+	
+	public List<Book> orderByPriceDESC();
+	
+	public List<Book> orderByNumberOfPagesASC();
+	
+	public List<Book> orderByNumberOfPagesDESC();
+
+	public List<Book> orderByLanguageASC();
+	
+	public List<Book> orderByLanguageDESC();
+	
+	public List<Book> orderByRatingASC();
+	
+	public List<Book> orderByRatingDESC();
+	
+	public List<Book> orderByNumberOfCopiesASC();
+	
+	public List<Book> orderByNumberOfCopiesDESC();
 }

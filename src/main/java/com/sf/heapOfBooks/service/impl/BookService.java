@@ -59,8 +59,7 @@ public class BookService implements IBookService{
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		bookRepository.delete(id);
 	}
 
 	@Override
@@ -162,5 +161,94 @@ public class BookService implements IBookService{
 	public List<Book> searchByGenre(Long id) {
 		return bookRepository.searchByGenre(id);
 	}
-	
+
+	@Override
+	public List<Book> orderByNameASC() {
+		return bookRepository.orderByNameASC();
+	}
+
+	@Override
+	public List<Book> orderByNameDESC() {
+		return bookRepository.orderByNameDESC();
+	}
+
+	@Override
+	public List<Book> orderByPublisherASC() {
+		return bookRepository.orderByPublisherASC();
+	}
+
+	@Override
+	public List<Book> orderByPublisherDESC() {
+		return bookRepository.orderByPublisherDESC();
+	}
+
+	@Override
+	public List<Book> orderByAuthorsASC() {
+		return bookRepository.orderByAuthorsASC();
+	}
+
+	@Override
+	public List<Book> orderByAuthorsDESC() {
+		return bookRepository.orderByAuthorsDESC();
+	}
+
+	@Override
+	public List<Book> orderByReleaseDateASC() {
+		return bookRepository.orderByReleaseDateASC();
+	}
+
+	@Override
+	public List<Book> orderByReleaseDateDESC() {
+		return bookRepository.orderByReleaseDateDESC();
+	}
+
+	@Override
+	public List<Book> orderByPriceASC() {
+		return bookRepository.orderByPriceASC();
+	}
+
+	@Override
+	public List<Book> orderByPriceDESC() {
+		return bookRepository.orderByPriceDESC();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfPagesASC() {
+		return bookRepository.orderByNumberOfPagesASC();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfPagesDESC() {
+		return bookRepository.orderByNumberOfPagesDESC();
+	}
+
+	@Override
+	public List<Book> orderByLanguageASC() {
+		return bookRepository.orderByLanguageASC();
+	}
+
+	@Override
+	public List<Book> orderByLanguageDESC() {
+		return bookRepository.orderByLanguageDESC();
+	}
+
+	@Override
+	public List<Book> orderByRatingASC() {
+		return bookRepository.orderByRatingASC();
+	}
+
+	@Override
+	public List<Book> orderByRatingDESC() {
+		return bookRepository.orderByRatingDESC();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfCopiesASC() {
+		return bookRepository.orderByNumberOfCopiesASC();
+	}
+
+	@Override
+	public List<Book> orderByNumberOfCopiesDESC() {
+		return bookRepository.orderByNumberOfCopiesDESC();
+	}	
 }
