@@ -8,5 +8,4 @@ public class HeapOfBooksApplication {
 	public static void main(String[] args) {		
 		SpringApplication.run(HeapOfBooksApplication.class, args);
 	}
-
 }
