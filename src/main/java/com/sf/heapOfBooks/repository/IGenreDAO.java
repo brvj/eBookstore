@@ -18,7 +18,7 @@ public interface IGenreDAO {
 	
 	public int delete(Long id);
 	
-	public int logicDelete(Genre genre);
+	public int logicDelete(Long id);
 	
 	public List<Genre> sortByNameAsc();
 	

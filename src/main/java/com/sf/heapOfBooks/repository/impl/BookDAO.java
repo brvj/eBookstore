@@ -91,7 +91,8 @@ public class BookDAO implements IBookDAO{
 	public List<Book> findAll() {
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id";
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ " WHERE b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		
@@ -106,6 +107,9 @@ public class BookDAO implements IBookDAO{
 				+ "	WHERE b.id = ?";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh, id);
+		
+		if(bcbh.getBooks().isEmpty())
+			return null;
 		
 		return bcbh.getBooks().get(0);
 	}
@@ -204,73 +208,13 @@ public class BookDAO implements IBookDAO{
 	}
 
 	@Override
-	public List<Book> searchByCopiesFrom(int numberOfCopies) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.numberOfCopies >= ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh, numberOfCopies);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByCopiesTo(int numberOfCopies) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.numberOfCopies <= ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh, numberOfCopies);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByCopiesFromTo(int numberOfCopiesFrom, int numberOfCopiesTo) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.numberOfCopies >= ? AND b.numberOfCopies <= ?)";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh, numberOfCopiesFrom, numberOfCopiesTo);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
 	public List<Book> searchByNameOrPublisher(String search) {
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.name LIKE ? OR b.publicher LIKE ?)";
+				+ "	WHERE (b.name LIKE '%" + search + "%' OR b.publicher LIKE '%" + search + "%' OR b.bookLanguage LIKE '%" + search + "%') AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,search,search);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByAuthors(String author) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.authors LIKE ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,author);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> serachByReleaseDate(LocalDate releaseDate) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.releaseDate LIKE ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,releaseDate.toString());
+		jdbcTemplate.query(sql, bcbh);
 		
 		return bcbh.getBooks();
 	}
@@ -280,7 +224,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.price >= ?";
+				+ "	WHERE b.price >= ? AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,price);
 		
@@ -292,7 +236,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.price <= ?";
+				+ "	WHERE b.price <= ? AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,price);
 		
@@ -304,81 +248,9 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.price >= ? AND b.price <= ?)";
+				+ "	WHERE (b.price >= ? AND b.price <= ?) AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,priceFrom,priceTo);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByNumberOfPagesFrom(int pageNumber) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.numberOfPages >= ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,pageNumber);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByNumberOfPagesTo(int pageNumber) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.numberOfPages <= ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,pageNumber);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByNumberOfPagesFromTo(int pageNumberFrom, int pageNumberTo) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.numberOfPages >= ? AND b.numberOfPages <= ?)";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,pageNumberFrom,pageNumberTo);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByBookType(BookTypeEnum bookType) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.bookType = ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,bookType.toString());
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> seacrhByLetter(LetterEnum letter) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.letter = ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,letter.toString());
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByLanguage(String language) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.bookLanguage = ?";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,language);
 		
 		return bcbh.getBooks();
 	}
@@ -388,7 +260,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.avgRating >= ?";
+				+ "	WHERE b.avgRating >= ? AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,rating);
 		
@@ -400,7 +272,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.avgRating <= ?";
+				+ "	WHERE b.avgRating <= ? AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,rating);
 		
@@ -412,7 +284,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.avgRating >= ? AND b.avgRating <= ?)";
+				+ "	WHERE (b.avgRating >= ? AND b.avgRating <= ?) AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,ratingFrom,ratingTo);
 		
@@ -424,7 +296,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE g.id = ?";
+				+ "	WHERE g.id = ? AND b.numberOfCopies > 0";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh,id);
 		
@@ -436,6 +308,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.name ASC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
@@ -448,79 +321,8 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.name DESC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByPublisherASC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.publicher ASC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByPublisherDESC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.publicher DESC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByAuthorsASC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.authors ASC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByAuthorsDESC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.authors DESC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByReleaseDateASC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.releaseDate ASC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByReleaseDateDESC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.releaseDate DESC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		
@@ -532,6 +334,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.price ASC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
@@ -544,31 +347,8 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.price DESC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByNumberOfPagesASC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.numberOfPages ASC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByNumberOfPagesDESC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.numberOfPages DESC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		
@@ -580,6 +360,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.bookLanguage ASC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
@@ -592,6 +373,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.bookLanguage DESC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
@@ -604,6 +386,7 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.avgRating ASC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
@@ -616,35 +399,11 @@ public class BookDAO implements IBookDAO{
 		String sql = "SELECT b.*,g.* FROM books b"
 				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
 				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.numberOfCopies > 0"
 				+ "	ORDER BY b.avgRating DESC";
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		
 		return bcbh.getBooks();
 	}
-
-	@Override
-	public List<Book> orderByNumberOfCopiesASC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.numberOfCopies ASC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> orderByNumberOfCopiesDESC() {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	ORDER BY b.numberOfCopies DESC";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-	
 }

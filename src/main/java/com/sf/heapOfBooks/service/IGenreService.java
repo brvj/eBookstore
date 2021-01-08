@@ -18,7 +18,7 @@ public interface IGenreService {
 	
 	void delete(Long id);
 	
-	void logicDelete(Genre genre);
+	void logicDelete(Long id);
 	
 	List<Genre> sortByNameAsc();
 	

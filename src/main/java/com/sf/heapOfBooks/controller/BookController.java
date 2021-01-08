@@ -54,91 +54,36 @@ public class BookController {
 	
 	@GetMapping
 	public ModelAndView init(
-			@RequestParam(required = false) Integer numberOfCopiesFrom,
-			@RequestParam(required = false) Integer numberOfCopiesTo,
 			@RequestParam(required = false) String search,
-			@RequestParam(required = false) String author,
-			@RequestParam(required = false) String releaseDate,
 			@RequestParam(required = false) Integer priceFrom,
 			@RequestParam(required = false) Integer priceTo,
-			@RequestParam(required = false) Integer pageNumFrom,
-			@RequestParam(required = false) Integer pageNumTo,
-			@RequestParam(required = false) BookTypeEnum bookType,
-			@RequestParam(required = false) LetterEnum letter,
-			@RequestParam(required = false) String language,
-			@RequestParam(required = false) Integer ratingFrom,
-			@RequestParam(required = false) Integer ratingTo,
 			@RequestParam(required = false) Long id) {
 		List<Book> books = bookService.findAll();	
-		List<Genre> genres = genreService.findAll();
+		List<Genre> genres = genreService.findAll();		
 		
 		ModelAndView returnBooks = new ModelAndView("books");
 		returnBooks.addObject("genres", genres);
 		List<Book> bookFilter = new ArrayList<Book>();
 		
-		if(numberOfCopiesFrom != null) {
-			bookFilter.addAll(bookService.searchByCopiesFrom(numberOfCopiesFrom));
-		}
-		if(numberOfCopiesTo != null) {
-			bookFilter.addAll(bookService.searchByCopiesTo(numberOfCopiesTo));
-		}
-		if(numberOfCopiesFrom != null && numberOfCopiesTo != null) {
-			bookFilter.addAll(bookService.searchByCopiesFromTo(numberOfCopiesFrom,numberOfCopiesTo));
-		}
-		if(search != null) {
+		if(search != "") {
 			bookFilter.addAll(bookService.searchByNameOrPublisher(search));
 		}
-		if(author != null) {
-			bookFilter.addAll(bookService.searchByAuthors(author));
-		}
-		if(releaseDate != null && releaseDate != "") {
-			bookFilter.addAll(bookService.serachByReleaseDate(LocalDate.parse(releaseDate, formatterDate)));
-		}
-		if(priceFrom != null) {
+
+		if(priceFrom != null && priceTo == null) {
 			bookFilter.addAll(bookService.serachByPriceFrom(priceFrom));
 		}
-		if(priceTo != null) {
+		if(priceTo != null && priceFrom == null) {
 			bookFilter.addAll(bookService.searchByPriceTo(priceTo));
 		}
 		if(priceTo != null && priceFrom != null) {
 			bookFilter.addAll(bookService.searchByPriceFromTo(priceFrom, priceTo));
 		}
-		if(pageNumTo != null) {
-			bookFilter.addAll(bookService.searchByNumberOfPagesTo(pageNumTo));
-		}
-		if(pageNumFrom != null) {
-			bookFilter.addAll(bookService.searchByNumberOfPagesFrom(pageNumFrom));
-		}
-		if(pageNumTo != null && pageNumFrom != null) {
-			bookFilter.addAll(bookService.searchByNumberOfPagesFromTo(pageNumFrom, pageNumTo));
-		}
-		if(bookType != null) {
-			bookFilter.addAll(bookService.searchByBookType(bookType));
-		}
-		if(letter != null) {
-			bookFilter.addAll(bookService.seacrhByLetter(letter));
-		}
-		if(language != null) {
-			bookFilter.addAll(bookService.searchByLanguage(language));
-		}
-		if(ratingFrom != null) {
-			bookFilter.addAll(bookService.searchByRatingFrom(ratingFrom));
-		}
-		if(ratingTo != null) {
-			bookFilter.addAll(bookService.searchByRatingTo(ratingTo));
-		}
-		if(ratingFrom != null && ratingTo != null) {
-			bookFilter.addAll(bookService.searchByRatingFromTo(ratingFrom,ratingTo));
-		}
+
 		if(id != null) {
 			bookFilter.addAll(bookService.searchByGenre(id));
 		}
-		
-				
-		if(numberOfCopiesTo == null && numberOfCopiesFrom == null && search == null &&
-				author == null && releaseDate == null && priceTo == null && priceFrom == null &&
-				pageNumFrom == null && pageNumTo == null && bookType == null && letter == null &&
-				language == null && ratingFrom == null && ratingTo == null && id == null)
+						
+		if(search == null && priceTo == null && priceFrom == null && id == null)
 			return returnBooks.addObject("books", books);
 		
 		List<Book> removeDuplicates = bookFilter.stream().distinct().collect(Collectors.toList());
@@ -160,7 +105,9 @@ public class BookController {
 	}
 	
 	@PostMapping(value = "/Create")
-	public void create(@RequestParam String name, 
+	public ModelAndView create(
+			@RequestParam Long ISBN,
+			@RequestParam String name, 
 			@RequestParam String publisher, 
 			@RequestParam String authors,
 			@RequestParam String releaseDate,
@@ -174,7 +121,15 @@ public class BookController {
 			@RequestParam int numberOfCopies, 
 			@RequestParam MultipartFile image, 
 			HttpServletResponse response) throws IOException {
-				
+		
+		Book b = bookService.findOne(ISBN);
+		if(b != null) {
+			ModelAndView maw = new ModelAndView("message");
+			String message = "Knjiga sa tim ISBN vec postoji!";
+			return maw.addObject("message",message);			
+		}
+		
+		
 		byte[] bytes = image.getBytes();
 		Path path = Paths.get(folder + "\\" + image.getOriginalFilename());
 		Files.write(path, bytes);
@@ -194,11 +149,13 @@ public class BookController {
 				image.getOriginalFilename(), price, numberOfPages, bookType, letter, language, numberOfCopies);
 		
 		book.setGenre(gList);
+		book.setISBN(ISBN);
 		book.setAverageRating(0);
 			
 		bookService.create(book);	
 		gList.clear();
 		response.sendRedirect("/HeapOfBooks/Books");
+		return null;
 	}
 	
 	@GetMapping(value = "/Details")
@@ -232,7 +189,8 @@ public class BookController {
 	}
 	
 	@PostMapping(value = "/Update")
-	public void update(@RequestParam String name, 
+	public void update(
+			@RequestParam String name, 
 			@RequestParam String publisher, 
 			@RequestParam String authors,
 			@RequestParam String releaseDate,
@@ -243,10 +201,10 @@ public class BookController {
 			@RequestParam String[] genre,
 			@RequestParam LetterEnum letter, 
 			@RequestParam String language, 
-			@RequestParam Long id, 
+			@RequestParam Long ISBN, 
 			HttpServletResponse response) throws IOException {
 		
-		Book book = bookService.findOne(id);
+		Book book = bookService.findOne(ISBN);
 		book.setName(name);
 		book.setPublisher(publisher);
 		List<String> authorsList = new ArrayList<String>();
@@ -310,60 +268,6 @@ public class BookController {
 		return maw;
 	}
 	
-	@GetMapping(value = "/OrderByPublisherASC")
-	public ModelAndView orderByPublisherAsc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByPublisherASC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByPublisherDESC")
-	public ModelAndView orderByPublisherDesc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByPublisherDESC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByAuthorsASC")
-	public ModelAndView orderByAuthorsAsc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByAuthorsASC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByAuthorsDESC")
-	public ModelAndView orderByAuthorsDesc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByAuthorsDESC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByDateASC")
-	public ModelAndView orderByDateAsc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByReleaseDateASC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByDateDESC")
-	public ModelAndView orderByDateDesc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByReleaseDateDESC());
-		
-		return maw;
-	}
-	
 	@GetMapping(value = "/OrderByPriceASC")
 	public ModelAndView orderByPriceAsc() {
 		ModelAndView maw = new ModelAndView("books");
@@ -381,43 +285,7 @@ public class BookController {
 		
 		return maw;
 	}
-	
-	@GetMapping(value = "/OrderByNumPagesASC")
-	public ModelAndView orderByNumPagesAsc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByNumberOfPagesASC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByNumPagesDESC")
-	public ModelAndView orderByNumPagesDesc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByNumberOfPagesDESC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByLanguageASC")
-	public ModelAndView orderByLanguageAsc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByLanguageASC());
-		
-		return maw;
-	}
-	
-	@GetMapping(value = "/OrderByLanguageDESC")
-	public ModelAndView orderByLanguageDesc() {
-		ModelAndView maw = new ModelAndView("books");
-		
-		maw.addObject("books", bookService.orderByLanguageDESC());
-		
-		return maw;
-	}
-	
+
 	@GetMapping(value = "/OrderByRatingASC")
 	public ModelAndView orderByRatingAsc() {
 		ModelAndView maw = new ModelAndView("books");
@@ -436,20 +304,20 @@ public class BookController {
 		return maw;
 	}
 	
-	@GetMapping(value = "/OrderByNumCopiesASC")
-	public ModelAndView orderByNumCopiesAsc() {
+	@GetMapping(value = "/OrderByLanguageDESC")
+	public ModelAndView orderByLanguageDesc() {
 		ModelAndView maw = new ModelAndView("books");
 		
-		maw.addObject("books", bookService.orderByNumberOfCopiesASC());
+		maw.addObject("books", bookService.orderByLanguageDESC());
 		
 		return maw;
 	}
 	
-	@GetMapping(value = "/OrderByNumCopiesDESC")
-	public ModelAndView orderByNumCopiesDesc() {
+	@GetMapping(value = "/OrderByLanguageASC")
+	public ModelAndView orderByLanguageAsc() {
 		ModelAndView maw = new ModelAndView("books");
 		
-		maw.addObject("books", bookService.orderByNumberOfCopiesDESC());
+		maw.addObject("books", bookService.orderByLanguageASC());
 		
 		return maw;
 	}

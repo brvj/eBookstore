@@ -7,7 +7,8 @@
 <body>		
 		<form method="post" th:action="@{Update}">
 			<table class="tabela">		
-			<caption>Forma za kreiranje nove knjige</caption>		
+			<caption>Forma za kreiranje nove knjige</caption>	
+				<tr><th align="left">ISBN:</th><td><input type="text" th:value="${book.ISBN}" name="ISBN" required readonly="readonly"></td></tr>	
 				<tr><th align="left">Naziv:</th><td><input type="text" th:value="${book.name}" name="name" required></td></tr>
 				<tr><th align="left">Izdavac:</th><td><input type="text" th:value="${book.publisher}" name="publisher" required></td></tr>
 				<tr><th align="left">Autor/i:</th><td><input type="text" th:value="${authors}" name="authors" required></td></tr>
@@ -31,7 +32,6 @@
 				
 				<tr><th></th><td><input type="submit" value="Azurirajte knjigu"/></td></tr>
 			</table>
-			<input type="hidden" name="id" th:value="${book.ISBN}"/>
 		</form>
 </body>
 </html>

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
+import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.GenreService;
 
 @Controller
@@ -25,6 +27,9 @@ public class GenreController {
 
 	@Autowired
 	private GenreService genreService;
+	
+	@Autowired
+	private BookService bookService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -148,8 +153,19 @@ public class GenreController {
 	
 	@GetMapping(value = "/Delete")
 	public void delete(@RequestParam Long id, HttpServletResponse response) throws IOException {
-		genreService.delete(id);
+		boolean found = false;
+		for(Book b : bookService.findAll()) {
+			for(Genre g : b.getGenre()) {
+				if(g.getId().equals(id))
+					found = true;
+			}
+		}
 		
+		if(found == true) {
+			genreService.logicDelete(id);
+		}else {
+			genreService.delete(id);
+		}	
 		response.sendRedirect(baseURL + "Genres");
 	}
 }

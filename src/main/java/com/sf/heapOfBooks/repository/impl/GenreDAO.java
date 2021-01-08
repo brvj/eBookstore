@@ -132,11 +132,11 @@ public class GenreDAO implements IGenreDAO{
 
 	@Transactional
 	@Override
-	public int logicDelete(Genre genre) {
+	public int logicDelete(Long id) {
 		boolean uspeh = true;
 		
 		String sql = "UPDATE genres SET deleted = ? WHERE id = ?";
-		uspeh = uspeh && jdbcTemplate.update(sql,genre.isDeleted()) == 1;
+		uspeh = uspeh && jdbcTemplate.update(sql,"true",id) == 1;
 		
 		return uspeh?1:0;		
 	}

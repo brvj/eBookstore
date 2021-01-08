@@ -8,80 +8,33 @@
 		<form method="get" th:action="@{Books}">
 			<table class="tabela" border ="1">
 				<caption>Knjige</caption>
-				<tr>
-					<th colspan="2"> 
-						Broj kopija od:<input type="number" min="0" th:value="${param.numberOfCopiesFrom}?: ''" name = "numberOfCopiesFrom"/>   <a th:href="@{/Books/OrderByNumCopiesASC}">▲</a><br/>
-						Broj kopija do:<input type="number" min="0" th:value="${param.numberOfCopiesTo}?: ''" name="numberOfCopiesTo"/>   <a th:href="@{/Books/OrderByNumCopiesDESC}">▼</a>
-					</th>
-					
-					<th colspan="2"> 
-						Stranice od:<input type="number" min="0" th:value="${param.pageNumFrom}?: ''" name = "pageNumFrom"/>  <a th:href="@{/Books/OrderByNumPagesASC}">▲</a><br/>
-						Stranice do:<input type="number" min="0" th:value="${param.pageNumTo}?: ''" name="pageNumTo"/>   <a th:href="@{/Books/OrderByNumPagesDESC}">▼</a>
-					</th>
-					
-					<th>Pretraga po povezu:
-						<select name="bookType">
-							<option value="">Povez</option>
-							<option th:each="itBookType : ${T(com.sf.heapOfBooks.model.enums.BookTypeEnum).values()}"
-								th:value="${itBookType}" th:text="${itBookType}" >
-						</select>
-					</th>
-					<th>Pretraga po pismu:
-						<select name="letter">
-							<option value="">Pismo</option>
-							<option th:each="itLetterType : ${T(com.sf.heapOfBooks.model.enums.LetterEnum).values()}"
-								th:value="${itLetterType}" th:text="${itLetterType}" >
-						</select>
-					</th>
-					<th>Jezik:<input type="text" th:value="${param.language}?: ''" name = "language"/>   <a th:href="@{/Books/OrderByLanguageASC}">▲</a>     <a th:href="@{/Books/OrderByLanguageDESC}">▼</a></th>		
-					<th><a th:href="@{/Books}">Ponisti rezultate</a>						
+				<tr>			
+					<th colspan="2" >Jezik:   <a th:href="@{/Books/OrderByLanguageASC}">▲</a>     <a th:href="@{/Books/OrderByLanguageDESC}">▼</a></th>		
+					<th><a th:href="@{/Books}">Ponisti rezultate</a>	
+					<th><input type="submit" value="Pretraži"/></th>					
 				</tr>
 				<tr>
-					<th colspan="2">Pretraga (naziv,izdavac):<input type="text" min="" th:value="${param.search}?: ''" name="search"/></th>
-					<th>Pretraga autor:<input type="text" min="" th:value="${param.author}?: ''" name="author"/></th>
-					<th>Pretraga zanr:
-						<select name="id">
-								<option value="">Zanr</option>
-								<option th:each="itGenre : ${genres}"
-									th:value="${itGenre.id}" th:text="${itGenre.name}" >
-						</select>
-					</th>
-					<th>Datum:<input type="date" th:value="${param.releaseDate}?: ''" name="releaseDate"/></th>
+					<th>Pretraga:<input type="text" th:value="${param.search}?: ''" name="search"/></th>
 					<th> 
 						Cena od:<input type="number" min="0" th:value="${param.priceFrom}?: ''" name = "priceFrom"/><br/>
 						Cena do:<input type="number" min="0" th:value="${param.priceTo}?: ''" name="priceTo"/>
 					</th>
-					<th> 
-						Ocena od:<input type="number" min="0" th:value="${param.ratingFrom}?: ''" name = "ratingFrom"/><br/>
-						Ocena do:<input type="number" min="0" th:value="${param.ratingTo}?: ''" name="ratingTo"/>
-					</th>
-					<th><input type="submit" value="Pretraži"/></th>
+					<th colspan="2">Pretraga zanr:
+						<select name="id">
+								<option value="">Zanr</option>
+								<option th:each="itGenre : ${genres}" th:value="${itGenre.id}" th:text="${itGenre.name}" >
+						</select>
+					</th>		
 				</tr>				
 				<tr>					
 					<th>Naziv knjige  <a th:href="@{/Books/OrderByNameASC}">▲</a>     <a th:href="@{/Books/OrderByNameDESC}">▼</a></th>
-					<th>Izdavac   <a th:href="@{/Books/OrderByPublisherASC}">▲</a>     <a th:href="@{/Books/OrderByPublisherDESC}">▼</a></th>
-					<th>Autor/i   <a th:href="@{/Books/OrderByAuthorsASC}">▲</a>     <a th:href="@{/Books/OrderByAuthorsDESC}">▼</a></th>
-					<th>Zanr/ovi</th>
-					<th>Datum izdavanja   <a th:href="@{/Books/OrderByDateASC}">▲</a>     <a th:href="@{/Books/OrderByDateDESC}">▼</a></th>
 					<th>Cena   <a th:href="@{/Books/OrderByPriceASC}">▲</a>     <a th:href="@{/Books/OrderByPriceDESC}">▼</a></th>
 					<th>Ocena   <a th:href="@{/Books/OrderByRatingASC}">▲</a>     <a th:href="@{/Books/OrderByRatingDESC}">▼</a></th>
 					<th>Slika</th>
 				</tr>
 				
 				<tr th:each="itBook, status: ${books}">
-					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>
-					<td th:text="${itBook.publisher}"></td>
-					<td>
-						<ul>
-							<li th:each="itAuthor: ${itBook.authors}"><a th:text="${itAuthor}"></a></li>
-						</ul>
-					</td>
-					<td>
-						<ul>
-							<li th:each="itGenre: ${itBook.genre}"><a th:text="${itGenre.name}"></a></li>
-						</ul>
-					</td>
-					<td th:text="${itBook.releaseDate}"></td>
+					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>					
 					<td th:text="${itBook.price}"></td>
 					<td th:text="${itBook.averageRating}">
 					<td><img th:src="@{${'/images/' + itBook.coverPicture}}" height="50px" width="30px"></td>

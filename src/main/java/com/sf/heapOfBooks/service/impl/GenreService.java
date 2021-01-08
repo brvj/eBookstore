@@ -66,8 +66,8 @@ public class GenreService implements IGenreService{
 	}
 
 	@Override
-	public void logicDelete(Genre genre) {
-		genreRepository.logicDelete(genre);
+	public void logicDelete(Long id) {
+		genreRepository.logicDelete(id);
 	}
 
 	@Override

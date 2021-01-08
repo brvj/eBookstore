@@ -7,7 +7,8 @@
 <body>		
 		<form method="post" enctype="multipart/form-data" action="/HeapOfBooks/Books/Create">
 			<table class="tabela">		
-			<caption>Forma za kreiranje nove knjige</caption>		
+			<caption>Forma za kreiranje nove knjige</caption>	
+				<tr><th align="left">ISBN:</th><td><input type="number" value="" min="1000000000000" max="9999999999999" name="ISBN" required></td></tr>	
 				<tr><th align="left">Naziv:</th><td><input type="text" value="" name="name" required></td></tr>
 				<tr><th align="left">Izdavac:</th><td><input type="text" value="" name="publisher" required></td></tr>
 				<tr><th align="left">Autor/i:</th><td><input type="text" value="" name="authors" required></td></tr>
