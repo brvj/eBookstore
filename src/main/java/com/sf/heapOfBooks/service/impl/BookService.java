@@ -108,5 +108,10 @@ public class BookService implements IBookService{
 	@Override
 	public List<Book> orderByRatingDESC() {
 		return bookRepository.orderByRatingDESC();
+	}
+
+	@Override
+	public Book searchByISBN(Long isbn) {
+		return bookRepository.searchByISBN(isbn);
 	}	
 }

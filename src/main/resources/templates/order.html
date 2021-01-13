@@ -6,12 +6,14 @@
 </head>
 <body>		
 		<form method="post" th:action="@{Order}">
-			<table class="tabela">		
+		<div class="orderCopiesContainer">
+			<table class="table">		
 			<caption>Forma za porucivanje</caption>		
 				<tr><th align="left">Broj kopija:</th><td><input type="number" value="" name="numberOfCopies" required></td></tr>
 				
 				<tr><th></th><td><input type="submit" value="Porucite"/></td></tr>
 			</table>
+		</div>
 			<input type="hidden" name="id" th:value="${book.ISBN}"/>
 		</form>
 </body>

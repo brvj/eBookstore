@@ -5,8 +5,9 @@
 	<title>Zanrovi</title>
 </head>
 <body>
-		<form method="get" action="/Genres">
-			<table class="tabela" border ="1">
+		<form method="get" th:action="@{Genres}">
+		<div class="genresContainer">
+			<table class="table" border ="1">
 				<caption>Zanrovi</caption>
 				<tr>
 					
@@ -24,9 +25,10 @@
 					<td th:text="${itGenre.description}"></td>
 				</tr>
 			</table>
+		</div>
 		</form>
 		<p/>
-		<form method="get" action="/HeapOfBooks/Genres/Search">						
+		<form method="get" th:action="@{Genres/Search}">						
 			<input type="text" value="" name="search"/><input type="submit" value="Pretrazi"/>					
 						
 		</form>

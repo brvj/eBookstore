@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
+import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.GenreService;
 
@@ -51,7 +54,20 @@ public class GenreController {
 	}
 	
 	@GetMapping(value = "/Create")
-	public ModelAndView createGenre() {
+	public ModelAndView createGenre(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		ModelAndView maw = new ModelAndView("createGenreForm");
 		
 		return maw;
@@ -130,7 +146,21 @@ public class GenreController {
 	}
 	
 	@GetMapping(value = "/Update")
-	public ModelAndView update(@RequestParam Long id) {
+	public ModelAndView update(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		Genre genre = genreService.findOne(id);
 		
 		ModelAndView maw = new ModelAndView("updateGenreForm");
@@ -152,7 +182,21 @@ public class GenreController {
 	}
 	
 	@GetMapping(value = "/Delete")
-	public void delete(@RequestParam Long id, HttpServletResponse response) throws IOException {
+	public ModelAndView delete(@RequestParam Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		boolean found = false;
 		for(Book b : bookService.findAll()) {
 			for(Genre g : b.getGenre()) {
@@ -166,6 +210,9 @@ public class GenreController {
 		}else {
 			genreService.delete(id);
 		}	
+		
 		response.sendRedirect(baseURL + "Genres");
+		
+		return null;
 	}
 }

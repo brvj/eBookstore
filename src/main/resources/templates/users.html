@@ -5,24 +5,24 @@
 	<title>Korisnici</title>
 </head>
 <body>
-		<form method="get" action="/Users">
-			<table class="tabela" border ="1">
-				<caption>Users</caption>
+		<form method="get" th:action="@{Users}">
+		<div class="usersContainers">
+			<table class="table" border ="1">
+				<caption>Korisnici</caption>
 				<tr>
-					<th>name</th>
-					<th>user name</th>
-					<th>email</th>					
+					<th>Korisnicko ime</th>
+					<th>Datum registracije</th>					
 					<th>Tip korisnika</th>
 				</tr>
 				<tr th:each="itUser, status: ${users}">
-					<td th:text="${itUser.name}"></td>
-					<td th:text="${itUser.userName}"></td>
-					<td th:text="${itUser.eMail}"></td>					
+					<td><a th:href="|/HeapOfBooks/Users/Details?id=${itUser.id}|" th:text="${itUser.userName}"></a></td>
+					<td th:text="${itUser.registrationDateAndTime}"></td>					
 					<td th:text="${itUser.userType}"></td>
 				</tr>
 			</table>
+		</div>
 		</form>
 		<p/>
-		<a href="Users/Registration">Forma za registraciju</a>
+		<a th:href="@{/Books}">Nazad</a>
 </body>
 </html>

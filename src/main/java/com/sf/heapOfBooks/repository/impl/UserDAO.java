@@ -85,8 +85,8 @@ public class UserDAO implements IUserDAO{
 	public User findOne(Long id) {
 		String sql = "SELECT u.id, u.userName, u.userPassword, u.eMail, u.name, u.surname, u.dateOfBirth, u.address,"
 				+ " u.phoneNumber, u.registrationDateAndTime, u.userType, u.userBlocked FROM users u"
-				+ "WHERE u.id = ?"
-				+ "ORDER BY u.id";
+				+ "	WHERE u.id = ?"
+				+ "	ORDER BY u.id";
 		
 		UserRowCallBackHandler rcbh = new UserRowCallBackHandler();
 		jdbcTemplate.query(sql, rcbh, id);
@@ -98,10 +98,10 @@ public class UserDAO implements IUserDAO{
 	public User login(String userName, String userPassword) {
 		String sql = "SELECT u.id, u.userName, u.userPassword, u.eMail, u.name, u.surname, u.dateOfBirth, u.address,"
 				+ " u.phoneNumber, u.registrationDateAndTime, u.userType, u.userBlocked FROM users u"
-				+ "WHERE u.userName = " + userName + " AND u.userPassword = " + userPassword;
+				+ "	WHERE u.userName = ? AND u.userPassword = ?";
 		
 		UserRowCallBackHandler rcbh = new UserRowCallBackHandler();
-		jdbcTemplate.query(sql, rcbh);
+		jdbcTemplate.query(sql, rcbh, userName, userPassword);
 		
 		return rcbh.getUsers().get(0);
 	}
@@ -150,6 +150,38 @@ public class UserDAO implements IUserDAO{
 	public User delete(User user) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Transactional
+	@Override
+	public int assignAdmin(Long id) {
+		boolean uspeh = true;
+		String sql = "UPDATE users SET userType = ? WHERE id = ?";
+		
+		uspeh = uspeh && jdbcTemplate.update(sql, UserEnum.Administrator.toString(), id) == 1;
+		
+		return uspeh?1:0;
+	}
+
+	@Transactional
+	@Override
+	public int blockUser(Long id) {
+		boolean uspeh = true;
+		String sql = "UPDATE users SET userBlocked = ? WHERE id = ?";
+		
+		uspeh = uspeh && jdbcTemplate.update(sql, "true", id) == 1;
+		
+		return uspeh?1:0;
+	}
+
+	@Override
+	public int unblockUser(Long id) {
+		boolean uspeh = true;
+		String sql = "UPDATE users SET userBlocked = ? WHERE id = ?";
+		
+		uspeh = uspeh && jdbcTemplate.update(sql, "false", id) == 1;
+		
+		return uspeh?1:0;
 	}
 
 }

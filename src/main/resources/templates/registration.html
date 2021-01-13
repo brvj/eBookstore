@@ -5,8 +5,9 @@
 	<title>Registracija</title>
 </head>
 <body>
-		<form method="post" action="/HeapOfBooks/Users/Registration">
-			<table class="tabela">
+		<form method="post" th:action="@{/Users/Registration}">
+		<div class="registrationContainer">
+			<table class="table">
 				<caption>Forma za registraciju</caption>
 				<tr><th>Korisnicko ime:</th><td><input type="text" value="" name="userName" required></td></tr>
 				<tr><th>Korisnicka sifra:</th><td><input type="password" value="" name="userPassword" required></td></tr>
@@ -18,6 +19,7 @@
 				<tr><th>Broj telefona:</th><td><input type="text" value="" name="phoneNumber" required></td></tr>
 				<tr><th></th><td><input type="submit" value="Kreirajte nalog"/></td></tr>
 			</table>
+		</div>
 		</form>
 </body>
 </html>

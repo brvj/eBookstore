@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.UserService;
 
 @Controller
@@ -40,7 +42,21 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public ModelAndView index() {
+	public ModelAndView index(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		List<User> users = userService.findAll();
 			
 		ModelAndView returnUsers = new ModelAndView("users");
@@ -81,7 +97,38 @@ public class UserController {
 		
 		userService.createNewUser(user);
 		
-		response.sendRedirect(baseURL+"Users");
+		response.sendRedirect(baseURL + "Login");
 		return null;
 	}
+	
+	@GetMapping(value = "/Details")
+	public ModelAndView details(@RequestParam Long id) {
+		ModelAndView maw = new ModelAndView("user");
+		
+		User user = userService.findOne(id);
+		
+		return maw.addObject("user", user);
+	}
+	
+	@GetMapping(value = "/Assign")
+	public void assignAdmin(@RequestParam Long id, HttpServletResponse response) throws IOException {
+		userService.assignAdmin(id);
+		
+		response.sendRedirect(baseURL + "Users");
+	}
+	
+	@GetMapping(value = "/Block")
+	public void blockUser(@RequestParam Long id, HttpServletResponse response) throws IOException {
+		userService.blockUser(id);
+		
+		response.sendRedirect(baseURL + "Users");
+	}
+	
+	@GetMapping(value = "/Unblock")
+	public void unblockUser(@RequestParam Long id, HttpServletResponse response) throws IOException {
+		userService.unblockUser(id);
+		
+		response.sendRedirect(baseURL + "Users");
+	}
+	
 }

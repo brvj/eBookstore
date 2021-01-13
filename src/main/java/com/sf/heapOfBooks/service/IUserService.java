@@ -17,4 +17,10 @@ public interface IUserService {
 	User delete(User user);
 
 	List<User> findAll();
+	
+	void assignAdmin(Long id);
+	
+	void blockUser(Long id);
+	
+	void unblockUser(Long id);
 }

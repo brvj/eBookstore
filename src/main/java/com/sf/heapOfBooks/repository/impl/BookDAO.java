@@ -406,4 +406,19 @@ public class BookDAO implements IBookDAO{
 		
 		return bcbh.getBooks();
 	}
+
+	@Override
+	public Book searchByISBN(Long isbn) {
+		String sql = "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id"
+				+ "	WHERE b.id = ?";
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh, isbn);
+		
+		if(bcbh.getBooks().isEmpty())
+			return null;
+		
+		return bcbh.getBooks().get(0);
+	}
 }

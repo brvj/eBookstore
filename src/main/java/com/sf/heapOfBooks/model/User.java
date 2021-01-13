@@ -19,6 +19,7 @@ public class User {
 	private LocalDateTime registrationDateAndTime;
 	private UserEnum userType;
 	private boolean userBlocked;
+	private boolean loggedIn;
 	
 	public User() {
 		this.userType = UserEnum.Kupac;
@@ -134,5 +135,13 @@ public class User {
 
 	public void setUserBlocked(boolean userBlocked) {
 		this.userBlocked = userBlocked;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 }

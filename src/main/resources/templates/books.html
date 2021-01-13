@@ -5,41 +5,71 @@
 	<title>Knjige</title>
 </head>
 <body>
+	<h3 th:if="${session.user != null}" th:text="${session.user.name}"></h3>
+	<p/>
+	<a th:if="${session.user != null}" th:href="@{Login/Logout}">Odjavite se</a>	
+	<p/>
+	<a th:if="${session.user != null}" th:href="|/HeapOfBooks/Users/Details?id=${session.user.id}|" >Moj profil</a>
+	<p/>
+	<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{Users}">Korisnici</a>
+	<p/><p/>
 		<form method="get" th:action="@{Books}">
-			<table class="tabela" border ="1">
-				<caption>Knjige</caption>
-				<tr>			
-					<th colspan="2" >Jezik:   <a th:href="@{/Books/OrderByLanguageASC}">▲</a>     <a th:href="@{/Books/OrderByLanguageDESC}">▼</a></th>		
-					<th><a th:href="@{/Books}">Ponisti rezultate</a>	
-					<th><input type="submit" value="Pretraži"/></th>					
+			<div class="sortContainer">
+			<table class="tableSort">
+				<caption>Sortiranje</caption>
+				<tr><th align="right">Jezik:   <a th:href="@{/Books/OrderByLanguageASC}">▲</a>     <a th:href="@{/Books/OrderByLanguageDESC}">▼</a></th></tr>
+				<tr><th align="right">Naziv knjige:  <a th:href="@{/Books/OrderByNameASC}">▲</a>     <a th:href="@{/Books/OrderByNameDESC}">▼</a></th></tr>
+				<tr><th align="right">Cena:   <a th:href="@{/Books/OrderByPriceASC}">▲</a>     <a th:href="@{/Books/OrderByPriceDESC}">▼</a></th></tr>
+				<tr><th align="right">Ocena   <a th:href="@{/Books/OrderByRatingASC}">▲</a>     <a th:href="@{/Books/OrderByRatingDESC}">▼</a></th></tr>				
+			</table>
+			</div>
+			<br/>
+			<div class="searchContainer">
+			<table class="tableSearch">
+				<caption>Pretraga</caption>
+				<tr th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}">
+					<th align="right">ISBN:<input type="number" min="1000000000000" max="9999999999999" th:value="${param.isbn}?: ''" name="isbn"/></th>
 				</tr>
-				<tr>
-					<th>Pretraga:<input type="text" th:value="${param.search}?: ''" name="search"/></th>
-					<th> 
+				<tr><th align="right">Pretraga:<input type="text" th:value="${param.search}?: ''" name="search"/></th></tr>
+				<tr>					
+					<th align="right"> 
 						Cena od:<input type="number" min="0" th:value="${param.priceFrom}?: ''" name = "priceFrom"/><br/>
 						Cena do:<input type="number" min="0" th:value="${param.priceTo}?: ''" name="priceTo"/>
-					</th>
-					<th colspan="2">Pretraga zanr:
-						<select name="id">
+					</th>		
+				</tr>
+				<tr><th align="right">Pretraga zanr:<select name="id">
 								<option value="">Zanr</option>
 								<option th:each="itGenre : ${genres}" th:value="${itGenre.id}" th:text="${itGenre.name}" >
 						</select>
-					</th>		
+				</th></tr>
+				<tr><th align="right"><a th:href="@{/Books}">Ponisti rezultate</a></th></tr>	
+				<tr><th align="right"><input type="submit" value="Pretraži"/></th></tr>			
+			</table>	
+			</div>
+			<br/>
+			<div class="booksContainer">
+			<table class="table" border ="1">						
+				<caption>Knjige</caption>								
+				<tr>				
+					<th align="center">Slika</th>					
+					<th align="center">Naziv knjige</th>
+					<th align="center">Cena</th>
+					<th align="center">Ocena</th>
+					
 				</tr>				
-				<tr>					
-					<th>Naziv knjige  <a th:href="@{/Books/OrderByNameASC}">▲</a>     <a th:href="@{/Books/OrderByNameDESC}">▼</a></th>
-					<th>Cena   <a th:href="@{/Books/OrderByPriceASC}">▲</a>     <a th:href="@{/Books/OrderByPriceDESC}">▼</a></th>
-					<th>Ocena   <a th:href="@{/Books/OrderByRatingASC}">▲</a>     <a th:href="@{/Books/OrderByRatingDESC}">▼</a></th>
-					<th>Slika</th>
-				</tr>
-				
 				<tr th:each="itBook, status: ${books}">
-					<td><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>					
-					<td th:text="${itBook.price}"></td>
-					<td th:text="${itBook.averageRating}">
-					<td><img th:src="@{${'/images/' + itBook.coverPicture}}" height="50px" width="30px"></td>
+					<td align="center"><img th:src="@{${'/images/' + itBook.coverPicture}}" height="180px" width="110px"></td>
+					<td align="center"><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td>					
+					<td align="center" th:text="${itBook.price}"></td>
+					<td align="center" th:text="${itBook.averageRating}">					
 				</tr>
 			</table>
+			</div>
 		</form>	
+		<br/>
+		<br/>
+		<a th:if="${session.user == null}" th:href="@{Users/Registration}">Registrujte se</a>
+		<br/>
+		<a th:if="${session.user == null}" th:href="@{Login}">Ulogujte se</a>
 </body>
 </html>

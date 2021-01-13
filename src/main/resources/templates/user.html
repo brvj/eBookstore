@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Korisnik</title>
+</head>
+<body>
+	<div class="userContainer">
+		<table class="tableUser" border ="1">
+			<caption>Knjiga</caption>
+				<tr><th>ID: </th><td th:text="${user.id}"></td></tr>
+				<tr><th>User name: </th><td th:text="${user.userName}"></td></tr>
+				<tr><th>E-Mail: </th><td th:text="${user.eMail}"></td></tr>				
+				<tr><th>Ime: </th><td th:text="${user.name}"></td></tr>
+				<tr><th>Prezime: </th><td th:text="${user.surname}"></td></tr>
+				<tr><th>Datum rodjenja: </th><td th:text="${user.dateOfBirth}"></td></tr>
+				<tr><th>Adresa: </th><td th:text="${user.address}"></td></tr>
+				<tr><th>Broj telefona: </th><td th:text="${user.phoneNumber}"></td></tr>
+				<tr><th>Datum registracije: </th><td th:text="${user.registrationDateAndTime}"></td></tr>
+				<tr><th>Tip korisnika: </th><td th:text="${user.userType}"></td></tr>			
+		</table>
+	</div>	
+		<p/>
+		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
+			th:href="|/HeapOfBooks/Users/Assign?id=${user.id}|">Dodelite admina korisniku</a>
+		<p/>
+		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac and user.userBlocked == false}"
+			th:href="|/HeapOfBooks/Users/Block?id=${user.id}|">Blokirajte korisnika</a>
+		<p/>
+		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac and user.userBlocked == true}" 
+			th:href="|/HeapOfBooks/Users/Unblock?id=${user.id}|">Odblokirajte korisnika</a>
+		<p/>
+		<a th:href="@{/Users}">Nazad</a>
+</body>
+</html>

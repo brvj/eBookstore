@@ -13,4 +13,10 @@ public interface IUserDAO {
 	public User update(User user);
 	
 	public User delete(User user);
+	
+	public int assignAdmin(Long id);
+	
+	public int blockUser(Long id);
+	
+	public int unblockUser(Long id);
 }

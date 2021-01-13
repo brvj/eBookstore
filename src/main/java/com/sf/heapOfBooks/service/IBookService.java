@@ -28,6 +28,8 @@ public interface IBookService {
 	 
 	 List<Book> searchByGenre(Long genreId);
 	 
+	 Book searchByISBN(Long isbn);
+	 
 	 List<Book> orderByNameASC();
 		
 	 List<Book> orderByNameDESC();

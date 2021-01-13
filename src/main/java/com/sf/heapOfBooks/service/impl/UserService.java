@@ -35,8 +35,7 @@ public class UserService implements IUserService{
 
 	@Override
 	public User login(String userName, String userPassword) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.login(userName, userPassword);
 	}
 
 	@Override
@@ -61,6 +60,21 @@ public class UserService implements IUserService{
 	public User delete(User user) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void assignAdmin(Long id) {
+		userRepository.assignAdmin(id);
+	}
+
+	@Override
+	public void blockUser(Long id) {
+		userRepository.blockUser(id);
+	}
+
+	@Override
+	public void unblockUser(Long id) {
+		userRepository.unblockUser(id);
 	}
 
 }

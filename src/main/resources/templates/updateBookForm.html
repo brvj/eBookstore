@@ -6,12 +6,13 @@
 </head>
 <body>		
 		<form method="post" th:action="@{Update}">
-			<table class="tabela">		
-			<caption>Forma za kreiranje nove knjige</caption>	
+		<div class="updateBookContainer">
+			<table class="table">		
+			<caption>Forma za azuriranje knjige</caption>	
 				<tr><th align="left">ISBN:</th><td><input type="text" th:value="${book.ISBN}" name="ISBN" required readonly="readonly"></td></tr>	
 				<tr><th align="left">Naziv:</th><td><input type="text" th:value="${book.name}" name="name" required></td></tr>
 				<tr><th align="left">Izdavac:</th><td><input type="text" th:value="${book.publisher}" name="publisher" required></td></tr>
-				<tr><th align="left">Autor/i:</th><td><input type="text" th:value="${authors}" name="authors" required></td></tr>
+				<tr><th align="left">Autor:</th><td><input type="text" th:value="${authors}" name="authors" required></td></tr>
 				<tr><th align="left">Datum izdavanja:</th><td><input type="date" th:value="${book.releaseDate}" name="releaseDate" required></td></tr>
 				<tr><th align="left">Opis:</th><td><input type="text" th:value="${book.shortDescription}" name="shortDescription" required></td></tr>
 				<tr><th align="left">Cena:</th><td><input type="number" th:value="${book.price}" name="price" required></td></tr>
@@ -32,6 +33,7 @@
 				
 				<tr><th></th><td><input type="submit" value="Azurirajte knjigu"/></td></tr>
 			</table>
+		</div>
 		</form>
 </body>
 </html>

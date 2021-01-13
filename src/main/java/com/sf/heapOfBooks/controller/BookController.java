@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
+import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
 import com.sf.heapOfBooks.model.enums.LetterEnum;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.GenreService;
 
@@ -57,7 +60,8 @@ public class BookController {
 			@RequestParam(required = false) String search,
 			@RequestParam(required = false) Integer priceFrom,
 			@RequestParam(required = false) Integer priceTo,
-			@RequestParam(required = false) Long id) {
+			@RequestParam(required = false) Long id,
+			@RequestParam(required = false) Long isbn) {
 		List<Book> books = bookService.findAll();	
 		List<Genre> genres = genreService.findAll();		
 		
@@ -68,8 +72,12 @@ public class BookController {
 		if(search != "") {
 			bookFilter.addAll(bookService.searchByNameOrPublisher(search));
 		}
+		
+		if(isbn != null) {
+			bookFilter.add(bookService.searchByISBN(isbn));
+		}
 
-		if(priceFrom != null && priceTo == null) {
+		if(priceFrom != null && priceTo == null) { 
 			bookFilter.addAll(bookService.serachByPriceFrom(priceFrom));
 		}
 		if(priceTo != null && priceFrom == null) {
@@ -83,7 +91,7 @@ public class BookController {
 			bookFilter.addAll(bookService.searchByGenre(id));
 		}
 						
-		if(search == null && priceTo == null && priceFrom == null && id == null)
+		if(search == null && priceTo == null && priceFrom == null && id == null && isbn == null)
 			return returnBooks.addObject("books", books);
 		
 		List<Book> removeDuplicates = bookFilter.stream().distinct().collect(Collectors.toList());
@@ -94,7 +102,22 @@ public class BookController {
 	}
 	
 	@GetMapping(value = "/Create")
-	public ModelAndView create() {
+	public ModelAndView create(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
+		
 		ModelAndView maw = new ModelAndView("createBookForm");
 		
 		List<Genre> genres = genreService.findAll();
@@ -169,7 +192,21 @@ public class BookController {
 	}
 	
 	@GetMapping(value = "/Update")
-	public ModelAndView update(@RequestParam Long id) {
+	public ModelAndView update(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+			
 		ModelAndView maw = new ModelAndView("updateBookForm");
 		
 		Book book = bookService.findOne(id);
@@ -232,7 +269,21 @@ public class BookController {
 	}
 	
 	@GetMapping(value = "/Order")
-	public ModelAndView order(@RequestParam Long id) {
+	public ModelAndView order(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		ModelAndView maw = new ModelAndView("order");
 		
 		maw.addObject("book", bookService.findOne(id));
