@@ -1,17 +1,16 @@
 package com.sf.heapOfBooks.model;
 
-import java.util.List;
-
 public class ShoppingCart {
 
 	private Long id;
-	private List<BoughtBook> books;
+	private Book book;
+	private int numberOfCopies;
 	private User user;
 	
 	public ShoppingCart() {}
 	
-	public ShoppingCart(List<BoughtBook> books, User user) {
-		this.books = books;
+	public ShoppingCart(Book book, User user) {
+		this.book = book;
 		this.user = user;
 	}
 
@@ -23,12 +22,20 @@ public class ShoppingCart {
 		this.id = id;
 	}
 
-	public List<BoughtBook> getBooks() {
-		return books;
+	public Book getBook() {
+		return book;
 	}
 
-	public void setBooks(List<BoughtBook> books) {
-		this.books = books;
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public int getNumberOfCopies() {
+		return numberOfCopies;
+	}
+
+	public void setNumberOfCopies(int numberOfCopies) {
+		this.numberOfCopies = numberOfCopies;
 	}
 
 	public User getUser() {

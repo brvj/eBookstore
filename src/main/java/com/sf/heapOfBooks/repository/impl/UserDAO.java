@@ -103,6 +103,9 @@ public class UserDAO implements IUserDAO{
 		UserRowCallBackHandler rcbh = new UserRowCallBackHandler();
 		jdbcTemplate.query(sql, rcbh, userName, userPassword);
 		
+		if(rcbh.getUsers().isEmpty())
+			return null;
+		
 		return rcbh.getUsers().get(0);
 	}
 

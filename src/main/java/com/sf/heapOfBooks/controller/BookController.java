@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.WishBook;
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
 import com.sf.heapOfBooks.model.enums.LetterEnum;
 import com.sf.heapOfBooks.model.enums.UserEnum;
@@ -39,6 +41,8 @@ public class BookController {
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static String folder = "";
 	private static List<Genre> gList = new ArrayList<Genre>();
+	public static List<WishBook> bookWishList = new ArrayList<WishBook>();
+	public static final String WISH_LIST_KEY = "wishList";
 	
 	@Autowired
 	private BookService bookService;
@@ -292,6 +296,52 @@ public class BookController {
 		bookService.orderCopiesOfBook(book);
 		
 		response.sendRedirect("/HeapOfBooks/Books");
+	}
+	
+	@GetMapping(value = "/AddToWishList")
+	public void addToWishList(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+		
+		Book book = bookService.findOne(id);
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		WishBook wb = new WishBook(user, book);
+		
+		bookWishList.add(wb);
+		
+		session.setAttribute(WISH_LIST_KEY, bookWishList);
+		
+		response.sendRedirect("/HeapOfBooks/Books");		
+	}
+	
+	@GetMapping(value = "/WishList")
+	public ModelAndView wishList(HttpServletRequest request) {
+		
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
+		
+		@SuppressWarnings("unchecked")
+		List<WishBook> allWB = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
+		
+		if(allWB == null || allWB.isEmpty()) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			String message = "Nemate ni jednu knjigu u listi zelja!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
+		for(WishBook wb : allWB) {
+			if(wb.getUser().getId() == user.getId())
+				currentUsersWishList.add(wb);
+		}
+		
+		ModelAndView maw = new ModelAndView("wishList");
+		maw.addObject("books", currentUsersWishList);	
+				
+		return maw;
 	}
 	
 	@GetMapping(value = "/OrderByNameASC")

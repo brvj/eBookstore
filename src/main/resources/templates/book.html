@@ -40,7 +40,19 @@
 		<p/>
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
 			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|">Poruci knjige</a>
-		<p/>
+		<p/>	
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
+			th:href="|/HeapOfBooks/Books/AddToWishList?id=${book.ISBN}|">Dodaj u listu zelja</a>
+		<p/>	
+		<form method="post" th:action="@{/ShoppingCart/Add}" > 
+		<table>
+			<tr><th><strong>Uneti kolicinu</strong></th></tr>
+			<tr><th><input type="number" min="1" name="quantity" value=""/></th></tr>
+			<tr><th><input type="hidden" name="isbn" th:value="${book.ISBN}"/></th></tr>
+			<tr><th><input type="submit" value="Dodaj u korpu"/></th></tr>
+		</table>
+	 	</form>
+		<p/>	
 		<a th:href="@{/Books}">Nazad</a>
 </body>
 </html>

@@ -375,7 +375,6 @@ public class BookDAO implements IBookDAO{
 			sql = sql + " WHERE b.numberOfCopies > 0"
 					+ " ORDER BY b.id";
 				
-		System.out.println(sql);
 		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
 		jdbcTemplate.query(sql, bcbh);
 		

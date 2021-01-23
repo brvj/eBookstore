@@ -11,6 +11,10 @@
 	<p/>
 	<a th:if="${session.user != null}" th:href="|/HeapOfBooks/Users/Details?id=${session.user.id}|" >Moj profil</a>
 	<p/>
+	<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/Books/WishList}" >Lista zelja</a>
+	<p/>
+	<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{ShoppingCart}" >Korpa</a>
+	<p/>
 	<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{Users}">Korisnici</a>
 	<p/><p/>
 		<form method="get" th:action="@{Books}">

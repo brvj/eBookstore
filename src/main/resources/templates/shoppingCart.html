@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Korpa</title>
+</head>
+<body>
+		<form method="get" th:action="@{/Books/AddToShoppingCart}">
+			<div class="booksContainer">
+			<table class="table" border ="1">						
+				<caption>Korpa</caption>								
+				<tr>								
+					<th align="center">Naziv knjige</th>
+					<th align="center">Autor/i</th>
+					<th align="center">Cena (ukupna)</th>
+					<th align="center">Cena</th>
+					<th align="center">Kolicina</th>					
+				</tr>				
+				<tr th:each="itBook, status: ${cart}">
+					<td align="center"><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.book.ISBN}|" th:text="${itBook.book.name}"></a></td>	
+					<td><ul>
+							<li th:each="itAuthor: ${itBook.book.authors}"><a th:text="${itAuthor}"></a></li>
+					</ul></td>			
+					<td align="center" th:text="${itBook.book.price * itBook.numberOfCopies}"></td>
+					<td align="center" th:text="${itBook.book.price}">
+					<td align="center" th:text="${itBook.numberOfCopies}">
+					<td align="center"><input type="submit" value="Kupi"></td>				
+				</tr>
+			</table>
+			</div>
+		</form>	
+		<p/>
+		<a th:href="@{/Books}">Pocetna</a>
+</body>
+</html>

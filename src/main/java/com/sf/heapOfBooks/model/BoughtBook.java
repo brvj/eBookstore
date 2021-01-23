@@ -6,6 +6,7 @@ public class BoughtBook {
 	private Book book;
 	private int numberOfBooks;
 	private float price;
+	private User user;
 	
 	public BoughtBook() {}
 	
@@ -44,5 +45,13 @@ public class BoughtBook {
 
 	public void setPrice(float price) {
 		this.price = price;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
