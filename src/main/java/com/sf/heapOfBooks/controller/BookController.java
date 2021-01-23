@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -62,42 +61,36 @@ public class BookController {
 			@RequestParam(required = false) Integer priceTo,
 			@RequestParam(required = false) Long id,
 			@RequestParam(required = false) Long isbn) {
-		List<Book> books = bookService.findAll();	
-		List<Genre> genres = genreService.findAll();		
 		
 		ModelAndView returnBooks = new ModelAndView("books");
-		returnBooks.addObject("genres", genres);
-		List<Book> bookFilter = new ArrayList<Book>();
+		List<Book> books = new ArrayList<Book>();
+		String message = "";
 		
-		if(search != "") {
-			bookFilter.addAll(bookService.searchByNameOrPublisher(search));
-		}
+		if(search != null && search.trim().equals(""))
+			search = null;
 		
 		if(isbn != null) {
-			bookFilter.add(bookService.searchByISBN(isbn));
+			returnBooks.addObject("books", books.add(bookService.searchByISBN(isbn)));
+		}else {
+			if(bookService.search(search, priceFrom, priceTo, id) == null) {
+				ModelAndView retMessage = new ModelAndView("message");
+				
+				message = "Ne postoji knjiga sa tim kriterijumima!";
+				
+				retMessage.addObject("message",	message);
+				
+				return retMessage;
+			}
+			else {
+				books = new ArrayList<Book>(bookService.search(search, priceFrom, priceTo, id));
+			}
 		}
-
-		if(priceFrom != null && priceTo == null) { 
-			bookFilter.addAll(bookService.serachByPriceFrom(priceFrom));
-		}
-		if(priceTo != null && priceFrom == null) {
-			bookFilter.addAll(bookService.searchByPriceTo(priceTo));
-		}
-		if(priceTo != null && priceFrom != null) {
-			bookFilter.addAll(bookService.searchByPriceFromTo(priceFrom, priceTo));
-		}
-
-		if(id != null) {
-			bookFilter.addAll(bookService.searchByGenre(id));
-		}
-						
-		if(search == null && priceTo == null && priceFrom == null && id == null && isbn == null)
-			return returnBooks.addObject("books", books);
-		
-		List<Book> removeDuplicates = bookFilter.stream().distinct().collect(Collectors.toList());
-
-		returnBooks.addObject("books", removeDuplicates);
-		
+				
+		List<Genre> genres = genreService.findAll();		
+			
+		returnBooks.addObject("genres", genres);
+		returnBooks.addObject("books", books);
+				
 		return returnBooks;		
 	}
 	

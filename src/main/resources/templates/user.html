@@ -30,6 +30,6 @@
 		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac and user.userBlocked == true}" 
 			th:href="|/HeapOfBooks/Users/Unblock?id=${user.id}|">Odblokirajte korisnika</a>
 		<p/>
-		<a th:href="@{/Users}">Nazad</a>
+		<a th:href="@{/Books}">Pocetna</a>
 </body>
 </html>

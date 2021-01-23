@@ -206,103 +206,7 @@ public class BookDAO implements IBookDAO{
 		
 		return uspeh?1:0;
 	}
-
-	@Override
-	public List<Book> searchByNameOrPublisher(String search) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.name LIKE '%" + search + "%' OR b.publicher LIKE '%" + search + "%' OR b.bookLanguage LIKE '%" + search + "%') AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> serachByPriceFrom(int price) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.price >= ? AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,price);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByPriceTo(int price) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.price <= ? AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,price);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByPriceFromTo(int priceFrom, int priceTo) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.price >= ? AND b.price <= ?) AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,priceFrom,priceTo);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByRatingFrom(float rating) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.avgRating >= ? AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,rating);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByRatingTo(float rating) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE b.avgRating <= ? AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,rating);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE (b.avgRating >= ? AND b.avgRating <= ?) AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,ratingFrom,ratingTo);
-		
-		return bcbh.getBooks();
-	}
-
-	@Override
-	public List<Book> searchByGenre(Long id) {
-		String sql = "SELECT b.*,g.* FROM books b"
-				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
-				+ " LEFT JOIN genres g ON bg.genreId = g.id"
-				+ "	WHERE g.id = ? AND b.numberOfCopies > 0";
-		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
-		jdbcTemplate.query(sql, bcbh,id);
-		
-		return bcbh.getBooks();
-	}
-
+	
 	@Override
 	public List<Book> orderByNameASC() {
 		String sql = "SELECT b.*,g.* FROM books b"
@@ -420,5 +324,64 @@ public class BookDAO implements IBookDAO{
 			return null;
 		
 		return bcbh.getBooks().get(0);
+	}
+
+	@Override
+	public List<Book> search(String search, Integer priceFrom, Integer priceTo, Long genreId) {
+		
+		String sql= "SELECT b.*,g.* FROM books b"
+				+ " LEFT JOIN bookGenre bg ON bg.bookId = b.id"
+				+ " LEFT JOIN genres g ON bg.genreId = g.id";
+		
+		StringBuffer whereClause = new StringBuffer(" WHERE b.numberOfCopies > 0 AND");
+		boolean arg = false;
+		
+		if(search != null) {
+			if(arg)
+				whereClause.append("AND");
+			
+			whereClause.append(" (b.name LIKE '%" + search + "%' OR b.publicher LIKE '%" + search + "%' OR b.bookLanguage LIKE '%" + search + "%') ");
+			arg = true;		
+		}
+		
+		if(priceFrom != null) {
+			if(arg)
+				whereClause.append("AND");
+			
+			whereClause.append(" b.price >= "+ priceFrom +" ");
+			arg = true;
+		}
+		
+		if(priceTo != null) {
+			if(arg)
+				whereClause.append("AND");
+			
+			whereClause.append(" b.price <= "+ priceTo +" ");
+			arg = true;
+		}
+		
+		if(genreId != null) {
+			if(arg)
+				whereClause.append("AND");
+			
+			whereClause.append(" g.id = "+ genreId +" ");
+			arg = true;
+		}
+					
+		if(arg) 
+			sql = sql + whereClause.toString() + ""
+					+ "	ORDER BY b.id";			
+		else 
+			sql = sql + " WHERE b.numberOfCopies > 0"
+					+ " ORDER BY b.id";
+				
+		System.out.println(sql);
+		BookRowCallBackHandler bcbh = new BookRowCallBackHandler();
+		jdbcTemplate.query(sql, bcbh);
+		
+		if(bcbh.getBooks().isEmpty())
+			return null;
+		
+		return bcbh.getBooks();		
 	}
 }

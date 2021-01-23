@@ -46,31 +46,6 @@ public class BookService implements IBookService{
 	}
 
 	@Override
-	public List<Book> searchByNameOrPublisher(String search) {
-		return bookRepository.searchByNameOrPublisher(search);
-	}
-
-	@Override
-	public List<Book> serachByPriceFrom(int price) {
-		return bookRepository.serachByPriceFrom(price);
-	}
-
-	@Override
-	public List<Book> searchByPriceTo(int price) {
-		return bookRepository.searchByPriceTo(price);
-	}
-
-	@Override
-	public List<Book> searchByPriceFromTo(int priceFrom, int priceTo) {
-		return bookRepository.searchByPriceFromTo(priceFrom, priceTo);
-	}
-
-	@Override
-	public List<Book> searchByGenre(Long id) {
-		return bookRepository.searchByGenre(id);
-	}
-
-	@Override
 	public List<Book> orderByNameASC() {
 		return bookRepository.orderByNameASC();
 	}
@@ -113,5 +88,10 @@ public class BookService implements IBookService{
 	@Override
 	public Book searchByISBN(Long isbn) {
 		return bookRepository.searchByISBN(isbn);
+	}
+
+	@Override
+	public List<Book> search(String search, Integer priceFrom, Integer priceTo, Long genreId) {
+		return bookRepository.search(search, priceFrom, priceTo, genreId);
 	}	
 }

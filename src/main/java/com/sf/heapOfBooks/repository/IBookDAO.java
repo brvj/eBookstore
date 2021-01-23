@@ -17,23 +17,9 @@ public interface IBookDAO {
 	
 	public int orderCopiesOfBook(Book book);
 	
-	public List<Book> searchByNameOrPublisher(String search);
-	
-	public List<Book> serachByPriceFrom(int price);
-	
-	public List<Book> searchByPriceTo(int price);
-	
-	public List<Book> searchByPriceFromTo(int priceFrom, int priceTo);
-	
-	public List<Book> searchByRatingFrom(float rating);
-	
-	public List<Book> searchByRatingTo(float rating);
-	
-	public List<Book> searchByRatingFromTo(float ratingFrom, float ratingTo);
+	public List<Book> search(String search, Integer priceFrom, Integer priceTo, Long genreId);
 	
 	public Book searchByISBN(Long isbn);
-	
-	public List<Book> searchByGenre(Long genreId);
 	
 	public List<Book> orderByNameASC();
 	

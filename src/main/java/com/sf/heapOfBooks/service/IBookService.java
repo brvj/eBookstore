@@ -18,15 +18,7 @@ public interface IBookService {
 	
 	 void orderCopiesOfBook(Book book);
 	
-	 List<Book> searchByNameOrPublisher(String search);
-	
-	 List<Book> serachByPriceFrom(int price);
-	
-	 List<Book> searchByPriceTo(int price);
-	
-	 List<Book> searchByPriceFromTo(int priceFrom, int price);
-	 
-	 List<Book> searchByGenre(Long genreId);
+	 List<Book> search(String search, Integer priceFrom, Integer priceTo, Long genreId);
 	 
 	 Book searchByISBN(Long isbn);
 	 
