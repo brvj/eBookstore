@@ -48,6 +48,44 @@ create table bookGenre(
 		on delete cascade
 );
 
+create table shoppingCarts(
+	id int primary key auto_increment,
+    numberOfCopies int
+);
+
+create table shoppingCartUserBook(
+	cartId int,
+	bookId bigint,
+    userId int,
+    primary key(cartId, bookId, userId),
+    foreign key(cartId) references shoppingCarts(id)
+		on delete cascade,
+	foreign key(bookId) references books(id)
+		on delete cascade,
+	foreign key(userId) references users(id)
+		on delete cascade
+);
+
+create table shop(
+	id int primary key auto_increment,
+    price float,
+    shoppingDate Date,
+    bookSum int
+);
+
+create table shopBookUser(
+	shopId int,
+	bookId bigint,
+    userId int,
+    primary key(shopId, bookId, userId),
+    foreign key(shopId) references shop(id)
+		on delete cascade,
+	foreign key(bookId) references books(id)
+		on delete cascade,
+	foreign key(userId) references users(id)
+		on delete cascade
+);
+
 insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 
 values(1,'brvj','sifra','jankovicb0230@gmail.com','Boris','Jankovic',current_date(),'Jovana Jovanovica Zmaja 3','0696354635','2020-01-12 10:10:10','Administrator','false');
 
@@ -63,7 +101,8 @@ insert into bookGenre(bookId,genreId) values(1000000000001,1);
 insert into bookGenre(bookId,genreId) values(1000000000002,1);
 insert into bookGenre(bookId,genreId) values(1000000000002,2);
 
-
+insert into shoppingCarts(id, numberOfCopies) values (1,2);
+insert into shoppingCartUserBook(cartId,bookId,userId) values(1,1000000000001,3)
 
 
 
