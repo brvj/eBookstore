@@ -313,37 +313,6 @@ public class BookController {
 		response.sendRedirect("/HeapOfBooks/Books");		
 	}
 	
-	@GetMapping(value = "/WishList")
-	public ModelAndView wishList(HttpServletRequest request) {
-		
-		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
-		
-		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
-		
-		@SuppressWarnings("unchecked")
-		List<WishBook> allWB = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
-		
-		if(allWB == null || allWB.isEmpty()) {
-			ModelAndView retMessage = new ModelAndView("message");
-			
-			String message = "Nemate ni jednu knjigu u listi zelja!";
-			
-			retMessage.addObject("message",	message);
-			
-			return retMessage;
-		}
-		
-		for(WishBook wb : allWB) {
-			if(wb.getUser().getId() == user.getId())
-				currentUsersWishList.add(wb);
-		}
-		
-		ModelAndView maw = new ModelAndView("wishList");
-		maw.addObject("books", currentUsersWishList);	
-				
-		return maw;
-	}
-	
 	@GetMapping(value = "/OrderByNameASC")
 	public ModelAndView orderByNameAsc() {
 		ModelAndView maw = new ModelAndView("books");

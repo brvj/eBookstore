@@ -2,13 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
+	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/book.css">
+	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/header.css">
 	<title>Knjiga-forma za kreiranje</title>
 </head>
-<body>		
+<body>	
+
+	<div class="header">
+	<img class="logo" th:src="@{${'/logo/logoV3.PNG'}}" alt="LOGO"/>
+	<a class="logout" th:if="${session.user != null}" th:href="@{/Login/Logout}">Odjavite se</a>	
+	<a class="register" th:if="${session.user == null}" th:href="@{/Users/Registration}">Registrujte se</a>
+	<a class="login" th:if="${session.user == null}" th:href="@{/Login}">Ulogujte se</a>
+	<h3 class="user" th:if="${session.user != null}" th:text="${session.user.name + ' ' + session.user.surname}"></h3>	
+	<button class="aoptions" th:if="${session.user != null}" onclick="klik()">Opcije</button>		
+	</div>
+	
+	<div id="options">	
+	<a class="profile" th:if="${session.user != null}" th:href="|/HeapOfBooks/Users/Details?id=${session.user.id}|" >Moj profil</a>
+	<p/>
+	<a class="basket" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{ShoppingCart}" >Korpa</a>
+	<p/>
+	<a class="users" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{Users}">Korisnici</a>
+	<p/>
+	<a class="createBook" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Books/Create}">Kreiraj knjigu</a>
+	</div>
+	
 		<form method="post" enctype="multipart/form-data" th:action="@{/Books/Create}">
 		<div class="createBookContainer">
 			<table class="table">		
-			<caption>Forma za kreiranje nove knjige</caption>	
 				<tr><th align="left">ISBN:</th><td><input type="number" value="" min="1000000000000" max="9999999999999" name="ISBN" required></td></tr>	
 				<tr><th align="left">Naziv:</th><td><input type="text" value="" name="name" required></td></tr>
 				<tr><th align="left">Izdavac:</th><td><input type="text" value="" name="publisher" required></td></tr>
@@ -33,7 +54,7 @@
 				<tr><th align="left">Broj kopija:</th><td><input type="number" value="" name="numberOfCopies" required></td></tr>
 				<tr><th align="left">Slika:</th><td><input type="file" name="image" required></td></tr>
 				
-				<tr><th></th><td><input type="submit" value="Kreirajte knjigu"/></td></tr>
+				<tr><th></th><td align="right"><input type="submit" value="Kreirajte knjigu"/></td></tr>
 			</table>
 		</div>
 		</form>

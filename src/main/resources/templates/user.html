@@ -20,6 +20,34 @@
 				<tr><th>Tip korisnika: </th><td th:text="${user.userType}"></td></tr>			
 		</table>
 	</div>	
+	
+	<form method="post" th:action="@{/ShoppingCart/Add}">
+			<div th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" class="booksContainer">
+			<table th:if="${books != null}" class="table" border ="1">						
+				<caption>Lista zelja</caption>								
+				<tr>				
+					<th align="center">Slika</th>					
+					<th align="center">Naziv knjige</th>
+					<th align="center">Cena</th>
+					<th align="center">Ocena</th>
+					<th align="center">Kolicina</th>					
+				</tr>				
+				<tr th:each="itBook, status: ${books}">
+					<td align="center"><img th:src="@{${'/images/' + itBook.book.coverPicture}}" height="180px" width="110px"></td>
+					<td align="center"><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.book.ISBN}|" th:text="${itBook.book.name}"></a></td>					
+					<td align="center" th:text="${itBook.book.price}"></td>
+					<td align="center" th:text="${itBook.book.averageRating}">
+					<td align="center" ><input type="number" value="" min="1" name="quantity"/><input type="submit" value="Dodaj">
+					<input type="hidden" th:value="${itBook.book.ISBN}" name="isbn">
+					<br/>
+					<a th:href="|/HeapOfBooks/ShoppingCart/RemoveWishItem?id=${itBook.book.ISBN}|">Ukloni</a>
+					</td>
+									
+				</tr>
+			</table>
+			</div>
+		</form>	
+	
 		<p/>
 		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
 			th:href="|/HeapOfBooks/Users/Assign?id=${user.id}|">Dodelite admina korisniku</a>

@@ -1,0 +1,86 @@
+.image{
+	padding-top:50px;
+	position: relative;
+	width:350px;
+	margin:auto;
+	float:left;
+}
+
+.bookContainer{
+	position:relative;
+	margin:auto;
+	float:left;
+	width:36%;
+}
+
+.table{
+	margin: auto auto auto auto;
+}
+
+.table th, td{
+	color: #FEC8C6;
+	font-size: 20px;
+	font-family: Arial, sans-serif;
+}
+
+th{
+	color: white;
+	font-family: Arial, sans-serif;
+}
+
+input{
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 4px 4px 4px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.bookContainer{
+	padding-top:75px;
+	width:70%;
+	margin-bottom:90px;
+}
+
+.addToCartContainer{
+	position:relative;
+	height: 100px;
+	width: 210px;
+	float:left;
+	padding-left: 65px;
+}
+
+.bookOptions{
+	position:relative;
+	height: 100px;
+	width: 300px;
+	float:left;
+	padding-left: 210px;
+	padding-top: 27px;
+}
+
+.bookOptions a{
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 4px 4px 4px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+.genreOption{
+	font-family: Arial, sans-serif;
+	color: #FEC8C6;
+}
+

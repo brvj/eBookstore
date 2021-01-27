@@ -1,24 +1,23 @@
 package com.sf.heapOfBooks.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Shop {
 
 	private Long id;
-	private List<BoughtBook> boughtBooks;
+	private List<ShoppingCart> boughtBooks = new ArrayList<ShoppingCart>();
 	private float price;
 	private LocalDate shoppingDate;
-	private User user;
 	private int bookSum;
 	
 	public Shop() {}
 	
-	public Shop(List<BoughtBook> boughtBooks, float price, LocalDate shoppingDate, User user, int bookSum) {
+	public Shop(List<ShoppingCart> boughtBooks, float price, LocalDate shoppingDate, int bookSum) {
 		this.boughtBooks = boughtBooks;
 		this.price = price;
 		this.shoppingDate = shoppingDate;
-		this.user = user;
 		this.bookSum = bookSum;
 	}
 
@@ -30,11 +29,11 @@ public class Shop {
 		this.id = id;
 	}
 
-	public List<BoughtBook> getBoughtBooks() {
+	public List<ShoppingCart> getBoughtBooks() {
 		return boughtBooks;
 	}
 
-	public void setBoughtBooks(List<BoughtBook> boughtBooks) {
+	public void setBoughtBooks(List<ShoppingCart> boughtBooks) {
 		this.boughtBooks = boughtBooks;
 	}
 
@@ -52,14 +51,6 @@ public class Shop {
 
 	public void setShoppingDate(LocalDate shoppingDate) {
 		this.shoppingDate = shoppingDate;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public int getBookSum() {

@@ -41,7 +41,7 @@ public class ShoppingCartController {
 		
 		List<ShoppingCart> spList = spService.findAll(user);
 		
-		if(spList.isEmpty()) {
+		if(spList == null) {
 			ModelAndView retMessage = new ModelAndView("message");
 			
 			message = "Nemate nista u korpi!";
@@ -87,5 +87,28 @@ public class ShoppingCartController {
 		session.setAttribute(BookController.WISH_LIST_KEY, newList);
 		
 		response.sendRedirect("/HeapOfBooks/Books");
+	}
+	
+	@GetMapping(value = "/RemoveWishItem")
+	public void removeItem(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
+		
+		@SuppressWarnings("unchecked")
+		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(BookController.WISH_LIST_KEY);
+		
+		List<WishBook> newList = new ArrayList<WishBook>();
+		
+		if(wb != null) {
+			for(WishBook w : wb) {
+				if(!w.getBook().getISBN().equals(id)) {
+					newList.add(w);
+				}
+			}
+		}
+			
+		session.removeAttribute(BookController.WISH_LIST_KEY);
+		
+		session.setAttribute(BookController.WISH_LIST_KEY, newList);
+		
+		response.sendRedirect("/HeapOfBooks/Books");	
 	}
 }

@@ -1,0 +1,30 @@
+* {
+	background-color: #003A3D 
+}
+
+div{
+	padding-top: 200px;
+}
+
+.table{
+	margin: auto auto auto auto;
+}
+
+.table th, td{
+	color: #FEC8C6;
+	font-size: 25px;
+	font-family: Arial, sans-serif;
+}
+
+input{
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 4px 4px 4px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+}

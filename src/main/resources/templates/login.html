@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>	
+	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/login.css">
 	<title>Prijava korisnika</title>
 </head>
 <body>
 	<form method="post" th:action="@{Login}">
 	<div class="loginContainer">
 		<table class="table">
-			<caption>Knjizara prijava</caption>
 			<tr><th>Korisnicko ime:</th><td><input type="text" value="" name="userName" required/></td></tr>
 			<tr><th>Sifra:</th><td><input type="password" value="" name="userPassword" required/></td></tr>
-			<tr><th></th><td><input type="submit" value="Prijavi se" /></td>
+			<tr><th></th><td align="right"><input type="submit" value="Prijavi se" /></td>
 		</table>
 	</div>
 	</form>

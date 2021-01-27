@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.WishBook;
 import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.UserService;
 
@@ -102,10 +104,25 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/Details")
-	public ModelAndView details(@RequestParam Long id) {
+	public ModelAndView details(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
+		
+		@SuppressWarnings("unchecked")
+		List<WishBook> allWB = (List<WishBook>) request.getSession().getAttribute(BookController.WISH_LIST_KEY);
+		
+		if(allWB != null) {
+			for(WishBook wb : allWB) {
+				if(wb.getUser().getId() == user.getId())
+					currentUsersWishList.add(wb);
+			}
+		}
+		
+			
 		ModelAndView maw = new ModelAndView("user");
 		
-		User user = userService.findOne(id);
+		maw.addObject("books", currentUsersWishList);
 		
 		return maw.addObject("user", user);
 	}

@@ -177,4 +177,20 @@ public class ShoppingCartDAO implements IShoppingCartDAO{
 		return sccbh.getShoppingCart();
 	}
 
+	@Override
+	public ShoppingCart findOne(Long id) {
+		String sql = "SELECT c.*,b.*,u.* FROM shoppingCarts c"
+				+ " LEFT JOIN shoppingCartUserBook cub ON cub.cartId = c.id"
+				+ " LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId =  u.id"
+				+ " WHERE b.numberOfCopies > 0 AND c.id = ?";
+		ShoppingCartCallBackHandler sccbh = new ShoppingCartCallBackHandler();
+		jdbcTemplate.query(sql, sccbh, id);
+		
+		if(sccbh.getShoppingCart().isEmpty())
+			return null;
+		
+		return sccbh.getShoppingCart().get(0);		
+	}
+
 }

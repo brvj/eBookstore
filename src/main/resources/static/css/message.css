@@ -1,0 +1,17 @@
+body{
+	background-color: #003A3D;
+	
+}
+
+h1{
+	color: #FEC8C6;
+	font-size: 40px;
+	font-family: Arial, sans-serif;
+	 
+}
+
+div{
+position: fixed;
+  top: 50%;
+  left: 10%;
+}

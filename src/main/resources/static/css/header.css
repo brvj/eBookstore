@@ -1,0 +1,146 @@
+body{
+	padding: 10px;	
+}
+
+.header{
+  text-align: right;
+  background: #003A3D;
+  color: white;
+  height: 100px;
+  width: 100%;
+}
+
+.logo{
+	float: left;
+	width: 300px;
+	height: 100px;
+}
+
+.register{  
+  position:absolute;
+  top:25px;
+  right:50px;
+  border-radius: 4px;
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 6px 4px 6px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+}
+
+.login{   
+  position:absolute;
+  top:70px;
+  right:50px;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 17px 4px 17px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+}
+
+.logout{   
+  position:absolute;
+  top:25px;
+  right:50px;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 14px 4px 15px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+}
+
+.user{
+	position:absolute;
+	right:250px;
+	top:15px;
+	color: #FEC8C6;
+	font-size: 30px;
+	font-family: Arial, sans-serif;
+}
+
+
+#options{
+	animation:fade 1000ms ease-in-out;
+  	transform-origin: top center;
+	position:absolute;
+	right:0;
+	top: 140px;
+	text-decoration: none;
+	text-align: center;
+	background: #003A3D;
+  	border-top: 3px solid #325B56;
+ 	border-bottom: 3px solid #325B56;
+ 	padding: 17px 75px 0px 75px;	
+ 	border-radius: 35px;	
+ 	display: none;
+}
+
+.aoptions{
+  position:absolute;
+  top:70px;
+  right:50px;
+  border-radius: 5px;
+  font-size: 20px;
+  text-decoration: none;
+  background-color: #003A3D;
+  color: #FEC8C6;
+  padding: 4px 36px 4px 36px;
+  border-top: 3px solid #325B56;
+  border-right: 3px solid #325B56;
+  border-bottom: 3px solid #325B56;
+  border-left: 3px solid #325B56;
+}
+
+a.register, a.login , a.users, a.wish, a.basket, a.profile, a.aoptions, a.logout, a.createBook{
+	font-family: Arial, sans-serif;
+	text-decoration: none;
+	font-size: 20px;
+	color: #FEC8C6;
+}
+
+*{ background-color: #003A3D }
+
+@keyframes fade{
+     0% {
+        transform: scale(0)
+    }
+    80% {
+        transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1)
+    }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,4 +14,6 @@ public interface IShoppingCartDAO {
 	public List<ShoppingCart> findAll(User user);	
 	
 	public List<ShoppingCart> findAlll();
+	
+	public ShoppingCart findOne(Long id);
 }
