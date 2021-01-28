@@ -139,10 +139,11 @@ public class ShoppingCartDAO implements IShoppingCartDAO{
 		return uspeh?1:0;
 	}
 
+	@Transactional
 	@Override
 	public int delete(ShoppingCart shoppingCart) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM shoppingCarts WHERE id = ?";
+		return jdbcTemplate.update(sql,shoppingCart.getId());
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class ShoppingCartDAO implements IShoppingCartDAO{
 				+ " LEFT JOIN shoppingCartUserBook cub ON cub.cartId = c.id"
 				+ " LEFT JOIN books b ON cub.bookId = b.id"
 				+ "	LEFT JOIN users u ON cub.userId = u.id"
-				+ " WHERE b.numberOfCopies > 0 AND u.id = "+ user.getId() +"";
+				+ " WHERE b.numberOfCopies > 0 AND u.id = "+ user.getId() +" AND c.id NOT IN (SELECT shoppingCartsId from shopUserCart)";
 		ShoppingCartCallBackHandler sccbh = new ShoppingCartCallBackHandler();
 		jdbcTemplate.query(sql, sccbh);
 		

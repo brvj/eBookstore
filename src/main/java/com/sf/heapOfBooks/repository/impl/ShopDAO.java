@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -20,21 +21,23 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Shop;
 import com.sf.heapOfBooks.model.ShoppingCart;
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.BookTypeEnum;
+import com.sf.heapOfBooks.model.enums.LetterEnum;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.repository.IShopDAO;
 
 @Repository
 public class ShopDAO implements IShopDAO{
 
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	private static final DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;	
-	
-	@Autowired
-	private ShoppingCartDAO shoppingCartRepository;
 	
 	private class ShopCallBackHandler implements RowCallbackHandler{
 
@@ -57,13 +60,70 @@ public class ShopDAO implements IShopDAO{
 				shop.setPrice(shopPrice);
 				shop.setShoppingDate(shoppingDate);
 				shop.setBookSum(bookSum);
+				
+				shops.put(shopId, shop);
 			}
 			
-			Long scId = rs.getLong(i++);
-			//Long userId = rs.getLong(i++);
-			ShoppingCart sc = shoppingCartRepository.findOne(scId);
+			Long cartId = rs.getLong(i++);
+			int numberOfCopies = rs.getInt(i++);
 			
-			shop.getBoughtBooks().add(sc);			
+			ShoppingCart shoppingCart = new ShoppingCart();
+			shoppingCart.setId(cartId);
+			shoppingCart.setNumberOfCopies(numberOfCopies);
+			
+			List<String> authors = new ArrayList<String>();
+
+			Long bookId = rs.getLong(i++);
+			String bookName = rs.getString(i++);
+			String bookPublisher = rs.getString(i++);
+			String bookAuthorsLine = rs.getString(i++);
+			String[] bookAuthors = bookAuthorsLine.split(",");
+			for(String author : bookAuthors) {
+				authors.add(author);
+			}
+			String bookDate = rs.getString(i++);
+			String bookDescription = rs.getString(i++);
+			String imagePath = rs.getString(i++);
+			float bookPrice = rs.getFloat(i++);
+			int bookNumberOfPages = rs.getInt(i++);
+			BookTypeEnum bookType = BookTypeEnum.valueOf(rs.getString(i++));
+			LetterEnum bookLetter = LetterEnum.valueOf(rs.getString(i++));
+			String bookLanguage = rs.getString(i++);
+			float bookAvgRating = rs.getFloat(i++);
+			int bookCopies = rs.getInt(i++);
+			
+			Book book = new Book(bookName, bookPublisher, authors, LocalDate.parse(bookDate, formatterDate), bookDescription, 
+					imagePath, bookPrice, bookNumberOfPages, bookType, bookLetter, bookLanguage, bookCopies);
+			book.setISBN(bookId);
+			book.setNumberOfCopies(bookCopies);
+			book.setAverageRating(bookAvgRating);
+			
+			Long id = rs.getLong(i++);
+			String userName = rs.getString(i++);
+			String userPassword = rs.getString(i++);
+			String eMail = rs.getString(i++);
+			String name = rs.getString(i++);
+			String surname = rs.getString(i++);
+			String regDateOfBirth = rs.getString(i++);
+			LocalDate dateOfBirth = LocalDate.parse(regDateOfBirth, formatterDate);
+			String address = rs.getString(i++);
+			String phoneNumber = rs.getString(i++);
+			String regDate = rs.getString(i++); 
+			LocalDateTime registrationDateAndTime = LocalDateTime.parse(regDate, formatterDateTime);
+			String uType = rs.getString(i++);
+			UserEnum userType = UserEnum.valueOf(uType);
+			boolean userBlocked = rs.getBoolean(i++);
+			
+			User user = new User(userName, userPassword, eMail, name, surname, dateOfBirth, address, phoneNumber, registrationDateAndTime);
+			user.setUserType(userType);
+			user.setUserBlocked(userBlocked);
+			user.setId(id);
+			
+			shoppingCart.setBook(book);
+			shoppingCart.setUser(user);	
+			
+			
+			shop.getBoughtBooks().add(shoppingCart);
 		}
 		public List<Shop> getShop(){
 			return new ArrayList<Shop>(shops.values());
@@ -72,8 +132,13 @@ public class ShopDAO implements IShopDAO{
 
 	@Override
 	public List<Shop> findAllForUser(User user) {
-		String sql = "SELECT s.* FROM shop s"
-				+ "	WHERE s.userId = "+ user.getId() +"";
+		String sql = "SELECT s.*, sc.*, b.*, u.* from shop as s"
+				+ "	LEFT JOIN shopUserCart suc on suc.shopId = s.id"
+				+ "	LEFT JOIN shoppingCarts sc on suc.shoppingCartsId = sc.id"
+				+ "	LEFT JOIN shoppingCartUserBook cub ON cub.cartId = sc.id"
+				+ " LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ " WHERE u.id = "+ user.getId() +"";
 
 		ShopCallBackHandler sccbh = new ShopCallBackHandler();
 		jdbcTemplate.query(sql, sccbh);
@@ -81,13 +146,18 @@ public class ShopDAO implements IShopDAO{
 		if(sccbh.getShop().isEmpty())
 			return null;
 		
-		return sccbh.getShop();		
+		return sccbh.getShop();	
 	}
 
 	@Override
 	public List<Shop> findAll() {
-		String sql = "SELECT s.* FROM shop s"
-				+ "	ORDER BY s.id";
+		String sql = "SELECT s.*, sc.*, b.*, u.* from shop as s"
+				+ "	LEFT JOIN shopUserCart suc on suc.shopId = s.id"
+				+ "	LEFT JOIN shoppingCarts sc on suc.shoppingCartsId = sc.id"
+				+ "	LEFT JOIN shoppingCartUserBook cub ON cub.cartId = sc.id"
+				+ " LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ " WHERE b.numberOfCopies > 0";
 
 		ShopCallBackHandler sccbh = new ShopCallBackHandler();
 		jdbcTemplate.query(sql, sccbh);
@@ -101,33 +171,31 @@ public class ShopDAO implements IShopDAO{
 	@Transactional
 	@Override
 	public int create(Shop shop) {
-		PreparedStatementCreator prepraredStatementCreator = new PreparedStatementCreator() {
+		PreparedStatementCreator preparedStatementCreator = new PreparedStatementCreator() {
 			
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				String sql = "INSERT INTO shop (id, price, shoppingDate, bookSum, shoppingCartId, userId) "
-						+ "	VALUES (?, ?, ?, ?, ?, ?)";
+				String sql = "INSERT INTO shop(id, price, shoppingDate, bookSum) VALUES (?, ?, ?, ?)";
 				
-				for(ShoppingCart sp : shop.getBoughtBooks()) {
-					PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-					int i = 1;
-					ps.setLong(i++, shop.getId());
-					ps.setFloat(i++, shop.getPrice());
-					ps.setString(i++, shop.getShoppingDate().toString());
-					ps.setInt(i++, shop.getBookSum());
-					ps.setLong(i++, sp.getId());
-					ps.setLong(i++, sp.getUser().getId());
-					
-					return ps;
-				}
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				int i = 1;
+				ps.setLong(i++, shop.getId());
+				ps.setFloat(i++, shop.getPrice());
+				ps.setString(i++, shop.getShoppingDate().toString());
+				ps.setInt(i++, shop.getBookSum());
+				
+				return ps;				
 			}
-		};
+		};	
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		boolean uspeh = jdbcTemplate.update(prepraredStatementCreator, keyHolder) == 1;
+		boolean uspeh = jdbcTemplate.update(preparedStatementCreator, keyHolder) == 1;
+		
 		if(uspeh) {
-			String sql = "INSERT INTO shoppingCartUserBook (cartId, bookId, userId) VALUES (?, ?, ?)";
-			uspeh = uspeh && jdbcTemplate.update(sql,keyHolder.getKey(),shoppingCart.getBook().getISBN(),shoppingCart.getUser().getId()) == 1;
-		}
+			String sql = "INSERT INTO shopUserCart(shopId, shoppingCartsId) VALUES(?, ?)";
+			for(ShoppingCart sc : shop.getBoughtBooks()) {
+				uspeh = uspeh && jdbcTemplate.update(sql, keyHolder.getKey(), sc.getId()) == 1;
+			}			
+		}	
 		return uspeh?1:0;
 	}
 

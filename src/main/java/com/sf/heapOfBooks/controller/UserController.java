@@ -110,7 +110,7 @@ public class UserController {
 		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
 		
 		@SuppressWarnings("unchecked")
-		List<WishBook> allWB = (List<WishBook>) request.getSession().getAttribute(BookController.WISH_LIST_KEY);
+		List<WishBook> allWB = (List<WishBook>) request.getSession().getAttribute(ShoppingCartController.WISH_LIST_KEY);
 		
 		if(allWB != null) {
 			for(WishBook wb : allWB) {

@@ -5,7 +5,7 @@
 	<title>Korpa</title>
 </head>
 <body>
-		<form method="get" th:action="@{/BoughtBook/Buy}">
+		<form method="post" th:action="@{/Shop/Buy}">
 			<div class="booksContainer">
 			<table class="table" border ="1">						
 				<caption>Korpa</caption>								
@@ -24,7 +24,9 @@
 					<td align="center" th:text="${itBook.book.price * itBook.numberOfCopies}"></td>
 					<td align="center" th:text="${itBook.book.price}">
 					<td align="center" th:text="${itBook.numberOfCopies}">
-					<td align="center"><input type="checkbox" name="shoppingCartItemId" th:value="${itBook.id}"/></td>				
+					<td align="center"><input type="checkbox" name="shoppingCartItemId" th:value="${itBook.id}"/>
+					<br/>
+					<a th:href="|/HeapOfBooks/ShoppingCart/Remove?id=${itBook.id}|">Ukloni</a></td>				
 				</tr>
 			</table>
 			<input type="submit" value="Kupi">

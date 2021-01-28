@@ -14,4 +14,6 @@ public interface IShoppingCartService {
 	List<ShoppingCart> findAll(User user);	
 	
 	List<ShoppingCart> findAlll();	
+	
+	ShoppingCart findOne(Long id);
 }

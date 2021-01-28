@@ -46,7 +46,7 @@
 				<tr><th align="left">Jezik: </th><td th:text="${book.bookLanguage}"></td></tr>
 				<tr><th align="left">Prosecna ocena: </th><td th:text="${book.averageRating}"></td></tr>
 				<tr th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" >
-					<th>Broj kopija: </th><td th:text="${book.numberOfCopies}"></td>
+					<th align="left">Broj kopija: </th><td th:text="${book.numberOfCopies}"></td>
 				</tr>
 				<tr><th align="left">Zanr/ovi: </th><td>
 				<ul>
@@ -75,7 +75,7 @@
 			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|">Poruci knjige</a>
 	
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
-			th:href="|/HeapOfBooks/Books/AddToWishList?id=${book.ISBN}|">Dodaj u listu zelja</a>
+			th:href="|/HeapOfBooks/ShoppingCart/AddToWishList?id=${book.ISBN}|">Dodaj u listu zelja</a>
 	</div>
 </body>
 </html>

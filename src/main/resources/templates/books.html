@@ -24,15 +24,17 @@
 	<p/>
 	<a class="basket" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{ShoppingCart}" >Korpa</a>
 	<p/>
+	<a class="shop" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/Shop}" >Kupovine</a>
+	<p/>
 	<a class="users" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{Users}">Korisnici</a>
 	<p/>
 	<a class="createBook" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Books/Create}">Kreiraj knjigu</a>
 	</div>
-		<form method="get" th:action="@{Books}" class="bookForm" onsubmit="return false">
+		<form method="get" th:action="@{/Books}" class="bookForm">
 		
 			<div class="divSearchSort">
-				<button class="showSearch" onclick="klikSearch()">Pretraga</button>
-				<button class="showSort" onclick="klikSort()">Sortiranje</button>
+				<button type="button" class="showSearch" onclick="klikSearch()">Pretraga</button>
+				<button type="button" class="showSort" onclick="klikSort()">Sortiranje</button>
 			</div>
 			
 			<div id="searchContainer">

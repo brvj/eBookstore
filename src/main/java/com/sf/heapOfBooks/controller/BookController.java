@@ -13,7 +13,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
 import com.sf.heapOfBooks.model.User;
-import com.sf.heapOfBooks.model.WishBook;
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
 import com.sf.heapOfBooks.model.enums.LetterEnum;
 import com.sf.heapOfBooks.model.enums.UserEnum;
@@ -41,8 +39,7 @@ public class BookController {
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static String folder = "";
 	private static List<Genre> gList = new ArrayList<Genre>();
-	public static List<WishBook> bookWishList = new ArrayList<WishBook>();
-	public static final String WISH_LIST_KEY = "wishList";
+
 	
 	@Autowired
 	private BookService bookService;
@@ -74,7 +71,18 @@ public class BookController {
 			search = null;
 		
 		if(isbn != null) {
-			returnBooks.addObject("books", books.add(bookService.searchByISBN(isbn)));
+			Book b = bookService.searchByISBN(isbn);
+			if(b == null) {
+				ModelAndView retMessage = new ModelAndView("message");
+				
+				message = "Ne postoji knjiga sa tim kriterijumima!";
+				
+				retMessage.addObject("message",	message);
+				
+				return retMessage;
+			}
+			
+			books.add(b);
 		}else {
 			if(bookService.search(search, priceFrom, priceTo, id) == null) {
 				ModelAndView retMessage = new ModelAndView("message");
@@ -298,25 +306,15 @@ public class BookController {
 		response.sendRedirect("/HeapOfBooks/Books");
 	}
 	
-	@GetMapping(value = "/AddToWishList")
-	public void addToWishList(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-		
-		Book book = bookService.findOne(id);
-		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
-		
-		WishBook wb = new WishBook(user, book);
-		
-		bookWishList.add(wb);
-		
-		session.setAttribute(WISH_LIST_KEY, bookWishList);
-		
-		response.sendRedirect("/HeapOfBooks/Books");		
-	}
+
 	
 	@GetMapping(value = "/OrderByNameASC")
 	public ModelAndView orderByNameAsc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByNameASC());
 		
 		return maw;
@@ -325,7 +323,10 @@ public class BookController {
 	@GetMapping(value = "/OrderByNameDESC")
 	public ModelAndView orderByNameDesc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByNameDESC());
 		
 		return maw;
@@ -334,7 +335,10 @@ public class BookController {
 	@GetMapping(value = "/OrderByPriceASC")
 	public ModelAndView orderByPriceAsc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByPriceASC());
 		
 		return maw;
@@ -343,7 +347,10 @@ public class BookController {
 	@GetMapping(value = "/OrderByPriceDESC")
 	public ModelAndView orderByPriceDesc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByPriceDESC());
 		
 		return maw;
@@ -354,14 +361,20 @@ public class BookController {
 		ModelAndView maw = new ModelAndView("books");
 		
 		maw.addObject("books", bookService.orderByRatingASC());
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		return maw;
 	}
 	
 	@GetMapping(value = "/OrderByRatingDESC")
 	public ModelAndView orderByRatingDesc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByRatingDESC());
 		
 		return maw;
@@ -370,7 +383,10 @@ public class BookController {
 	@GetMapping(value = "/OrderByLanguageDESC")
 	public ModelAndView orderByLanguageDesc() {
 		ModelAndView maw = new ModelAndView("books");
+
+		List<Genre> genres = genreService.findAll();		
 		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByLanguageDESC());
 		
 		return maw;
@@ -380,6 +396,9 @@ public class BookController {
 	public ModelAndView orderByLanguageAsc() {
 		ModelAndView maw = new ModelAndView("books");
 		
+		List<Genre> genres = genreService.findAll();		
+		
+		maw.addObject("genres", genres);
 		maw.addObject("books", bookService.orderByLanguageASC());
 		
 		return maw;

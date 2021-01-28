@@ -33,6 +33,12 @@ public class ShoppingCartController {
 	@Autowired
 	private BookService bookService;
 	
+	@Autowired
+	private ShoppingCartService shoppingCartService;
+	
+	public static List<WishBook> bookWishList = new ArrayList<WishBook>();
+	public static final String WISH_LIST_KEY = "wishList";
+	
 	@GetMapping
 	public ModelAndView init(HttpServletRequest request) {
 		String message = "";
@@ -58,7 +64,7 @@ public class ShoppingCartController {
 	}
 	
 	@PostMapping(value = "/Add")
-	public void create(@RequestParam int quantity, @RequestParam String isbn, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+	public void create(@RequestParam int quantity, @RequestParam Long isbn, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 		
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
 		
@@ -70,7 +76,7 @@ public class ShoppingCartController {
 		spService.create(sp);
 			
 		@SuppressWarnings("unchecked")
-		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(BookController.WISH_LIST_KEY);
+		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
 		
 		List<WishBook> newList = new ArrayList<WishBook>();
 		
@@ -82,9 +88,9 @@ public class ShoppingCartController {
 			}
 		}
 			
-		session.removeAttribute(BookController.WISH_LIST_KEY);
+		session.removeAttribute(WISH_LIST_KEY);
 		
-		session.setAttribute(BookController.WISH_LIST_KEY, newList);
+		session.setAttribute(WISH_LIST_KEY, newList);
 		
 		response.sendRedirect("/HeapOfBooks/Books");
 	}
@@ -93,7 +99,7 @@ public class ShoppingCartController {
 	public void removeItem(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		
 		@SuppressWarnings("unchecked")
-		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(BookController.WISH_LIST_KEY);
+		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
 		
 		List<WishBook> newList = new ArrayList<WishBook>();
 		
@@ -105,10 +111,34 @@ public class ShoppingCartController {
 			}
 		}
 			
-		session.removeAttribute(BookController.WISH_LIST_KEY);
+		session.removeAttribute(WISH_LIST_KEY);
 		
-		session.setAttribute(BookController.WISH_LIST_KEY, newList);
+		session.setAttribute(WISH_LIST_KEY, newList);
 		
 		response.sendRedirect("/HeapOfBooks/Books");	
+	}
+	
+	@GetMapping(value = "/AddToWishList")
+	public void addToWishList(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+		
+		Book book = bookService.findOne(id);
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		WishBook wb = new WishBook(user, book);
+		
+		bookWishList.add(wb);
+		
+		session.setAttribute(WISH_LIST_KEY, bookWishList);
+		
+		response.sendRedirect("/HeapOfBooks/Books");		
+	}
+	
+	@GetMapping(value = "/Remove")
+	public void remove(@RequestParam Long id, HttpServletResponse response) throws IOException {
+		ShoppingCart sc = shoppingCartService.findOne(id);
+		
+		shoppingCartService.delete(sc);
+		
+		response.sendRedirect("/HeapOfBooks/Books");
 	}
 }

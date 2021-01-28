@@ -7,10 +7,10 @@ import com.sf.heapOfBooks.model.User;
 
 public interface IShopDAO {
 
-	List<Shop> findAllForUser(User user);
+	public List<Shop> findAllForUser(User user);
 	
-	List<Shop> findAll();
+	public List<Shop> findAll();
 	
-	int create(Shop shop);
+	public int create(Shop shop);
 	
 }

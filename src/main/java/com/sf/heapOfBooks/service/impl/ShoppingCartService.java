@@ -58,4 +58,10 @@ public class ShoppingCartService implements IShoppingCartService{
 		return shoppingCartRepository.findAlll();
 	}
 
+
+	@Override
+	public ShoppingCart findOne(Long id) {
+		return shoppingCartRepository.findOne(id);
+	}
+
 }
