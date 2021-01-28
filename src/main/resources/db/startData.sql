@@ -65,7 +65,6 @@ create table shoppingCartUserBook(
 	foreign key(userId) references users(id)
 		on delete cascade
 );
-
 create table shop(
 	id int primary key auto_increment,
     price float,
@@ -73,16 +72,13 @@ create table shop(
     bookSum int
 );
 
-create table shopBookUser(
+create table shopUserCart(
 	shopId int,
-	bookId bigint,
-    userId int,
-    primary key(shopId, bookId, userId),
+	shoppingCartsId int,
+    primary key(shopId, shoppingCartsId),
     foreign key(shopId) references shop(id)
 		on delete cascade,
-	foreign key(bookId) references books(id)
-		on delete cascade,
-	foreign key(userId) references users(id)
+	foreign key(shoppingCartsId) references shoppingCarts(id)
 		on delete cascade
 );
 
