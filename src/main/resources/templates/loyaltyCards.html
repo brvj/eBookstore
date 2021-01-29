@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Zahtevi</title>
+</head>
+<body>	
+		<form method="get" th:action="@{/LoyaltyCard/Req}">
+			<table th:each="itLC, status: ${lc}" id="tableLC">												
+					<tr><th align="left">Korisnik: </th><td align="right" th:text="${itLC.user.name + ' ' + itLC.user.surname}">
+						</td><td><input type="checkbox" name="userId" th:value="${itLC.user.id}"/></td></tr>									
+			</table>	
+		<input type="submit" name="btn" value="Accept"/>	
+		<input type="submit" name="btn" value="Decline"/>			
+		</form>
+</body>
+</html>

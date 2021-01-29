@@ -10,9 +10,9 @@ public class LoyaltyCard {
 	
 	public LoyaltyCard() {}
 	
-	public LoyaltyCard(User user) {
-		this.discount = 20;
+	public LoyaltyCard(User user) {		
 		this.points = 4;
+		this.discount = this.points * 5;
 		this.user = user;
 		this.status = false;
 	}

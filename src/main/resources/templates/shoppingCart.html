@@ -29,6 +29,9 @@
 					<a th:href="|/HeapOfBooks/ShoppingCart/Remove?id=${itBook.id}|">Ukloni</a></td>				
 				</tr>
 			</table>
+			
+			<input th:if="${lc != null}" type="number" name="lcPoints" max="lc.points"/>
+						
 			<input type="submit" value="Kupi">
 			</div>
 		</form>	

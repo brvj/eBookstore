@@ -82,8 +82,27 @@ create table shopUserCart(
 		on delete cascade
 );
 
+create table loyaltyCard(
+	id int primary key auto_increment,
+    discount int,
+    points int,
+    `status` varchar(10)
+);
+
+create table loyaltyCardUser(
+	loyaltyCardId int,
+	userId int,
+    primary key(loyaltyCardId, userId),
+    foreign key(loyaltyCardId) references loyaltyCard(id)
+		on delete cascade,
+	foreign key(userId) references users(id)
+		on delete cascade
+);
+
 insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 
 values(1,'brvj','sifra','jankovicb0230@gmail.com','Boris','Jankovic',current_date(),'Jovana Jovanovica Zmaja 3','0696354635','2020-01-12 10:10:10','Administrator','false');
+insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 
+values(2,'sfj','sifra','sfj@gmail.com','Sofija','Rajic',current_date(),'Jovana Jovanovica Zmaja 3','0696354635','2020-01-12 10:10:10','Kupac','false');
 
 insert into genres(id,`name`,description,deleted) values (1,'Horror','A horror film is one that seeks to elicit fear in its audience for entertainment purposes.','false');
 insert into genres(id,`name`,description,deleted) values(2,'Comedy','Comedy is a literary genre and a type of dramatic work that is amusing and satirical in its tone, mostly having a cheerful ending.','false');
@@ -98,7 +117,7 @@ insert into bookGenre(bookId,genreId) values(1000000000002,1);
 insert into bookGenre(bookId,genreId) values(1000000000002,2);
 
 insert into shoppingCarts(id, numberOfCopies) values (1,2);
-insert into shoppingCartUserBook(cartId,bookId,userId) values(1,1000000000001,3)
+insert into shoppingCartUserBook(cartId,bookId,userId) values(1,1000000000001,2);
 
 
 

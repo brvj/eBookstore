@@ -5,9 +5,7 @@
 
 	<title>Kupljene knjige</title>
 </head>
-<body>
-
-			
+<body>	
 			<table th:each="itShop, status: ${shop}" id="tableShop">												
 					<tr><th align="left">Datum: </th><td align="right" th:text="${itShop.shoppingDate}"></td></tr>
 					<tr><th align="left">Ukupna cena: </th><td align="right" th:text="${itShop.price}"></td></tr>

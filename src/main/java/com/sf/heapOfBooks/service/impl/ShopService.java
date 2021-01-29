@@ -52,4 +52,14 @@ public class ShopService implements IShopService{
 		shopRepository.create(shop);
 	}
 
+	@Override
+	public Shop findOne(Long id) {
+		return shopRepository.findOne(id);
+	}
+
+	@Override
+	public List<Shop> findAllForUserByDateDesc(User user) {
+		return shopRepository.findAllForUserByDateDesc(user);
+	}
+
 }

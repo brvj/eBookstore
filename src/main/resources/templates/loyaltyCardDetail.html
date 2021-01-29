@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Kartica</title>
+</head>
+<body>
+		<table>												
+			<tr><th align="left">Broj poena: </th><td align="right" th:text="${lc.points}"></td></tr>
+			<tr><th align="left">Ukupan popust na osnovu poena: </th><td align="right" th:text="${lc.discount}"></td></tr>
+		</table>
+		<a th:href="@{/Books}">Pocetna</a>
+</body>
+</html>

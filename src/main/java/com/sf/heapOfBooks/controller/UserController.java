@@ -20,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sf.heapOfBooks.model.LoyaltyCard;
+import com.sf.heapOfBooks.model.Shop;
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.WishBook;
 import com.sf.heapOfBooks.model.enums.UserEnum;
+import com.sf.heapOfBooks.service.impl.LoyaltyCardService;
+import com.sf.heapOfBooks.service.impl.ShopService;
 import com.sf.heapOfBooks.service.impl.UserService;
 
 @Controller
@@ -31,6 +35,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ShopService shopService;
+	
+	@Autowired
+	private LoyaltyCardService lcService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -104,8 +114,20 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/Details")
-	public ModelAndView details(@RequestParam Long id, HttpServletRequest request) {
+	public ModelAndView details(@RequestParam(required = false) Long id, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		User userInFocus = null;
+		List<Shop> currentUserShopList = null;
+		
+		ModelAndView maw = new ModelAndView("user");
+		
+		maw.addObject("user", user);
+		
+		if(user.getUserType().equals(UserEnum.Administrator)) {
+			userInFocus = userService.findOne(id);
+			currentUserShopList = shopService.findAllForUserByDateDesc(userInFocus);
+			maw.addObject("userShop", currentUserShopList);
+		}
 		
 		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
 		
@@ -118,13 +140,17 @@ public class UserController {
 					currentUsersWishList.add(wb);
 			}
 		}
-		
 			
-		ModelAndView maw = new ModelAndView("user");
+		if(!currentUsersWishList.isEmpty())
+			maw.addObject("books", currentUsersWishList);
 		
-		maw.addObject("books", currentUsersWishList);
 		
-		return maw.addObject("user", user);
+		LoyaltyCard lc = lcService.findOneForUser(user);
+		if(lc == null)
+			maw.addObject("reqLoyaltyCard", false);
+		else
+			maw.addObject("reqLoyaltyCard", true);
+		return maw;
 	}
 	
 	@GetMapping(value = "/Assign")

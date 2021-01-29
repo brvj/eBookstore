@@ -199,4 +199,42 @@ public class ShopDAO implements IShopDAO{
 		return uspeh?1:0;
 	}
 
+	@Override
+	public Shop findOne(Long id) {
+		String sql = "SELECT s.*, sc.*, b.*, u.* from shop as s"
+				+ "	LEFT JOIN shopUserCart suc on suc.shopId = s.id"
+				+ "	LEFT JOIN shoppingCarts sc on suc.shoppingCartsId = sc.id"
+				+ "	LEFT JOIN shoppingCartUserBook cub ON cub.cartId = sc.id"
+				+ " LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ " WHERE b.numberOfCopies > 0 AND s.id = ?";
+
+		ShopCallBackHandler sccbh = new ShopCallBackHandler();
+		jdbcTemplate.query(sql, sccbh, id);
+		
+		if(sccbh.getShop().isEmpty())
+			return null;
+		
+		return sccbh.getShop().get(0);	
+	}
+
+	@Override
+	public List<Shop> findAllForUserByDateDesc(User user) {
+		String sql = "SELECT s.*, sc.*, b.*, u.* from shop as s"
+				+ "	LEFT JOIN shopUserCart suc on suc.shopId = s.id"
+				+ "	LEFT JOIN shoppingCarts sc on suc.shoppingCartsId = sc.id"
+				+ "	LEFT JOIN shoppingCartUserBook cub ON cub.cartId = sc.id"
+				+ " LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ " WHERE b.numberOfCopies > 0 AND u.id = ?"
+				+ "	ORDER BY s.shoppingDate DESC";
+
+		ShopCallBackHandler sccbh = new ShopCallBackHandler();
+		jdbcTemplate.query(sql, sccbh, user.getId());
+		
+		if(sccbh.getShop().isEmpty())
+			return null;
+		
+		return sccbh.getShop();	
+	}
 }

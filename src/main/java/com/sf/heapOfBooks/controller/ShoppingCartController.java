@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.Book;
+import com.sf.heapOfBooks.model.LoyaltyCard;
 import com.sf.heapOfBooks.model.ShoppingCart;
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.WishBook;
 import com.sf.heapOfBooks.service.impl.BookService;
+import com.sf.heapOfBooks.service.impl.LoyaltyCardService;
 import com.sf.heapOfBooks.service.impl.ShoppingCartService;
 
 @Controller
@@ -32,6 +34,9 @@ public class ShoppingCartController {
 	
 	@Autowired
 	private BookService bookService;
+	
+	@Autowired
+	private LoyaltyCardService lcService;
 	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
@@ -56,8 +61,12 @@ public class ShoppingCartController {
 			
 			return retMessage;
 		}
-		
 		ModelAndView maw = new ModelAndView("shoppingCart");
+		
+		LoyaltyCard lc = lcService.findOneForUser(user);
+		if(lc != null && lc.getPoints() > 0)
+			maw.addObject("lc", lc);
+		
 		maw.addObject("cart", spList);
 		
 		return maw;
@@ -101,20 +110,20 @@ public class ShoppingCartController {
 		@SuppressWarnings("unchecked")
 		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
 		
-		List<WishBook> newList = new ArrayList<WishBook>();
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
 		
+		List<WishBook> newList = new ArrayList<WishBook>();
+			
 		if(wb != null) {
 			for(WishBook w : wb) {
-				if(!w.getBook().getISBN().equals(id)) {
+				if(!w.getBook().getISBN().equals(id) && w.getUser().getId().equals(user.getId())) {
 					newList.add(w);
 				}
 			}
 		}
-			
-		session.removeAttribute(WISH_LIST_KEY);
 		
 		session.setAttribute(WISH_LIST_KEY, newList);
-		
+
 		response.sendRedirect("/HeapOfBooks/Books");	
 	}
 	

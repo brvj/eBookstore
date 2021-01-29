@@ -47,6 +47,16 @@
 			</table>
 			</div>
 		</form>	
+		
+		<div class="userShopList">
+			<table th:each="itShop, status: ${userShop}">												
+				<tr><th align="left">Datum: </th><td align="right"><a  th:text="${itShop.shoppingDate}" th:href="|/HeapOfBooks/Shop/Details?id=${itShop.id}|"></a></td></tr>
+				<tr><th align="left">Ukupna cena: </th><td align="right" th:text="${itShop.price}"></td></tr>		
+			</table>	
+		</div>
+	
+		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac and reqLoyaltyCard == false}" 
+			th:href="|/HeapOfBooks/LoyaltyCard/Create?id=${user.id}|">Zahtev za loyalty karticu</a>
 	
 		<p/>
 		<a th:if="${session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator and user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
