@@ -30,6 +30,8 @@
 	<p/>
 	<a class="users" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Users}">Korisnici</a>
 	<p/>
+	<a class=users th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Report}">Izvestavanje</a>
+	<p/>
 	<a class="users" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Genres}">Zanrovi</a>
 	<p/>
 	<a class="createBook" th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Books/Create}">Kreiraj knjigu</a>

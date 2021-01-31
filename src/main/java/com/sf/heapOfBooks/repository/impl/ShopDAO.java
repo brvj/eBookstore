@@ -156,8 +156,7 @@ public class ShopDAO implements IShopDAO{
 				+ "	LEFT JOIN shoppingCarts sc on suc.shoppingCartsId = sc.id"
 				+ "	LEFT JOIN shoppingCartUserBook cub ON cub.cartId = sc.id"
 				+ " LEFT JOIN books b ON cub.bookId = b.id"
-				+ "	LEFT JOIN users u ON cub.userId = u.id"
-				+ " WHERE b.numberOfCopies > 0";
+				+ "	LEFT JOIN users u ON cub.userId = u.id";
 
 		ShopCallBackHandler sccbh = new ShopCallBackHandler();
 		jdbcTemplate.query(sql, sccbh);

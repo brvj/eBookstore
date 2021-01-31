@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Izvestavanje</title>
+</head>
+<body>	
+		<form method="get" th:action="@{/Report}">
+			<table class="tableSearch">
+				<tr>					
+					<th align="left"> 
+						Datum od:<input type="date"  name = "dateFrom"/><br/>
+						Datum do:<input type="date"  name="dateTo" />
+					</th>		
+				</tr>
+				<tr>					
+					<th align="left"> 
+						Sortiranje cena asc:<input type="checkbox" name = "priceAsc"/><br/>
+						Sortiranje cena desc:<input type="checkbox" name="priceDesc" />
+					</th>		
+				</tr>
+				<tr>					
+					<th align="left"> 
+						Sortiranje br kopija asc:<input type="checkbox" name = "numAsc"/><br/>
+						Sortiranje br kopija desc:<input type="checkbox" name="numDesc" />
+					</th>		
+				</tr>
+				
+				<tr><th align="right"><input type="submit" value="Pretraži"/></th></tr>			
+			</table>
+		</form>
+			<table th:each="itReport, status: ${report}">												
+					<tr><th align="left">Naziv knjige: </th><td align="right" th:text="${itReport.book.name}"></td></tr>
+					<tr><th align="left">Autori/i: </th><td>
+						<ul>
+							<li th:each="itAuthor: ${itReport.book.authors}"><a th:text="${itAuthor}"></a></li>
+						</ul>
+					</td></tr>
+					<tr><th align="left">Broj prodatih kopija: </th><td align="right" th:text="${itReport.bookSum}"></td></tr>
+					<tr><th align="left">Ukupna cena:</th><td align="right" th:text="${itReport.price}"></td>			
+			</table>	
+			<p>Ukupna cena </p>
+			<p th:text="${price}"></p>
+			<p>Ukupan broj kopija </p>
+			<p th:text="${copies}"></p>
+</body>
+</html>

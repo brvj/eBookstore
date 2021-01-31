@@ -41,7 +41,7 @@ public class ShoppingCartController {
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 	
-	public static List<WishBook> bookWishList = new ArrayList<WishBook>();
+	private List<WishBook> bookWishList = new ArrayList<WishBook>();
 	public static final String WISH_LIST_KEY = "wishList";
 	
 	@GetMapping
@@ -73,33 +73,34 @@ public class ShoppingCartController {
 	}
 	
 	@PostMapping(value = "/Add")
-	public void create(@RequestParam int quantity, @RequestParam Long isbn, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+	public void create(@RequestParam String quantity, @RequestParam Long isbn, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 		
-		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
-		
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);		
 		Book book = bookService.findOne(Long.valueOf(isbn));
 		
+		quantity = quantity.replace(",", "");
+		quantity.trim();
+		
 		ShoppingCart sp = new ShoppingCart(book, user);
-		sp.setNumberOfCopies(quantity);
+		sp.setNumberOfCopies(Integer.valueOf(quantity));
 		
 		spService.create(sp);
 			
-		@SuppressWarnings("unchecked")
-		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
-		
 		List<WishBook> newList = new ArrayList<WishBook>();
 		
-		if(wb != null) {
-			for(WishBook w : wb) {
-				if(!w.getBook().getISBN().equals(Long.valueOf(isbn))) {
+		if(bookWishList != null) {
+			for(WishBook w : bookWishList) {
+				if(!w.getBook().getISBN().equals(isbn) && w.getUser().getId().equals(user.getId())) {
 					newList.add(w);
 				}
 			}
 		}
-			
-		session.removeAttribute(WISH_LIST_KEY);
 		
-		session.setAttribute(WISH_LIST_KEY, newList);
+		bookWishList.clear();
+		bookWishList = newList;
+			
+		session.removeAttribute(WISH_LIST_KEY);		
+		session.setAttribute(WISH_LIST_KEY, bookWishList);
 		
 		response.sendRedirect("/HeapOfBooks/Books");
 	}
@@ -107,22 +108,23 @@ public class ShoppingCartController {
 	@GetMapping(value = "/RemoveWishItem")
 	public void removeItem(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		
-		@SuppressWarnings("unchecked")
-		List<WishBook> wb = (List<WishBook>) request.getSession().getAttribute(WISH_LIST_KEY);
-		
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
 		
 		List<WishBook> newList = new ArrayList<WishBook>();
-			
-		if(wb != null) {
-			for(WishBook w : wb) {
+		
+		if(bookWishList != null) {
+			for(WishBook w : bookWishList) {
 				if(!w.getBook().getISBN().equals(id) && w.getUser().getId().equals(user.getId())) {
 					newList.add(w);
 				}
 			}
 		}
 		
-		session.setAttribute(WISH_LIST_KEY, newList);
+		bookWishList.clear();
+		bookWishList = newList;
+		
+		session.removeAttribute(WISH_LIST_KEY);
+		session.setAttribute(WISH_LIST_KEY, bookWishList);
 
 		response.sendRedirect("/HeapOfBooks/Books");	
 	}
