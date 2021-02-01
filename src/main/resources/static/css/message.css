@@ -1,17 +1,12 @@
-body{
-	background-color: #003A3D;
-	
+
+.messageContainer{
+	display:inline-block;
+	margin: auto;
+	width: 100%;
 }
 
-h1{
-	color: #FEC8C6;
+.messageContainer h1{
+	color: #2c5697;
 	font-size: 40px;
-	font-family: Arial, sans-serif;
-	 
-}
-
-div{
-position: fixed;
-  top: 50%;
-  left: 10%;
+	font-family: Arial, sans-serif;	
 }

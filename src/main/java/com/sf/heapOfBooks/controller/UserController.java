@@ -116,18 +116,22 @@ public class UserController {
 	@GetMapping(value = "/Details")
 	public ModelAndView details(@RequestParam(required = false) Long id, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
 		User userInFocus = null;
 		List<Shop> currentUserShopList = null;
 		
 		ModelAndView maw = new ModelAndView("user");
 		
-		maw.addObject("user", user);
 		
 		if(user.getUserType().equals(UserEnum.Administrator)) {
 			userInFocus = userService.findOne(id);
 			currentUserShopList = shopService.findAllForUserByDateDesc(userInFocus);
 			maw.addObject("userShop", currentUserShopList);
+			maw.addObject("user", userInFocus);
+		}else {
+			maw.addObject("user", user);
 		}
+		
 		
 		List<WishBook> currentUsersWishList = new ArrayList<WishBook>();
 		

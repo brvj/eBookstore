@@ -9,4 +9,10 @@ public class PercentageUtil {
 					
 		return price - percentage;
 	}	
+	
+	public static float claculatePercentage(int discount, float price) {
+		float percentage = price * discount / 100;
+		
+		return price - percentage;
+	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sf.heapOfBooks.model.Report;
 import com.sf.heapOfBooks.model.Shop;
 import com.sf.heapOfBooks.model.ShoppingCart;
+import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.ReportService;
 
 @Controller
@@ -31,7 +35,23 @@ public class ReportController {
 			@RequestParam(required = false) String priceAsc,
 			@RequestParam(required = false) String priceDesc,
 			@RequestParam(required = false) String numAsc,
-			@RequestParam(required = false) String numDesc) {
+			@RequestParam(required = false) String numDesc,
+			HttpServletRequest request) {
+		
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		ModelAndView maw = new ModelAndView("report");
 		
 		

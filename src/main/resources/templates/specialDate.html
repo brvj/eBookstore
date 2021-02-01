@@ -7,10 +7,10 @@
 	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/header.css">
 	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/books.css">
 	<script type="text/javascript" src="/HeapOfBooks/js/header.js"></script>
-	<title>Zanr</title>
+	<title>Napravi specijalni datum</title>
+	
 </head>
 <body>
-
 	<div class="header">
 		<img class="logo" th:src="@{${'/logo/logoV4.PNG'}}" alt="LOGO" height="150px"/>
 		<h3 class="user" th:if="${session.user != null}" th:text="${session.user.name + ' ' + session.user.surname}"></h3>	
@@ -31,27 +31,36 @@
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Genres}">Zanrovi</a>		
 	</div>
 
-	<div class="genreContainer">
-		<table class="table">
-			<tr>
-				<th>ID</th>
-				<th>Naziv zanra</th>
-				<th>Opis</th>
-			</tr>
-			<tr >
-				<td th:text="${genre.id}"></td>
-				<td th:text="${genre.name}"></td>
-				<td th:text="${genre.description}"></td>
-			</tr>
-		</table>
+	<div class="specialDateContainer">
+		<form method="post" th:action="@{/SpecialDate}">
+			<div class="specialOptions">
+				<table class="table">
+				<tr><th align="left">Datum:<input type="date" name ="date"/></th></tr>
+				<tr><th align="left">Popust:<input type="number" min="1" max="50" name ="discount"/></th></tr>
+				<tr><th align="left">Izabri sve knjige:<input type="checkbox" name = "selectAll" id="select-all"/></th></tr>
+				<tr><th align="right"><input type="submit" value="Postavi"/></th></tr>			
+			</table>			
+			</div>
+			
+			<div class="booksContainer">
+			<table th:each="itBook, status: ${book}" id="tableBook">						
+					<tr><td colspan="2" align="center"><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|"><img th:src="@{${'/images/' + itBook.coverPicture}}" 
+						height="390px" width="235px" alt="Book cover"></a></td></tr>						
+					<tr><th align="left">Naziv: </th><td align="right"><a th:href="|/HeapOfBooks/Books/Details?id=${itBook.ISBN}|" th:text="${itBook.name}"></a></td></tr>
+					<tr><th align="left">Cena: </th><td align="right" th:text="${itBook.price}"></td></tr>
+					<tr><th align="left">Prosecna ocena: </th><td align="right" th:text="${itBook.averageRating}"></td></tr>	
+					<tr><th align="left">Izaberi: </th><td align="right"><input type="checkbox" name="selectBook" th:value="${itBook.ISBN}"/></td></tr>		
+			</table>
+			</div> 
+		</form>
 	</div>
-	<div class="optionsGenre">
-		<p/>
-		<a th:href="|/HeapOfBooks/Genres/Update?id=${genre.id}|" >Izmeni</a>
-		<p/>
-		<a th:href="|/HeapOfBooks/Genres/Delete?id=${genre.id}|">Obrisi zanr</a>
-		<p/>
-		<a href="/HeapOfBooks/Genres">Nazad</a>	
-	</div>
+	<script type="text/javascript">
+		document.getElementById('select-all').onclick = function() {
+		  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+		  for (var checkbox of checkboxes) {
+		    checkbox.checked = this.checked;
+		  }
+		}
+	</script>
 </body>
 </html>

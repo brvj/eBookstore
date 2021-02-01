@@ -1,6 +1,5 @@
 package com.sf.heapOfBooks.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.sf.heapOfBooks.model.Shop;

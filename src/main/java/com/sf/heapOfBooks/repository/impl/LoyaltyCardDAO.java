@@ -186,10 +186,9 @@ public class LoyaltyCardDAO implements ILoyaltyCardDAO{
 	@Override
 	public int updatePoints(LoyaltyCard loyaltyCart) {
 		boolean uspeh = true;
-		String sql = "UPDATE loyaltyCard SET points = "+loyaltyCart.getPoints()+" WHERE id = "+loyaltyCart.getId()+";"
-				+ "UPDATE loyaltyCard SET discount = "+loyaltyCart.getDiscount()+" WHERE id = "+loyaltyCart.getId()+";";
+		String sql = "UPDATE loyaltyCard SET points = ?, discount = ?  WHERE id = ?";
 		
-		uspeh = uspeh && jdbcTemplate.update(sql) == 1;
+		uspeh = uspeh && jdbcTemplate.update(sql,loyaltyCart.getPoints(),loyaltyCart.getDiscount(),loyaltyCart.getId()) == 1;
 		
 		return uspeh?1:0;
 	}

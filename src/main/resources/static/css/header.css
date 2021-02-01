@@ -1,116 +1,104 @@
 body{
-	padding: 10px;	
+	padding-left:50px;
+	padding-right:50px;
 }
 
 .header{
-  text-align: right;
-  background: #003A3D;
-  color: white;
-  height: 100px;
-  width: 100%;
+	display: inline-block;
+	margin: auto;
+	width: 100%;
+	padding: 10px;	
+	border-bottom: 5px solid;
+	border-color:#2c5697;
+	border-radius:5px;
+	font-family: "Lucida Console";
+	background-color: #f9f9f9;
 }
 
-.logo{
-	float: left;
-	width: 300px;
-	height: 100px;
+.header img{
+	float:left;
+	margin: auto;
 }
 
-.register{  
-  position:absolute;
-  top:25px;
-  right:50px;
-  border-radius: 4px;
-  text-decoration: none;
-  background-color: #003A3D;
-  color: #FEC8C6;
-  padding: 4px 6px 4px 6px;
-  border-top: 3px solid #325B56;
-  border-right: 3px solid #325B56;
-  border-bottom: 3px solid #325B56;
-  border-left: 3px solid #325B56;
+.header a{
+	font-size:20px;
+	text-decoration: none;
+	float:right;
+	margin: 90px 20px 0px 0px;
+	background-color: #2c5697;
+	color: #f9f9f9;
+	border-top: 1px;
+    border-right: 1px;
+    border-bottom: 1px ;
+    border-left: 1px;
+    border-radius:5px;
 }
 
-.login{   
-  position:absolute;
-  top:70px;
-  right:50px;
-  border-radius: 5px;
-  text-decoration: none;
-  background-color: #003A3D;
-  color: #FEC8C6;
-  padding: 4px 17px 4px 17px;
-  border-top: 3px solid #325B56;
-  border-right: 3px solid #325B56;
-  border-bottom: 3px solid #325B56;
-  border-left: 3px solid #325B56;
+.aoptions{
+	font-family: "Lucida Console";
+	font-size:20px;
+	text-decoration: none;
+	float:right;
+	margin: 90px 20px 0px 0px;
+	background-color: #2c5697;
+	color: #f9f9f9;
+	border-top: 1px;
+    border-right: 1px;
+    border-bottom: 1px ;
+    border-left: 1px;
+    border-radius:5px;
+	padding: 12px 50px 12px 50px;
+	float:right;
 }
 
-.logout{   
-  position:absolute;
-  top:25px;
-  right:50px;
-  border-radius: 5px;
-  text-decoration: none;
-  background-color: #003A3D;
-  color: #FEC8C6;
-  padding: 4px 14px 4px 15px;
-  border-top: 3px solid #325B56;
-  border-right: 3px solid #325B56;
-  border-bottom: 3px solid #325B56;
-  border-left: 3px solid #325B56;
+h3{
+	float:left;
+	margin: auto;
+	font-size:30px;
+	padding-top: 100px;
 }
 
-.user{
-	position:absolute;
-	right:250px;
-	top:15px;
-	color: #FEC8C6;
-	font-size: 30px;
-	font-family: Arial, sans-serif;
+.login{
+	padding: 12px 25px 12px 25px;
 }
 
+.logout{
+	padding: 12px 25px 12px 25px;
+}
+
+.register{
+	padding: 12px 12px 12px 12px;
+}
 
 #options{
 	animation:fade 1000ms ease-in-out;
   	transform-origin: top center;
 	position:absolute;
-	right:0;
-	top: 140px;
-	text-decoration: none;
+	float:right;
+	right:55px;
+	margin:auto;	
+	width:170px;
 	text-align: center;
-	background: #003A3D;
-  	border-top: 3px solid #325B56;
- 	border-bottom: 3px solid #325B56;
- 	padding: 17px 75px 0px 75px;	
- 	border-radius: 35px;	
- 	display: none;
+	padding-right: 18px;
+	display: none;
 }
 
-.aoptions{
-  position:absolute;
-  top:70px;
-  right:50px;
-  border-radius: 5px;
-  font-size: 20px;
-  text-decoration: none;
-  background-color: #003A3D;
-  color: #FEC8C6;
-  padding: 4px 36px 4px 36px;
-  border-top: 3px solid #325B56;
-  border-right: 3px solid #325B56;
-  border-bottom: 3px solid #325B56;
-  border-left: 3px solid #325B56;
-}
-
-a.register, a.login , a.users, a.wish, a.basket, a.profile, a.aoptions, a.logout, a.createBook{
-	font-family: Arial, sans-serif;
+#options a{
+	font-family: "Lucida Console";
+	font-size:20px;
 	text-decoration: none;
-	font-size: 20px;
-	color: #FEC8C6;
+	float:left;
+	width:170px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color: #f9f9f9;
+	color: #2c5697;
+    border-bottom: 1px solid;
+    border-color:#2c5697;
+    border-radius:5px;
+    padding: 5px 6px 5px 6px;
 }
 
-*{ background-color: #003A3D }
 
 @keyframes fade{
      0% {
@@ -123,11 +111,6 @@ a.register, a.login , a.users, a.wish, a.basket, a.profile, a.aoptions, a.logout
         transform: scale(1)
     }
  }
-
-
-
-
-
 
 
 

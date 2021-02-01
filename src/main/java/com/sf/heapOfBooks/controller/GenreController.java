@@ -136,7 +136,20 @@ public class GenreController {
 	}
 	
 	@GetMapping(value = "/Details")
-	public ModelAndView details(@RequestParam Long id) {
+	public ModelAndView details(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		Genre genre = genreService.findOne(id);
 		
 		ModelAndView maw = new ModelAndView("genre");

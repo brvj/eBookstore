@@ -18,7 +18,7 @@ public class ShoppingCartService implements IShoppingCartService{
 	@Autowired
 	private ShoppingCartDAO shoppingCartRepository;
 	
-	private Long newId(List<Long> ids) {
+	public Long newId(List<Long> ids) {
 		Long id = null;
 		
 		if(ids.isEmpty())
@@ -34,13 +34,15 @@ public class ShoppingCartService implements IShoppingCartService{
 	public void create(ShoppingCart shoppingCart) {
 		List<Long> ids = new ArrayList<Long>();
 		
-		if(shoppingCartRepository.findAlll() != null) {
-			for(ShoppingCart sp : shoppingCartRepository.findAlll()) {
-				ids.add(sp.getId());
+		if(shoppingCart.getId() == null) {
+			if(shoppingCartRepository.findAlll() != null) {
+				for(ShoppingCart sp : shoppingCartRepository.findAlll()) {
+					ids.add(sp.getId());
+				}
 			}
+			shoppingCart.setId(newId(ids));	
 		}
-		shoppingCart.setId(newId(ids));	
-			
+	
 		shoppingCartRepository.create(shoppingCart);
 	}
 

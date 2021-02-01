@@ -21,6 +21,7 @@ import com.sf.heapOfBooks.model.LoyaltyCard;
 import com.sf.heapOfBooks.model.Shop;
 import com.sf.heapOfBooks.model.ShoppingCart;
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.LoyaltyCardService;
 import com.sf.heapOfBooks.service.impl.ShopService;
@@ -51,10 +52,22 @@ public class ShopController {
 		
 		List<Shop> shop = shopService.findAllForUser(user);
 		
+		String message = "";
+		
+		if(user == null) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Prijavite se da biste pritupili ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		if(shop == null) {
 			ModelAndView retMessage = new ModelAndView("message");
 			
-			String message = "Nemate ni jednu kupljenu knjigu!";
+			message = "Nemate ni jednu kupljenu knjigu!";
 			
 			retMessage.addObject("message",	message);
 			
@@ -74,7 +87,7 @@ public class ShopController {
 		float price = 0;
 		LocalDate shoppingDate = LocalDate.now();
 		int bookSum = 0;
-		LoyaltyCard lc = null;
+		LoyaltyCard lc = lcService.findOneForUser(user);
 				
 		List<ShoppingCart> spList = new ArrayList<ShoppingCart>();
 		
@@ -96,15 +109,13 @@ public class ShopController {
 				retMessage.addObject("message",	message);
 				
 				return retMessage;
-			}
-			
+			}			
 			book.setNumberOfCopies(book.getNumberOfCopies() - bookSum);
 			
 			bookService.orderCopiesOfBook(book);
 		}
 		
-		if(lcPoints != null) {
-			
+		if(lcPoints != null) {			
 			if(lcPoints > 10) {
 				ModelAndView retMessage = new ModelAndView("message");
 				
@@ -113,21 +124,19 @@ public class ShopController {
 				retMessage.addObject("message",	message);
 				
 				return retMessage;
-			}
-			
+			}			
 			float	discountPrice = PercentageUtil.calculatePercentage(lcPoints, price);			
 			price = discountPrice;				
-			lc = lcService.findOneForUser(user);
 			lc.setPoints(lc.getPoints() - lcPoints);
 			lc.setDiscount(lc.getPoints()*5);
 			lcService.updatePoints(lc);
-			
-			if(price > 1000) {
-				lc.setPoints(lc.getPoints() + 1);
-				lc.setDiscount(lc.getPoints()*5);
-				lcService.updatePoints(lc);
-			}
-		}		
+						
+		}	
+		if(price > 1000 && lc != null) {
+			lc.setPoints(lc.getPoints() + 1);
+			lc.setDiscount(lc.getPoints()*5);
+			lcService.updatePoints(lc);
+		}
 		
 		Shop shop = new Shop(spList, price, shoppingDate, bookSum);
 		
@@ -148,7 +157,21 @@ public class ShopController {
 	}
 	
 	@GetMapping(value = "/Details")
-	public ModelAndView details(@RequestParam Long id) {
+	public ModelAndView details(@RequestParam Long id, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Morate se prijaviti da biste pristupili ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		ModelAndView maw = new ModelAndView("shop");
 		
 		Shop shop = shopService.findOne(id);
@@ -156,6 +179,46 @@ public class ShopController {
 		maw.addObject("shop", shop);
 		
 		return maw;
+	}
+	
+	@PostMapping(value = "/BuySpecialDate")
+	public ModelAndView buy(@RequestParam Long isbn,@RequestParam(value = "quantity", required = true) Integer quantity,@RequestParam float price, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		Book book = bookService.findOne(isbn);
+		ShoppingCart sCart = new ShoppingCart();
+		
+		LocalDate shoppingDate = LocalDate.now();
+		int bookSum = quantity;
+		
+		sCart.setBook(book);
+		sCart.setNumberOfCopies(quantity);
+		sCart.setUser(user);
+		
+		List<Long> ids = new ArrayList<Long>();
+		for(ShoppingCart sc : shoppingCartService.findAlll()) {
+			ids.add(sc.getId());
+		}
+		
+		sCart.setId(shoppingCartService.newId(ids));	
+		System.out.println(sCart.getId());
+		shoppingCartService.create(sCart);
+									
+		Shop shop = new Shop();
+		shop.getBoughtBooks().add(sCart);
+		shop.setBookSum(bookSum);
+		shop.setPrice(price * bookSum);
+		shop.setShoppingDate(shoppingDate);
+		
+		shopService.create(shop);
+		
+		
+		book.setNumberOfCopies(book.getNumberOfCopies() - bookSum);			
+		bookService.orderCopiesOfBook(book);
+		
+		response.sendRedirect("/HeapOfBooks/Books");
+		
+		return null;
 	}
 	
 }

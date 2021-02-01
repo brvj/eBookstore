@@ -99,6 +99,17 @@ create table loyaltyCardUser(
 		on delete cascade
 );
 
+create table bookSpecialDate(
+	id int,
+	specialDate Date,
+    discount int,
+    bookId bigint,
+    primary key(id, bookId),
+    foreign key(bookId) references books(id)
+		on delete cascade
+);
+
+
 insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 
 values(1,'brvj','sifra','jankovicb0230@gmail.com','Boris','Jankovic',current_date(),'Jovana Jovanovica Zmaja 3','0696354635','2020-01-12 10:10:10','Administrator','false');
 insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 

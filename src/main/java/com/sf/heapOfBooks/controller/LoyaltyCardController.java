@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.LoyaltyCard;
 import com.sf.heapOfBooks.model.User;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.LoyaltyCardService;
 import com.sf.heapOfBooks.service.impl.UserService;
 
@@ -30,7 +31,20 @@ public class LoyaltyCardController {
 	
 	
 	@GetMapping
-	public ModelAndView init() {
+	public ModelAndView init(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Administrator)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		ModelAndView maw = new ModelAndView("loyaltyCards");
 		
 		List<LoyaltyCard> lc = lcService.findAllWithStatusFalse();
@@ -38,7 +52,7 @@ public class LoyaltyCardController {
 		if(lc == null) {
 			ModelAndView retMessage = new ModelAndView("message");
 			
-			String message = "Nema zahteva za loyalty karticu!";
+			message = "Nema zahteva za loyalty karticu!";
 			
 			retMessage.addObject("message",	message);
 			
@@ -49,16 +63,19 @@ public class LoyaltyCardController {
 	}
 	
 	@GetMapping(value = "/Req")
-	public ModelAndView request(@RequestParam Long[] userId, @RequestParam("btn") String btn) {		
+	public ModelAndView request(@RequestParam Long[] userId, @RequestParam("btn") String btn, HttpServletResponse response) throws IOException {		
 		if(btn.equals("Accept")) {			
 			for(Long ids: userId) {
 				lcService.accept(lcService.findOneForUser(userService.findOne(ids)));
-			}		
-		
+				
+			}					
+			response.sendRedirect("/HeapOfBooks/Books");
+			
 		}else if(btn.equals("Decline")) {
 			for(Long ids: userId) {
 				lcService.reject(lcService.findOneForUser(userService.findOne(ids)));
 			}
+			response.sendRedirect("/HeapOfBooks/Books");
 		}
 		return null;
 	}
@@ -69,13 +86,24 @@ public class LoyaltyCardController {
 		
 		lcService.create(lc);
 		
-		response.sendRedirect("/Books");
+		response.sendRedirect("/HeapOfBooks/Books");
 	}
 	
 	@GetMapping(value = "/Details")
 	public ModelAndView details(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
 		
+		String message = "";
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Kupac)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate prava pristupa ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		ModelAndView maw = new ModelAndView("loyaltyCardDetail");
 		
 		LoyaltyCard lc = lcService.findOneForUser(user);
@@ -83,7 +111,5 @@ public class LoyaltyCardController {
 		maw.addObject("lc", lc);
 		
 		return maw;
-	}
-	
-	
+	}	
 }

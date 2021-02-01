@@ -21,6 +21,7 @@ import com.sf.heapOfBooks.model.LoyaltyCard;
 import com.sf.heapOfBooks.model.ShoppingCart;
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.WishBook;
+import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.LoyaltyCardService;
 import com.sf.heapOfBooks.service.impl.ShoppingCartService;
@@ -51,6 +52,16 @@ public class ShoppingCartController {
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
 		
 		List<ShoppingCart> spList = spService.findAll(user);
+		
+		if(user == null || !user.getUserType().equals(UserEnum.Kupac)) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Morate se prijaviti da biste pristupili ovoj stranici!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		
 		if(spList == null) {
 			ModelAndView retMessage = new ModelAndView("message");

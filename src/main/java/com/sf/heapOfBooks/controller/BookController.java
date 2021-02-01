@@ -25,12 +25,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.Book;
 import com.sf.heapOfBooks.model.Genre;
+import com.sf.heapOfBooks.model.SpecialDate;
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
 import com.sf.heapOfBooks.model.enums.LetterEnum;
 import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
 import com.sf.heapOfBooks.service.impl.GenreService;
+import com.sf.heapOfBooks.service.impl.SpecialDateService;
+import com.sf.heapOfBooks.util.PercentageUtil;
 
 @Controller
 @RequestMapping(value = "/Books")
@@ -46,6 +49,9 @@ public class BookController {
 	
 	@Autowired
 	private GenreService genreService;
+	
+	@Autowired
+	private SpecialDateService sdService;
 	
 	@PostConstruct
 	private void imagesPath() {
@@ -65,6 +71,22 @@ public class BookController {
 		
 		ModelAndView returnBooks = new ModelAndView("books");
 		List<Book> books = new ArrayList<Book>();
+		List<SpecialDate> specialDateBooks = new ArrayList<SpecialDate>();
+		LocalDate dateNow = LocalDate.now();
+		
+		for(SpecialDate sd : sdService.findAll()) {
+			if(sd.getSpecialDate() != null) {
+				if(sd.getSpecialDate().equals(dateNow))
+					specialDateBooks.add(sd);
+			}
+		}
+		
+		
+		for(SpecialDate sd : specialDateBooks) {
+			float originalPrice = sd.getBook().getPrice();			
+			sd.getBook().setPrice(PercentageUtil.claculatePercentage(sd.getDiscount(), originalPrice));
+		}
+		
 		String message = "";
 		
 		if(search != null && search.trim().equals(""))
@@ -97,11 +119,12 @@ public class BookController {
 				books = new ArrayList<Book>(bookService.search(search, priceFrom, priceTo, id));
 			}
 		}
-				
+					
 		List<Genre> genres = genreService.findAll();		
 			
 		returnBooks.addObject("genres", genres);
 		returnBooks.addObject("books", books);
+		returnBooks.addObject("bookSpecialDate", specialDateBooks);
 				
 		return returnBooks;		
 	}
