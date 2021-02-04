@@ -24,14 +24,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sf.heapOfBooks.model.Book;
+import com.sf.heapOfBooks.model.Comment;
 import com.sf.heapOfBooks.model.Genre;
+import com.sf.heapOfBooks.model.Shop;
+import com.sf.heapOfBooks.model.ShoppingCart;
 import com.sf.heapOfBooks.model.SpecialDate;
 import com.sf.heapOfBooks.model.User;
 import com.sf.heapOfBooks.model.enums.BookTypeEnum;
 import com.sf.heapOfBooks.model.enums.LetterEnum;
 import com.sf.heapOfBooks.model.enums.UserEnum;
 import com.sf.heapOfBooks.service.impl.BookService;
+import com.sf.heapOfBooks.service.impl.CommentService;
 import com.sf.heapOfBooks.service.impl.GenreService;
+import com.sf.heapOfBooks.service.impl.ShopService;
 import com.sf.heapOfBooks.service.impl.SpecialDateService;
 import com.sf.heapOfBooks.util.PercentageUtil;
 
@@ -52,6 +57,12 @@ public class BookController {
 	
 	@Autowired
 	private SpecialDateService sdService;
+	
+	@Autowired
+	private ShopService shopService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	@PostConstruct
 	private void imagesPath() {
@@ -210,12 +221,41 @@ public class BookController {
 	}
 	
 	@GetMapping(value = "/Details")
-	public ModelAndView details(@RequestParam Long id) {
+	public ModelAndView details(@RequestParam Long id, HttpServletRequest request) {
 		ModelAndView maw = new ModelAndView("book");
 		
 		Book book = bookService.findOne(id);
 		maw.addObject("book", book);
 		
+		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);
+		
+		if(user != null) {
+			List<Shop> shop = shopService.findAllForUser(user);
+			List<Comment> comment = commentService.findAll();
+			
+			boolean gotShop = false;
+			boolean gotComment = true;
+			
+			if(shop != null) {
+				for(Shop s : shop) {
+					for(ShoppingCart sc : s.getBoughtBooks()) {
+						if(sc.getBook().getISBN().equals(id))
+							gotShop = true;
+					}
+				}
+			}
+			
+			if(comment != null) {
+				for(Comment c : comment) {
+					if(c.getBook().getISBN().equals(id) && c.getUser().getId().equals(user.getId()))
+						gotComment = false;
+				}
+			}
+			
+			if(gotShop && gotComment)
+				maw.addObject("canComment", true);
+			
+		}		
 		return maw;
 	}
 	

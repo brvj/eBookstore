@@ -93,5 +93,10 @@ public class BookService implements IBookService{
 	@Override
 	public List<Book> search(String search, Integer priceFrom, Integer priceTo, Long genreId) {
 		return bookRepository.search(search, priceFrom, priceTo, genreId);
+	}
+
+	@Override
+	public void updateRating(Book book) {
+		bookRepository.updateRating(book);		
 	}	
 }

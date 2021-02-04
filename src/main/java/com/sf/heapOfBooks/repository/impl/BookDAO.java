@@ -383,4 +383,15 @@ public class BookDAO implements IBookDAO{
 		
 		return bcbh.getBooks();		
 	}
+
+	@Transactional
+	@Override
+	public int updateRating(Book book) {
+		boolean uspeh = true;
+		String sql = "UPDATE books SET avgRating = ? WHERE id = ?";
+		
+		uspeh = uspeh && jdbcTemplate.update(sql,book.getAverageRating(),book.getISBN()) == 1;
+		
+		return uspeh?1:0;
+	}
 }

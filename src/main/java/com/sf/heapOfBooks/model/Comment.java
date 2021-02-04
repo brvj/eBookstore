@@ -14,7 +14,9 @@ public class Comment {
 	private Book book;
 	private CommentStatus status;
 	
-	public Comment() {}
+	public Comment() {
+		this.status = CommentStatus.Čekanje;
+	}
 	
 	public Comment(float rating, String comment, LocalDate commentDate, User user, Book book) {
 		this.rating = rating;

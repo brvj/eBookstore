@@ -13,6 +13,8 @@ public interface IBookDAO {
 	
 	public int update(Book book);
 	
+	public int updateRating(Book book);
+	
 	public int delete(Long id);
 	
 	public int orderCopiesOfBook(Book book);

@@ -1,4 +1,3 @@
-
 CREATE table users(
 	id int primary key auto_increment,
     userName varchar(20),
@@ -108,7 +107,26 @@ create table bookSpecialDate(
     foreign key(bookId) references books(id)
 		on delete cascade
 );
+create table comments(
+	id int primary key auto_increment,
+    rating float,
+    `comment` varchar(100),
+    commDate Date,
+    `status` varchar(20)
+);
 
+create table commentUserBook(
+	commentId int,
+	userId int,
+    bookId bigint,
+    primary key(commentId, userId, bookId),
+    foreign key(commentId) references comments(id)
+		on delete cascade,
+	foreign key(userId) references users(id)
+		on delete cascade,
+	foreign key(bookId) references books(id)
+		on delete cascade
+);
 
 insert into users(id,userName,userPassword,eMail,`name`,surname,dateOfBirth,address,phoneNumber, registrationDateAndTime,userType,userBlocked) 
 values(1,'brvj','sifra','jankovicb0230@gmail.com','Boris','Jankovic',current_date(),'Jovana Jovanovica Zmaja 3','0696354635','2020-01-12 10:10:10','Administrator','false');
@@ -126,18 +144,3 @@ values(1000000000002,'Good Omens','Gollancz','Terry Pratchett,Neil Gaiman','1990
 insert into bookGenre(bookId,genreId) values(1000000000001,1);
 insert into bookGenre(bookId,genreId) values(1000000000002,1);
 insert into bookGenre(bookId,genreId) values(1000000000002,2);
-
-insert into shoppingCarts(id, numberOfCopies) values (1,2);
-insert into shoppingCartUserBook(cartId,bookId,userId) values(1,1000000000001,2);
-
-
-
-
-
-
-
-
-
-
-
-

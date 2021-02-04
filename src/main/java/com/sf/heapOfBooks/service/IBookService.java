@@ -13,6 +13,8 @@ public interface IBookService {
 	 void create(Book book);
 	
 	 void update(Book book);
+	 
+	 void updateRating(Book book);
 	
 	 void delete(Long id);
 	
