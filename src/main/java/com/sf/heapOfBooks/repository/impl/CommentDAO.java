@@ -125,10 +125,10 @@ public class CommentDAO implements ICommentDAO{
 	@Override
 	public Comment findOne(Long id) {
 		String sql = "SELECT c.*,b.*,u.* FROM comments AS c"
-				+ "LEFT JOIN commentUserBook cub ON cub.commentId = c.id"
-				+ "LEFT JOIN books b ON cub.bookId = b.id"
-				+ "LEFT JOIN users u ON cub.userId = u.id"
-				+ "WHERE c.id = ?";
+				+ "	LEFT JOIN commentUserBook cub ON cub.commentId = c.id"
+				+ "	LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ "	WHERE c.id = ?";
 		
 		CommentCallBackHandler ccbh = new CommentCallBackHandler();
 		jdbcTemplate.query(sql, ccbh, id);
@@ -142,10 +142,10 @@ public class CommentDAO implements ICommentDAO{
 	@Override
 	public List<Comment> findAllOnWaiting() {
 		String sql = "SELECT c.*,b.*,u.* FROM comments AS c"
-				+ "LEFT JOIN commentUserBook cub ON cub.commentId = c.id"
-				+ "LEFT JOIN books b ON cub.bookId = b.id"
-				+ "LEFT JOIN users u ON cub.userId = u.id"
-				+ "WHERE c.`status` = ?";
+				+ "	LEFT JOIN commentUserBook cub ON cub.commentId = c.id"
+				+ "	LEFT JOIN books b ON cub.bookId = b.id"
+				+ "	LEFT JOIN users u ON cub.userId = u.id"
+				+ "	WHERE c.status = ?";
 		
 		CommentCallBackHandler ccbh = new CommentCallBackHandler();
 		jdbcTemplate.query(sql, ccbh, CommentStatus.Čekanje.toString());

@@ -6,14 +6,13 @@
 
 .bookContainer{
 	display:inline-block;
-	margin: auto;
-	width: auto;	
+	width: 400px;	
 }
 
 .bookContainer table{
 	text-decoration: none;
 	font-family: "Lucida Console";
-	font-size:20px;
+	font-size:15px;
 	color: #2c5697;	
 }
 
@@ -26,7 +25,7 @@
 .addToCartContainer table{
 	text-decoration: none;
 	font-family: "Lucida Console";
-	font-size:20px;
+	font-size:15px;
 	color: #2c5697;	
 }
 
@@ -38,6 +37,6 @@
 .bookOptions a, input{
 	text-decoration: none;
 	font-family: "Lucida Console";
-	font-size:20px;
+	font-size:15px;
 	color: #2c5697;		
 }

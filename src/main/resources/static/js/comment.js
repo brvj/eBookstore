@@ -36,7 +36,6 @@ $(document).ready(function(){
 			comment: comment,
 			isbn: bookISBN
 		}
-		console.log(params)
 		
 		$.post("/HeapOfBooks/Comments/Create", params)
 		
