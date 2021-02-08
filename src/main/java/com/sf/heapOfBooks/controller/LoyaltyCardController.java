@@ -49,6 +49,8 @@ public class LoyaltyCardController {
 		
 		List<LoyaltyCard> lc = lcService.findAllWithStatusFalse();
 		
+		
+		
 		if(lc == null) {
 			ModelAndView retMessage = new ModelAndView("message");
 			
@@ -108,7 +110,17 @@ public class LoyaltyCardController {
 		
 		LoyaltyCard lc = lcService.findOneForUser(user);
 		
-		maw.addObject("lc", lc);
+		if(lc.isStatus())
+			maw.addObject("lc", lc);
+		else {
+			ModelAndView retMessage = new ModelAndView("message");
+		
+			message = "Nemate karticu ili vam jos nije odobren zahtev!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
 		
 		return maw;
 	}	

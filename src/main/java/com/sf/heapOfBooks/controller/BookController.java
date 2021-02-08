@@ -9,10 +9,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,8 +49,8 @@ public class BookController {
 	private static final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static String folder = "";
 	private static List<Genre> gList = new ArrayList<Genre>();
+	public static final String LOCAL_KEY = "localisation";
 
-	
 	@Autowired
 	private BookService bookService;
 	
@@ -78,7 +80,10 @@ public class BookController {
 			@RequestParam(required = false) Integer priceFrom,
 			@RequestParam(required = false) Integer priceTo,
 			@RequestParam(required = false) Long id,
-			@RequestParam(required = false) Long isbn) {
+			@RequestParam(required = false) Long isbn,
+			HttpSession session) {
+		
+
 		
 		ModelAndView returnBooks = new ModelAndView("books");
 		List<Book> books = new ArrayList<Book>();
@@ -465,5 +470,19 @@ public class BookController {
 		maw.addObject("books", bookService.orderByLanguageASC());
 		
 		return maw;
+	}
+	
+	@GetMapping(value = "/ChangeLanguage")
+	public void change(@RequestParam String lang, HttpSession session, HttpServletResponse response) throws IOException {
+		
+		Locale localisation = (Locale) session.getAttribute(LOCAL_KEY);
+		
+		if(lang.equals("sr"))
+			localisation = Locale.forLanguageTag("sr");
+		else if(lang.equals("en"))
+			localisation = Locale.ENGLISH;
+		
+		session.setAttribute(LOCAL_KEY, localisation);	
+		//jresponse.sendRedirect("/HeapOfBooks/Books");
 	}
 }

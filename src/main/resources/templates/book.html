@@ -9,27 +9,55 @@
 	<script src="/HeapOfBooks/js/jquery-3.5.1.js" type="text/javascript"></script>
 	<script type="text/javascript" src="/HeapOfBooks/js/header.js"></script>
 	<script type="text/javascript" src="/HeapOfBooks/js/comment.js"></script>
-	<title>Knjiga</title>
+	<title th:text="#{bookTitle}"></title>
+	<script src="/HeapOfBooks/js/jquery-3.5.1.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $("#locales").change(function () {
+		        var selectedOption = $('#locales').val();
+		        if (selectedOption != ''){
+		        	var url = window.location.href;		 
+		        	var change = '/HeapOfBooks/Books/ChangeLanguage?lang=' + selectedOption
+		           	$.ajax({
+		           		url: change
+		           	});
+		            window.location.replace(url);
+		        }
+		    });
+		});
+	</script>	
 </head>
 <body>
 	<div class="header">
 		<img class="logo" th:src="@{${'/logo/logoV4.PNG'}}" alt="LOGO" height="150px"/>
 		<h3 class="user" th:if="${session.user != null}" th:text="${session.user.name + ' ' + session.user.surname}"></h3>	
-		<button class="aoptions" th:if="${session.user != null}" onclick="klik()">Opcije</button>
-		<a class="logout" th:if="${session.user != null}" th:href="@{/Login/Logout}">Odjavite se</a>	
-		<a class="register" th:if="${session.user == null}" th:href="@{/Users/Registration}">Registrujte se</a>
-		<a class="login" th:if="${session.user == null}" th:href="@{/Login}">Ulogujte se</a>								
+
+		<button class="aoptions" th:if="${session.user != null}" onclick="klik()" th:text="#{navigation}"></button>
+		<a class="logout" th:if="${session.user != null}" th:href="@{/Login/Logout}" th:text="#{logOut}"></a>	
+		<a class="register" th:if="${session.user == null}" th:href="@{/Users/Registration}" th:text="#{registration}"></a>
+		<a class="login" th:if="${session.user == null}" th:href="@{/Login}" th:text="#{logIn}"></a>
+		<div class="languageContainer">
+		<span th:text="#{lang.change}"></span>
+			<select id="locales">
+			    <option value=""></option>
+			    <option value="en" th:text="#{lang.eng}"></option>
+			    <option value="sr" th:text="#{lang.sr}"></option>
+			</select>	
+		</div>							
 	</div>	
 	<div id="options">	
-		<a th:if="${session.user != null}" th:href="|/HeapOfBooks/Users/Details?id=${session.user.id}|" >Moj profil</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/Shop}" >Kupovine</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/LoyaltyCard/Details}" >Kartica</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/ShoppingCart}" >Korpa</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/SpecialDate}">Specijalni datumi</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Books/Create}">Kreiraj knjigu</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Report}">Izvestavanje</a>
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Users}">Korisnici</a>		
-		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Genres}">Zanrovi</a>		
+		<a th:href="|/HeapOfBooks/Books|" th:text="#{mainPage}"></a>
+		<a th:if="${session.user != null}" th:href="|/HeapOfBooks/Users/Details?id=${session.user.id}|" th:text="#{myProfile}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/Shop}" th:text="#{shop}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/LoyaltyCard/Details}" th:text="#{loyaltyCard}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" th:href="@{/ShoppingCart}" th:text="#{shoppingCart}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/SpecialDate}" th:text="#{specialDate}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/LoyaltyCard}" th:text="#{loyaltyCards}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Books/Create}" th:text="#{createBook}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Report}" th:text="#{report}"></a>
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Users}" th:text="#{users}"></a>		
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Genres}" th:text="#{genres}"></a>	
+		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" th:href="@{/Comments}" th:text="#{comments}"></a>	
 	</div>
 	
 	<div class="image">
@@ -38,25 +66,25 @@
 	<div class="bookContainer">
 		<table class="tableBook">
 				<tr><th align="left">ISBN: </th><td th:text="${book.ISBN}" class="bookID"></td></tr>
-				<tr><th align="left">Naziv: </th><td th:text="${book.name}"></td></tr>
-				<tr><th align="left">Izdavac: </th><td th:text="${book.publisher}"></td></tr>
-				<tr><th align="left">Autori/i: </th><td>
+				<tr><th align="left" th:text="#{nameBook}">: </th><td th:text="${book.name}"></td></tr>
+				<tr><th align="left" th:text="#{publisher}">: </th><td th:text="${book.publisher}"></td></tr>
+				<tr><th align="left" th:text="#{authors}">: </th><td>
 				<ul>
 							<li th:each="itAuthor: ${book.authors}"><a th:text="${itAuthor}"></a></li>
 				</ul>
 				</td></tr>
-				<tr><th align="left">Datum izdavanja: </th><td th:text="${book.releaseDate}"></td></tr>
-				<tr><th align="left">Opis: </th><td th:text="${book.shortDescription}"></td></tr>
-				<tr><th align="left">Cena: </th><td th:text="${book.price}"></td></tr>
-				<tr><th align="left">Broj stranica: </th><td th:text="${book.numberOfPages}"></td></tr>
-				<tr><th align="left">Tip poveza: </th><td th:text="${book.bookType}"></td></tr>
-				<tr><th align="left">Pismo: </th><td th:text="${book.letter}"></td></tr>
-				<tr><th align="left">Jezik: </th><td th:text="${book.bookLanguage}"></td></tr>
-				<tr><th align="left">Prosecna ocena: </th><td th:text="${book.averageRating}"></td></tr>
+				<tr><th align="left" th:text="#{releaseDate}">: </th><td th:text="${book.releaseDate}"></td></tr>
+				<tr><th align="left" th:text="#{description}">: </th><td th:text="${book.shortDescription}"></td></tr>
+				<tr><th align="left" th:text="#{price}">: </th><td th:text="${book.price}"></td></tr>
+				<tr><th align="left" th:text="#{pageNum}">: </th><td th:text="${book.numberOfPages}"></td></tr>
+				<tr><th align="left" th:text="#{bookType}">: </th><td th:text="${book.bookType}"></td></tr>
+				<tr><th align="left" th:text="#{letter}">: </th><td th:text="${book.letter}"></td></tr>
+				<tr><th align="left" th:text="#{language}">: </th><td th:text="${book.bookLanguage}"></td></tr>
+				<tr><th align="left" th:text="#{avgRating}">: </th><td th:text="${book.averageRating}"></td></tr>
 				<tr th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" >
-					<th align="left">Broj kopija: </th><td th:text="${book.numberOfCopies}"></td>
+					<th align="left" th:text="#{numCopies}">: </th><td th:text="${book.numberOfCopies}"></td>
 				</tr>
-				<tr><th align="left">Zanr/ovi: </th><td>
+				<tr><th align="left" th:text="#{genre}">: </th><td>
 				<ul>
 							<li th:each="itGenre: ${book.genre}"><a th:text="${itGenre.name}"></a></li>
 				</ul>
@@ -67,7 +95,7 @@
 	<div th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" class="addToCartContainer">
 		<form method="post" th:action="@{/ShoppingCart/Add}" class="cartForm"> 
 		<table class="addToCart">
-			<tr><th><strong>Uneti kolicinu</strong></th></tr>
+			<tr><th><strong th:text="#{inputQuantity}"></strong></th></tr>
 			<tr><th><input type="number" min="1" th:max="${book.numberOfCopies}" name="quantity" value=""/></th></tr>
 			<tr><th><input type="hidden" name="isbn" th:value="${book.ISBN}"/></th></tr>
 			<tr><th><input type="submit" value="Dodaj u korpu"/></th></tr>
@@ -77,23 +105,23 @@
 	
 	<div class="bookOptions">	
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
-			th:href="|/HeapOfBooks/Books/Update?id=${book.ISBN}|">Izmeni knjigu</a>
+			th:href="|/HeapOfBooks/Books/Update?id=${book.ISBN}|" th:text="#{cnageBook}"></a>
 
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
-			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|">Poruci knjige</a>
+			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|" th:text="#{orderBook}"></a>
 			
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
-			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|">Obrisi</a>
+			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|" th:text="#{delete}"></a>
 	
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
-			th:href="|/HeapOfBooks/ShoppingCart/AddToWishList?id=${book.ISBN}|">Dodaj u listu zelja</a>
+			th:href="|/HeapOfBooks/ShoppingCart/AddToWishList?id=${book.ISBN}|" th:text="#{addToWishList}"></a>
 	</div>
 	
 	<div th:if="${canComment == true}" class="leaveCommentContainer">
 		<form action="post" class="commentForm">
 			<table class="tableComm">
-				<tr><th>Ocena:</th><td><input type="number" min="1" max="5" name="rating" required></td></tr>
-				<tr><th>Komentar:</th><td><input type="text" name="comment" required></td></tr>
+				<tr><th th:text="#{rating}">:</th><td><input type="number" min="1" max="5" name="rating" required></td></tr>
+				<tr><th th:text="#{comment}">:</th><td><input type="text" name="comment" required></td></tr>
 				<tr><th></th><td><input type="hidden" name="isbn" th:value="${book.ISBN}"></td></tr>
 				<tr><th></th><td align="right"><input type="submit" value="Komentarisi"/></td></tr>
 			</table>

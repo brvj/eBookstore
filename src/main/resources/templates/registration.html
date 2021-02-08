@@ -7,21 +7,21 @@
 
 	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/books.css">
 	<script type="text/javascript" src="/HeapOfBooks/js/header.js"></script>
-	<title>Registracija</title>
+	<title th:text="#{registration}"></title>
 </head>
 <body>
 		<form method="post" th:action="@{/Users/Registration}">
 		<div class="registrationContainer">
 			<table class="table">
-				<tr><th>Korisnicko ime:</th><td><input type="text" value="" name="userName" required></td></tr>
-				<tr><th>Korisnicka sifra:</th><td><input type="password" value="" name="userPassword" required></td></tr>
-				<tr><th>E-Mail adresa:</th><td><input type="text" value="" name="eMail" required></td></tr>
-				<tr><th>Ime:</th><td><input type="text" value="" name="name" required></td></tr>
-				<tr><th>Prezime:</th><td><input type="text" value="" name="surname" required></td></tr>
-				<tr><th>Datum rodjenja:</th><td><input type="date" value="" name="dateOfBirth" required></td></tr>
-				<tr><th>Adresa stanovanja:</th><td><input type="text" value="" name="address" required></td></tr>
-				<tr><th>Broj telefona:</th><td><input type="text" value="" name="phoneNumber" required></td></tr>
-				<tr><th></th><td align="right"><input type="submit" value="Kreirajte nalog"/></td></tr>
+				<tr><th th:text="#{username}"></th><td><input type="text" value="" name="userName" required></td></tr>
+				<tr><th th:text="#{password}"></th><td><input type="password" value="" name="userPassword" required></td></tr>
+				<tr><th>E-Mail</th><td><input type="text" value="" name="eMail" required></td></tr>
+				<tr><th th:text="#{name}"></th><td><input type="text" value="" name="name" required></td></tr>
+				<tr><th th:text="#{surname}"></th><td><input type="text" value="" name="surname" required></td></tr>
+				<tr><th th:text="#{dateOfBirth}"></th><td><input type="date" value="" name="dateOfBirth" required></td></tr>
+				<tr><th th:text="#{address}">:</th><td><input type="text" value="" name="address" required></td></tr>
+				<tr><th th:text="#{phone}"></th><td><input type="text" value="" name="phoneNumber" required></td></tr>
+				<tr><th></th><td align="right"><input type="submit" th:value="#{create}"/></td></tr>
 			</table>
 		</div>
 		</form>

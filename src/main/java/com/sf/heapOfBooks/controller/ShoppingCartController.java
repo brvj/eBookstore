@@ -75,7 +75,7 @@ public class ShoppingCartController {
 		ModelAndView maw = new ModelAndView("shoppingCart");
 		
 		LoyaltyCard lc = lcService.findOneForUser(user);
-		if(lc != null && lc.getPoints() > 0)
+		if(lc != null && lc.getPoints() > 0 && lc.isStatus())
 			maw.addObject("lc", lc);
 		
 		maw.addObject("cart", spList);

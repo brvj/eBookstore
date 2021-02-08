@@ -7,15 +7,15 @@
 	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/header.css">
 	<link type="text/css" rel="stylesheet" href="/HeapOfBooks/css/books.css">
 	<script type="text/javascript" src="/HeapOfBooks/js/header.js"></script>
-	<title>Prijava korisnika</title>
+	<title th:text="#{logIn}"></title>
 </head>
 <body>
 	<form method="post" th:action="@{Login}">
 	<div class="loginContainer">
 		<table class="table">
-			<tr><th align="left">Korisnicko ime:</th><td align="center"><input type="text" value="" name="userName" required/></td></tr>
-			<tr><th align="left">Sifra:</th><td align="center"><input type="password" value="" name="userPassword" required/></td></tr>
-			<tr><th></th><td align="right"><input type="submit" value="Prijavi se" /></td>
+			<tr><th align="left" th:text="#{username}"></th><td align="center"><input type="text" value="" name="userName" required/></td></tr>
+			<tr><th align="left" th:text="#{password}"></th><td align="center"><input type="password" value="" name="userPassword" required/></td></tr>
+			<tr><th></th><td align="right"><input type="submit" th:value="#{logIn}" /></td>
 		</table>
 	</div>
 	</form>
