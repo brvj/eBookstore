@@ -77,8 +77,8 @@
 						<span th:text="#{priceTo}"></span>:<input width="100%" type="number" min="0" th:value="${param.priceTo}?: ''" name="priceTo" />
 					</th>		
 				</tr>
-				<tr><th align="left" th:text="#{searchGenre}">:<select name="id">
-								<option value="" th:text="#{genre}"></option>
+				<tr><th align="left" th:text="#{searchGenre}"><select name="id">
+								<option value="" th:value="#{genre}"></option>
 								<option class="genreOption" th:each="itGenre : ${genres}" th:value="${itGenre.id}" th:text="${itGenre.name}" >
 						</select>
 				</th></tr>

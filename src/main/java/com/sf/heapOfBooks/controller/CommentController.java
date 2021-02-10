@@ -100,7 +100,11 @@ public class CommentController {
 			commentService.updateStatus(comment);
 			
 			Book book = bookService.findOne(comment.getBook().getISBN());
-			book.setAverageRating((book.getAverageRating() + comment.getRating()) / 2);
+			if(book.getAverageRating() == 0.0)
+				book.setAverageRating(comment.getRating());
+			else
+				book.setAverageRating((book.getAverageRating() + comment.getRating()) / 2);
+			
 			bookService.updateRating(book);
 		}		
 	}

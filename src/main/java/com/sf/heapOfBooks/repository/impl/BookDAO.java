@@ -190,10 +190,23 @@ public class BookDAO implements IBookDAO{
 		return uspeh?1:0;
 	}
 
+	@Transactional
 	@Override
 	public int delete(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM bookGenre WHERE bookId = ?";
+		jdbcTemplate.update(sql, id);
+		
+		sql = "DELETE FROM shoppingCartUserBook WHERE bookId = ?";
+		jdbcTemplate.update(sql, id);
+		
+		sql = "DELETE FROM bookSpecialDate WHERE bookId = ?";
+		jdbcTemplate.update(sql, id);
+		
+		sql = "DELETE FROM commentUserBook WHERE bookId =?";
+		jdbcTemplate.update(sql, id);
+		
+		sql = "DELETE FROM books WHERE id = ?";
+		return jdbcTemplate.update(sql, id);
 	}
 
 	@Transactional

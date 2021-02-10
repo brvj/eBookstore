@@ -341,6 +341,13 @@ public class BookController {
 		response.sendRedirect("/HeapOfBooks/Books");
 	}
 	
+	@GetMapping(value = "/Delete")
+	public void delete(@RequestParam Long id, HttpServletResponse response) throws IOException {
+		bookService.delete(id);
+		
+		response.sendRedirect("/HeapOfBooks/Books");
+	}
+	
 	@GetMapping(value = "/Order")
 	public ModelAndView order(@RequestParam Long id, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute(LogingController.USER_KEY);

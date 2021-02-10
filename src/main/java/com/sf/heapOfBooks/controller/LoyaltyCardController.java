@@ -110,6 +110,16 @@ public class LoyaltyCardController {
 		
 		LoyaltyCard lc = lcService.findOneForUser(user);
 		
+		if(lc == null) {
+			ModelAndView retMessage = new ModelAndView("message");
+			
+			message = "Nemate loyalty karticu!";
+			
+			retMessage.addObject("message",	message);
+			
+			return retMessage;
+		}
+		
 		if(lc.isStatus())
 			maw.addObject("lc", lc);
 		else {

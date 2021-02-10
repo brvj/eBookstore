@@ -105,13 +105,13 @@
 	
 	<div class="bookOptions">	
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
-			th:href="|/HeapOfBooks/Books/Update?id=${book.ISBN}|" th:text="#{cnageBook}"></a>
+			th:href="|/HeapOfBooks/Books/Update?id=${book.ISBN}|" th:text="#{changeBook}"></a>
 
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
 			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|" th:text="#{orderBook}"></a>
 			
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Administrator}" 
-			th:href="|/HeapOfBooks/Books/Order?id=${book.ISBN}|" th:text="#{delete}"></a>
+			th:href="|/HeapOfBooks/Books/Delete?id=${book.ISBN}|" th:text="#{delete}"></a>
 	
 		<a th:if="${session.user != null and session.user.userType == T(com.sf.heapOfBooks.model.enums.UserEnum).Kupac}" 
 			th:href="|/HeapOfBooks/ShoppingCart/AddToWishList?id=${book.ISBN}|" th:text="#{addToWishList}"></a>
