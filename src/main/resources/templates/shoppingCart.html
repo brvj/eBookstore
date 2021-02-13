@@ -84,7 +84,7 @@
 				</tr>
 			</table>
 			
-			<input th:if="${lc != null}" type="number" name="lcPoints" max="lc.points"/>
+			<input th:if="${lc != null}" type="number" name="lcPoints" th:max="${lc.points}"/>
 						
 			<input type="submit" th:value="#{buy}">
 			</div>

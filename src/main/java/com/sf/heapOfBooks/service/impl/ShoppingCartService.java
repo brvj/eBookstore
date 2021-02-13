@@ -26,7 +26,7 @@ public class ShoppingCartService implements IShoppingCartService{
 		else
 			id = Collections.max(ids) + 1L;
 		
-		return id;
+		return id + 1L;
 	}
 	
 	

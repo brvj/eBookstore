@@ -98,7 +98,7 @@
 			<tr><th><strong th:text="#{inputQuantity}"></strong></th></tr>
 			<tr><th><input type="number" min="1" th:max="${book.numberOfCopies}" name="quantity" value=""/></th></tr>
 			<tr><th><input type="hidden" name="isbn" th:value="${book.ISBN}"/></th></tr>
-			<tr><th><input type="submit" value="Dodaj u korpu"/></th></tr>
+			<tr><th><input type="submit" th:value="#{addToBasket}"/></th></tr>
 		</table>
 	 	</form>
 	</div>
